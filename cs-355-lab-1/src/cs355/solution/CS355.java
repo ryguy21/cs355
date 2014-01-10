@@ -1,29 +1,30 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template, choose Tools | Templates and open the template in the editor.
  */
 package cs355.solution;
 
+import cs355.CS355Controller;
 import cs355.GUIFunctions;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import cs355.ViewRefresher;
 
 /**
- *
- * @author [your name here]
+ * @author Ryan Cheatham
  */
-public class CS355 
+public class CS355
 {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-    	// Fill in the parameters below with your controller, view, 
-    	//   mouse listener, and mouse motion listener
-        GUIFunctions.createCS355Frame(null,null,null,null);
-        
-        GUIFunctions.refresh();        
-    }
+	/**
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(String[] args)
+	{
+		CS355Controller controller = new Controller();
+		ViewRefresher refresher = new Refresher();
+		EventHandler listener = new EventHandler();
+
+		GUIFunctions.createCS355Frame(controller, refresher, listener, listener);
+
+		GUIFunctions.refresh();
+	}
 }
