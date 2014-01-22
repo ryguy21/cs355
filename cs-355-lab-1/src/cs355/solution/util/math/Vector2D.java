@@ -244,6 +244,21 @@ public class Vector2D
 		return getScaledCopy(scalar);
 	}
 
+	public float dot(Vector2D other)
+	{
+		return x * other.x + y * other.y;
+	}
+
+	public Vector3D get3DVector()
+	{
+		return new Vector3D(this);
+	}
+
+	public Vector3D get3DVector(float z)
+	{
+		return new Vector3D(this, z);
+	}
+
 	public String print()
 	{
 		return String.format("(%4.0f,%4.0f)", x, y);

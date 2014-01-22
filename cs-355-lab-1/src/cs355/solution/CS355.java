@@ -24,7 +24,5 @@ public class CS355
 		EventHandler listener = new EventHandler();
 
 		GUIFunctions.createCS355Frame(controller, refresher, listener, listener);
-
-		GUIFunctions.refresh();
 	}
 }
