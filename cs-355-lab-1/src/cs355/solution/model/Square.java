@@ -11,6 +11,11 @@ public class Square extends Rectangle
 		super(color, topLeft, size, size);
 	}
 
+	public float getSize()
+	{
+		return width;
+	}
+
 	public void setSize(int size)
 	{
 		super.setWidth(size);
@@ -18,14 +23,14 @@ public class Square extends Rectangle
 	}
 
 	@Override
-	public void setWidth(int size)
+	public void setWidth(float size)
 	{
 		super.setWidth(size);
 		super.setHeight(size);
 	}
 
 	@Override
-	public void setHeight(int size)
+	public void setHeight(float size)
 	{
 		super.setWidth(size);
 		super.setHeight(size);

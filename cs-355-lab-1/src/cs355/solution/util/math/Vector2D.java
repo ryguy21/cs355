@@ -52,7 +52,20 @@ public class Vector2D
 		return new Vector2D(x, y);
 	}
 
+	public IntVector2D getIntCopy()
+	{
+		return new IntVector2D(this);
+	}
+
 	public Vector2D copyValues(Vector2D other)
+	{
+		x = other.x;
+		y = other.y;
+
+		return this;
+	}
+
+	public Vector2D copyValues(IntVector2D other)
 	{
 		x = other.x;
 		y = other.y;

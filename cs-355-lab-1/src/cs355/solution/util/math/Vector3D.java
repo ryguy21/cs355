@@ -22,6 +22,16 @@ public class Vector3D
 		this(v.x, v.y, 0, 0);
 	}
 
+	public Vector3D(IntVector2D v)
+	{
+		this(v.x, v.y, 0, 0);
+	}
+
+	public Vector3D(IntVector2D v, float z)
+	{
+		this(v.x, v.y, z, 0);
+	}
+
 	public Vector3D(Vector2D v, float z)
 	{
 		this(v.x, v.y, z, 0);

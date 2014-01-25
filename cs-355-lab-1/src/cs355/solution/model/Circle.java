@@ -16,6 +16,11 @@ public class Circle extends Ellipse
 		return super.getxRadius();
 	}
 
+	public float getDiameter()
+	{
+		return super.getxDiameter();
+	}
+
 	public void setRadius(float radius)
 	{
 		super.setxRadius(radius);

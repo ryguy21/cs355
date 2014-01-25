@@ -6,11 +6,11 @@ import cs355.solution.util.math.Vector2D;
 
 public class Rectangle extends Shape
 {
-	private final Vector2D	topLeft;
-	private int				width;
-	private int				height;
+	protected final Vector2D	topLeft;
+	protected float				width;
+	protected float				height;
 
-	public Rectangle(Color color, Vector2D topLeft, int width, int height)
+	public Rectangle(Color color, Vector2D topLeft, float width, float height)
 	{
 		super(color);
 		this.topLeft = topLeft.getCopy();
@@ -28,22 +28,22 @@ public class Rectangle extends Shape
 		this.topLeft.copyValues(topLeft);
 	}
 
-	public int getWidth()
+	public float getWidth()
 	{
 		return width;
 	}
 
-	public void setWidth(int width)
+	public void setWidth(float width)
 	{
 		this.width = width;
 	}
 
-	public int getHeight()
+	public float getHeight()
 	{
 		return height;
 	}
 
-	public void setHeight(int height)
+	public void setHeight(float height)
 	{
 		this.height = height;
 	}

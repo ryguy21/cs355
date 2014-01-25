@@ -28,9 +28,19 @@ public class Ellipse extends Shape
 		this.center.copyValues(center);
 	}
 
+	public Vector2D getTopLeftCorner()
+	{
+		return center.getSubtractedCopy(xRadius, yRadius);
+	}
+
 	public float getxRadius()
 	{
 		return xRadius;
+	}
+
+	public float getxDiameter()
+	{
+		return xRadius * 2f;
 	}
 
 	public void setxRadius(float xRadius)
@@ -41,6 +51,11 @@ public class Ellipse extends Shape
 	public float getyRadius()
 	{
 		return yRadius;
+	}
+
+	public float getyDiameter()
+	{
+		return yRadius * 2f;
 	}
 
 	public void setyRadius(float yRadius)
