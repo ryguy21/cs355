@@ -35,4 +35,10 @@ public class Circle extends Ellipse
 		super.setxRadius(radius);
 		super.setyRadius(radius);
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.CIRCLE;
+	}
 }

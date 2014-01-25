@@ -48,4 +48,10 @@ public class Triangle extends Shape
 	{
 		p3.copyValues(pt3);
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.TRIANGLE;
+	}
 }

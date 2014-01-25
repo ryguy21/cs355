@@ -47,4 +47,10 @@ public class Rectangle extends Shape
 	{
 		this.height = height;
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.RECTANGLE;
+	}
 }

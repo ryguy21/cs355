@@ -30,4 +30,10 @@ public class Square extends Rectangle
 		super.setWidth(size);
 		super.setHeight(size);
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.SQUARE;
+	}
 }

@@ -47,4 +47,10 @@ public class Ellipse extends Shape
 	{
 		this.yRadius = yRadius;
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.ELLIPSE;
+	}
 }

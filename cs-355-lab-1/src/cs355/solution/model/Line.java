@@ -45,4 +45,10 @@ public class Line extends Shape
 	{
 		end.add(trans);
 	}
+
+	@Override
+	public ShapeType getType()
+	{
+		return ShapeType.LINE;
+	}
 }
