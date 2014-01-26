@@ -2,7 +2,7 @@ package cs355.solution.view;
 
 import java.awt.Graphics2D;
 
-import cs355.solution.model.*;
+import cs355.solution.model.shapes.*;
 import cs355.solution.util.math.Vector2D;
 
 public class ShapeDrawer implements IShapeDrawer

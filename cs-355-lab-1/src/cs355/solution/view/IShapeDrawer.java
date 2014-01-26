@@ -2,7 +2,7 @@ package cs355.solution.view;
 
 import java.awt.Graphics2D;
 
-import cs355.solution.model.*;
+import cs355.solution.model.shapes.*;
 
 public interface IShapeDrawer
 {

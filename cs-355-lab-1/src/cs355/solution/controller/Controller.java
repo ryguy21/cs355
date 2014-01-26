@@ -1,13 +1,21 @@
-package cs355.solution;
+package cs355.solution.controller;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import cs355.CS355Controller;
+import cs355.solution.model.IModelManager;
 
 public class Controller implements CS355Controller
 {
+	private final IModelManager	model;
+
+	public Controller(IModelManager model)
+	{
+		this.model = model;
+	}
+
 	@Override
 	public void colorButtonHit(Color c)
 	{

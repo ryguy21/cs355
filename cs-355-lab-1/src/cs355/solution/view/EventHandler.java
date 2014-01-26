@@ -1,11 +1,20 @@
-package cs355.solution;
+package cs355.solution.view;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import cs355.solution.model.IModelManager;
+
 public class EventHandler implements MouseListener, MouseMotionListener
 {
+	private final IModelManager	model;
+
+	public EventHandler(IModelManager model)
+	{
+		this.model = model;
+	}
+
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
