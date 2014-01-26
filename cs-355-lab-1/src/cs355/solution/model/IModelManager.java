@@ -1,6 +1,6 @@
 package cs355.solution.model;
 
-public interface IModel
+public interface IModelManager
 {
 	public IShapeStorage getShapeStorage();
 }
