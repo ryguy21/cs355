@@ -1,4 +1,4 @@
-package cs355.solution.model;
+package cs355.solution.model.shapes;
 
 import java.awt.Color;
 
