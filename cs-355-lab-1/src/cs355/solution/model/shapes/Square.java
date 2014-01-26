@@ -16,7 +16,7 @@ public class Square extends Rectangle
 		return width;
 	}
 
-	public void setSize(int size)
+	public void setSize(float size)
 	{
 		super.setWidth(size);
 		super.setHeight(size);

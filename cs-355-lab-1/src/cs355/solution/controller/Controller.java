@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
+import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.model.IModelManager;
 import cs355.solution.util.math.Vector2D;
@@ -76,12 +77,26 @@ public class Controller implements IController
 	public void setDrawingStartPoint(Vector2D p)
 	{
 		drawingController.setDrawingStartPoint(p);
+		refresh();
 	}
 
 	@Override
 	public void updateDrawingEndPoint(Vector2D p)
 	{
 		drawingController.updateDrawingEndPoint(p);
+		refresh();
+	}
+
+	@Override
+	public void registerClick(Vector2D p)
+	{
+		boolean consumed = drawingController.addTrianglePoint(p);
+		if (!consumed)
+		{
+			// do something here
+		}
+
+		refresh();
 	}
 
 	@Override
@@ -184,5 +199,10 @@ public class Controller implements IController
 	public void toggleBackgroundDisplay()
 	{
 		System.out.println("toggleBackgroundDisplay()");
+	}
+
+	private void refresh()
+	{
+		GUIFunctions.refresh();
 	}
 }

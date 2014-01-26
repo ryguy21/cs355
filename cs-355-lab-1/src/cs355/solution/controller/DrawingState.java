@@ -7,16 +7,16 @@ import cs355.solution.util.math.Vector2D;
 
 public class DrawingState
 {
-	private final Vector2D	startPoint;
-	private final Vector2D	endPoint;
+	private Vector2D	startPoint;
+	private Vector2D	endPoint;
+	private Vector2D	intermediatePoint;
 
-	private ShapeType		currentShape;
-	private Color			color;
+	private ShapeType	currentShape;
+	private Color		color;
 
-	public DrawingState()
+	public boolean isSetUp()
 	{
-		startPoint = new Vector2D();
-		endPoint = new Vector2D();
+		return currentShape != null && color != null;
 	}
 
 	public ShapeType getCurrentShape()
@@ -31,22 +31,32 @@ public class DrawingState
 
 	public Vector2D getStartPoint()
 	{
-		return startPoint.getCopy();
+		return startPoint;
 	}
 
 	public void setStartPoint(Vector2D startPoint)
 	{
-		this.startPoint.copyValues(startPoint);
+		this.startPoint = startPoint;
 	}
 
 	public Vector2D getEndPoint()
 	{
-		return endPoint.getCopy();
+		return endPoint;
 	}
 
 	public void setEndPoint(Vector2D endPoint)
 	{
-		this.endPoint.copyValues(endPoint);
+		this.endPoint = endPoint;
+	}
+
+	public Vector2D getIntermediatePoint()
+	{
+		return intermediatePoint;
+	}
+
+	public void setIntermediatePoint(Vector2D intermediatePoint)
+	{
+		this.intermediatePoint = intermediatePoint;
 	}
 
 	public Color getColor()
@@ -57,5 +67,12 @@ public class DrawingState
 	public void setColor(Color color)
 	{
 		this.color = color;
+	}
+
+	public void reset()
+	{
+		startPoint = null;
+		intermediatePoint = null;
+		endPoint = null;
 	}
 }

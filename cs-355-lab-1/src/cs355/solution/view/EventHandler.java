@@ -46,16 +46,19 @@ public class EventHandler extends MouseAdapter
 		controller.endDrawing();
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		System.out.println("Mouse clicked event called at " + e.getPoint());
+
+		Vector2D p = new Vector2D(e.getPoint());
+		controller.registerClick(p);
+	}
+
 	// @Override
 	// public void mouseMoved(MouseEvent e)
 	// {
 	// System.out.println("Mouse moved event called at " + e.getPoint());
-	// }
-	//
-	// @Override
-	// public void mouseClicked(MouseEvent e)
-	// {
-	// System.out.println("Mouse clicked event called at " + e.getPoint());
 	// }
 	//
 	// @Override

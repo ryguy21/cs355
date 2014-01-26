@@ -10,4 +10,6 @@ public interface IController extends CS355Controller
 	public void updateDrawingEndPoint(Vector2D p);
 
 	public void endDrawing();
+
+	public void registerClick(Vector2D p);
 }
