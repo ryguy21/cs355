@@ -64,6 +64,8 @@ public class DrawingController
 			drawingState.setStartPoint(p);
 
 			currentShape = ShapeCreator.getInstance().createShape(drawingState);
+
+			model.getShapeStorage().addShape(currentShape);
 		}
 	}
 
@@ -81,17 +83,18 @@ public class DrawingController
 	{
 		if (drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE)
 		{
-			if (drawingState.getStartPoint() == null)
+			if (!drawingState.hasStartPoint())
 			{
 				drawingState.setStartPoint(p);
 				currentShape = ShapeCreator.getInstance().createShape(drawingState);
+				model.getShapeStorage().addShape(currentShape);
 			}
-			else if (drawingState.getIntermediatePoint() == null)
+			else if (!drawingState.hasIntermediatePoint())
 			{
 				drawingState.setIntermediatePoint(p);
 				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
 			}
-			else if (drawingState.getEndPoint() == null)
+			else if (!drawingState.hasEndPoint())
 			{
 				drawingState.setEndPoint(p);
 				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
@@ -106,17 +109,32 @@ public class DrawingController
 			return false;
 	}
 
+	public void updateTrianglePoint(Vector2D p)
+	{
+		if (drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE && drawingState.hasStartPoint())
+		{
+			if (!drawingState.hasIntermediatePoint())
+			{
+				drawingState.setIntermediatePoint(p, false);
+				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
+			}
+			else if (!drawingState.hasEndPoint())
+			{
+				drawingState.setEndPoint(p, false);
+				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
+			}
+		}
+	}
+
 	public void endDrawing()
 	{
-		if (drawingState.getCurrentShape() != ShapeType.TRIANGLE)
+		if (drawingState.isSetUp() && drawingState.getCurrentShape() != ShapeType.TRIANGLE)
 			endDrawingInternal();
 	}
 
 	private void endDrawingInternal()
 	{
 		drawingState.reset();
-
-		model.getShapeStorage().addShape(currentShape);
 
 		currentShape = null;
 	}

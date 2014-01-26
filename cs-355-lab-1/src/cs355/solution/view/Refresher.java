@@ -6,6 +6,7 @@ import java.util.Iterator;
 import cs355.ViewRefresher;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
+import cs355.solution.util.Log;
 
 public class Refresher implements ViewRefresher
 {
@@ -19,7 +20,8 @@ public class Refresher implements ViewRefresher
 	@Override
 	public void refreshView(Graphics2D g)
 	{
-		System.out.println("refreshView()");
+		Log.v("refreshView()");
+		Log.d("Drawing %d shapes\n", model.getShapeStorage().getShapeCount());
 
 		Iterator<Shape> itr = model.getShapeStorage().getShapes();
 

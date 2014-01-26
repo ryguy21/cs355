@@ -54,4 +54,19 @@ public class Triangle extends Shape
 	{
 		return ShapeType.TRIANGLE;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Triangle [p1=");
+		builder.append(p1.print());
+		builder.append(", p2=");
+		builder.append(p2.print());
+		builder.append(", p3=");
+		builder.append(p3.print());
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

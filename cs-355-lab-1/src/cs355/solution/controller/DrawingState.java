@@ -11,8 +11,17 @@ public class DrawingState
 	private Vector2D	endPoint;
 	private Vector2D	intermediatePoint;
 
+	private boolean		hasStartPoint;
+	private boolean		hasIntermediatePoint;
+	private boolean		hasEndPoint;
+
 	private ShapeType	currentShape;
-	private Color		color;
+	private Color		color	= Color.white;
+
+	public DrawingState()
+	{
+		reset();
+	}
 
 	public boolean isSetUp()
 	{
@@ -37,6 +46,12 @@ public class DrawingState
 	public void setStartPoint(Vector2D startPoint)
 	{
 		this.startPoint = startPoint;
+		hasStartPoint = true;
+	}
+
+	public boolean hasStartPoint()
+	{
+		return hasStartPoint;
 	}
 
 	public Vector2D getEndPoint()
@@ -47,6 +62,18 @@ public class DrawingState
 	public void setEndPoint(Vector2D endPoint)
 	{
 		this.endPoint = endPoint;
+		hasEndPoint = true;
+	}
+
+	public void setEndPoint(Vector2D endPoint, boolean finalPoint)
+	{
+		this.endPoint = endPoint;
+		hasEndPoint |= finalPoint;
+	}
+
+	public boolean hasEndPoint()
+	{
+		return hasEndPoint;
 	}
 
 	public Vector2D getIntermediatePoint()
@@ -57,6 +84,18 @@ public class DrawingState
 	public void setIntermediatePoint(Vector2D intermediatePoint)
 	{
 		this.intermediatePoint = intermediatePoint;
+		hasIntermediatePoint = true;
+	}
+
+	public void setIntermediatePoint(Vector2D intermediatePoint, boolean finalPoint)
+	{
+		this.intermediatePoint = intermediatePoint;
+		hasIntermediatePoint |= finalPoint;
+	}
+
+	public boolean hasIntermediatePoint()
+	{
+		return hasIntermediatePoint;
 	}
 
 	public Color getColor()
@@ -74,5 +113,9 @@ public class DrawingState
 		startPoint = null;
 		intermediatePoint = null;
 		endPoint = null;
+
+		hasStartPoint = false;
+		hasIntermediatePoint = false;
+		hasEndPoint = false;
 	}
 }

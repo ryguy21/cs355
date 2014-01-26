@@ -3,6 +3,7 @@ package cs355.solution.view;
 import java.awt.Graphics2D;
 
 import cs355.solution.model.shapes.*;
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class ShapeDrawer implements IShapeDrawer
@@ -27,14 +28,19 @@ public class ShapeDrawer implements IShapeDrawer
 		{
 			case CIRCLE:
 				drawCircle((Circle) shape, g);
+				break;
 			case ELLIPSE:
 				drawEllipse((Ellipse) shape, g);
+				break;
 			case LINE:
 				drawLine((Line) shape, g);
+				break;
 			case RECTANGLE:
 				drawRectangle((Rectangle) shape, g);
+				break;
 			case SQUARE:
 				drawSquare((Square) shape, g);
+				break;
 			case TRIANGLE:
 				drawTriangle((Triangle) shape, g);
 		}
@@ -86,6 +92,8 @@ public class ShapeDrawer implements IShapeDrawer
 	@Override
 	public void drawTriangle(Triangle t, Graphics2D g)
 	{
+		Log.d("Drawing triangle %s", t);
+
 		g.setPaint(t.getColor());
 
 		int[] xs = new int[3];

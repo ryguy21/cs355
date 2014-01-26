@@ -7,6 +7,7 @@ import java.util.Iterator;
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.model.IModelManager;
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class Controller implements IController
@@ -27,49 +28,49 @@ public class Controller implements IController
 	@Override
 	public void colorButtonHit(Color c)
 	{
-		System.out.println("colorButtonHit(" + c + ")");
+		Log.v("colorButtonHit(%s)", c);
 		drawingController.colorButtonHit(c);
 	}
 
 	@Override
 	public void triangleButtonHit()
 	{
-		System.out.println("triangleButtonHit()");
+		Log.v("triangleButtonHit()");
 		drawingController.triangleButtonHit();
 	}
 
 	@Override
 	public void squareButtonHit()
 	{
-		System.out.println("squareButtonHit()");
+		Log.v("squareButtonHit()");
 		drawingController.squareButtonHit();
 	}
 
 	@Override
 	public void rectangleButtonHit()
 	{
-		System.out.println("rectangleButtonHit()");
+		Log.v("rectangleButtonHit()");
 		drawingController.rectangleButtonHit();
 	}
 
 	@Override
 	public void circleButtonHit()
 	{
-		System.out.println("circleButtonHit()");
+		Log.v("circleButtonHit()");
 		drawingController.circleButtonHit();
 	}
 
 	@Override
 	public void ellipseButtonHit()
 	{
-		System.out.println("ellipseButtonHit()");
+		Log.v("ellipseButtonHit()");
 		drawingController.ellipseButtonHit();
 	}
 
 	@Override
 	public void lineButtonHit()
 	{
-		System.out.println("lineButtonHit()");
+		Log.v("lineButtonHit()");
 		drawingController.lineButtonHit();
 	}
 
@@ -100,6 +101,13 @@ public class Controller implements IController
 	}
 
 	@Override
+	public void registerMove(Vector2D p)
+	{
+		drawingController.updateTrianglePoint(p);
+		refresh();
+	}
+
+	@Override
 	public void endDrawing()
 	{
 		drawingController.endDrawing();
@@ -108,97 +116,98 @@ public class Controller implements IController
 	@Override
 	public void selectButtonHit()
 	{
-		System.out.println("selectButtonHit()");
+		Log.v("selectButtonHit()");
 	}
 
 	@Override
 	public void zoomInButtonHit()
 	{
-		System.out.println("zoomInButtonHit()");
+		Log.v("zoomInButtonHit()");
 	}
 
 	@Override
 	public void zoomOutButtonHit()
 	{
-		System.out.println("zoomOutButtonHit()");
+		Log.v("zoomOutButtonHit()");
 	}
 
 	@Override
 	public void hScrollbarChanged(int value)
 	{
-		System.out.println("hScrollbarChanged(" + value + ")");
+		Log.v("hScrollbarChanged(" + value + ")");
 	}
 
 	@Override
 	public void vScrollbarChanged(int value)
 	{
-		System.out.println("vScrollbarChanged(" + value + ")");
+		Log.v("vScrollbarChanged(" + value + ")");
 	}
 
 	@Override
 	public void toggle3DModelDisplay()
 	{
-		System.out.println("toggle3DModelDisplay()");
+		Log.v("toggle3DModelDisplay()");
 	}
 
 	@Override
 	public void keyPressed(Iterator<Integer> iterator)
 	{
-		System.out.print("keyPressed():");
+		String message = "keyPressed():";
 
 		while (iterator.hasNext())
 		{
-			System.out.print(" " + iterator.next());
+			message += " " + iterator.next();
 		}
-		System.out.println();
+
+		Log.v(message);
 	}
 
 	@Override
 	public void doEdgeDetection()
 	{
-		System.out.println("doEdgeDetection()");
+		Log.v("doEdgeDetection()");
 	}
 
 	@Override
 	public void doSharpen()
 	{
-		System.out.println("doSharpen()");
+		Log.v("doSharpen()");
 	}
 
 	@Override
 	public void doMedianBlur()
 	{
-		System.out.println("doMedianBlur()");
+		Log.v("doMedianBlur()");
 	}
 
 	@Override
 	public void doUniformBlur()
 	{
-		System.out.println("doUniformBlur()");
+		Log.v("doUniformBlur()");
 	}
 
 	@Override
 	public void doChangeContrast(int delta)
 	{
-		System.out.println("doChangeContrast(" + delta + ")");
+		Log.v("doChangeContrast(" + delta + ")");
 	}
 
 	@Override
 	public void doChangeBrightness(int delta)
 	{
-		System.out.println("doChangeBrightness(" + delta + ")");
+		Log.v("doChangeBrightness(" + delta + ")");
 	}
 
 	@Override
 	public void doLoadImage(BufferedImage openImage)
 	{
-		System.out.println("doLoadImage()");
+		Log.v("doLoadImage()");
 	}
 
 	@Override
 	public void toggleBackgroundDisplay()
 	{
-		System.out.println("toggleBackgroundDisplay()");
+		Log.v("toggleBackgroundDisplay()");
 	}
 
 	private void refresh()

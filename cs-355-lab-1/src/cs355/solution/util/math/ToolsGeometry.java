@@ -1,10 +1,6 @@
 package cs355.solution.util.math;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,10 +96,6 @@ public class ToolsGeometry
 		else if (!clockwise && endAngle < startAngle)
 			endAngle += 2 * Math.PI;
 
-		// System.out.printf("dx=%3.0f dy=%3.0f theta=%4.2fpi phi=%4.2fpi gamma=%4.2fpi center=%s, start=%4.2fpi end=%4.2fpi\n", dx, dy,
-		// theta
-		// / Math.PI, phi / Math.PI, gamma / Math.PI, c.print(2, 3), startAngle / Math.PI, endAngle / Math.PI);
-
 		return generateArc(arcCenter, r, startAngle, endAngle, segments);
 	}
 
@@ -132,23 +124,18 @@ public class ToolsGeometry
 
 	public static double calculateAngle(double dx, double dy)
 	{
-		// System.out.printf("dx=%20.15f dy=%20.15f ", dx, dy);
-
 		if (dx == 0)
 		{
 			if (dy == 0)
 			{
-				// System.out.println("returning 0.0000pi");
 				return 0;
 			}
 			else if (dy > 0)
 			{
-				// System.out.println("returning 0.5000pi");
 				return Math.PI / 2;
 			}
 			else
 			{
-				// System.out.println("returning 1.5000pi");
 				return Math.PI * 3 / 2;
 			}
 		}
@@ -159,8 +146,6 @@ public class ToolsGeometry
 			phi += Math.PI;
 		else if (dx > 0 && dy < 0)
 			phi += 2 * Math.PI;
-
-		// System.out.printf("returning %6.4fpi\n", phi / Math.PI);
 
 		return phi;
 	}

@@ -40,7 +40,7 @@ public class ShapeCreator
 			case SQUARE:
 				return createSquare(color, startPoint);
 			case TRIANGLE:
-				return createTriangle(color);
+				return createTriangle(color, startPoint);
 			default:
 				return null;
 		}
@@ -71,26 +71,32 @@ public class ShapeCreator
 		return new Square(c, startPoint, 0);
 	}
 
-	public Triangle createTriangle(Color c)
+	public Triangle createTriangle(Color c, Vector2D startPoint)
 	{
-		return new Triangle(c, null, null, null);
+		return new Triangle(c, startPoint, startPoint, startPoint);
 	}
 
-	public void updateShape(DrawingState drawingState, Shape currentShape)
+	public void updateShape(DrawingState drawingState, Shape shape)
 	{
-		switch (currentShape.getType())
+		switch (shape.getType())
 		{
 			case CIRCLE:
+				updateShape((Circle) shape, drawingState);
 				break;
 			case ELLIPSE:
+				updateShape((Ellipse) shape, drawingState);
 				break;
 			case LINE:
+				updateShape((Line) shape, drawingState);
 				break;
 			case RECTANGLE:
+				updateShape((Rectangle) shape, drawingState);
 				break;
 			case SQUARE:
+				updateShape((Square) shape, drawingState);
 				break;
 			case TRIANGLE:
+				updateShape((Triangle) shape, drawingState);
 				break;
 			default:
 				break;
@@ -98,36 +104,42 @@ public class ShapeCreator
 		}
 	}
 
-	public void updateCircle(Circle c, DrawingState state)
+	public void updateShape(Circle c, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
-		Vector2D center = Vector2D.average(start, end);
-		float radius = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) * 0.5f;
+
+		float diameter = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
+		float radius = diameter * 0.5f;
+		float multiplierX = end.x > start.x ? 0 : -1;
+		float multiplierY = end.y > start.y ? 0 : -1;
+
+		Vector2D center = new Vector2D(start.x + diameter * multiplierX + radius, start.y + diameter * multiplierY + radius);
 
 		c.setCenter(center);
 		c.setRadius(radius);
 	}
 
-	public void updateEllipse(Ellipse e, DrawingState state)
+	public void updateShape(Ellipse e, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
+
 		Vector2D center = Vector2D.average(start, end);
-		float radX = Math.abs(start.x - end.x);
-		float radY = Math.abs(start.y - end.y);
+		float radX = Math.abs(start.x - end.x) * 0.5f;
+		float radY = Math.abs(start.y - end.y) * 0.5f;
 
 		e.setCenter(center);
 		e.setxRadius(radX);
 		e.setyRadius(radY);
 	}
 
-	public void updateLine(Line l, DrawingState state)
+	public void updateShape(Line l, DrawingState state)
 	{
 		l.setEndPoint(state.getEndPoint());
 	}
 
-	public void updateRectangle(Rectangle r, DrawingState state)
+	public void updateShape(Rectangle r, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
@@ -142,20 +154,22 @@ public class ShapeCreator
 		r.setHeight(height);
 	}
 
-	public void updateSquare(Square s, DrawingState state)
+	public void updateShape(Square s, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
 
-		float leftX = Math.min(start.x, end.x);
-		float topY = Math.min(start.y, end.y);
 		float size = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
+		float multiplierX = end.x > start.x ? 0 : -1;
+		float multiplierY = end.y > start.y ? 0 : -1;
 
-		s.setTopLeftCorner(new Vector2D(leftX, topY));
+		Vector2D topLeftCorner = new Vector2D(start.x + size * multiplierX, start.y + size * multiplierY);
+
+		s.setTopLeftCorner(topLeftCorner);
 		s.setSize(size);
 	}
 
-	public void updateTriangle(Triangle t, DrawingState state)
+	public void updateShape(Triangle t, DrawingState state)
 	{
 		Vector2D p2 = state.getIntermediatePoint();
 		Vector2D p3 = state.getEndPoint();
