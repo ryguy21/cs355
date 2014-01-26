@@ -4,58 +4,90 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
-import cs355.CS355Controller;
+import cs355.ViewRefresher;
 import cs355.solution.model.IModelManager;
+import cs355.solution.util.math.Vector2D;
 
-public class Controller implements CS355Controller
+public class Controller implements IController
 {
-	private final IModelManager	model;
+	private final IModelManager		model;
+	private final ViewRefresher		refresher;
 
-	public Controller(IModelManager model)
+	private final DrawingController	drawingController;
+
+	public Controller(IModelManager model, ViewRefresher refresher)
 	{
 		this.model = model;
+		this.refresher = refresher;
+
+		drawingController = new DrawingController(model);
 	}
 
 	@Override
 	public void colorButtonHit(Color c)
 	{
 		System.out.println("colorButtonHit(" + c + ")");
+		drawingController.colorButtonHit(c);
 	}
 
 	@Override
 	public void triangleButtonHit()
 	{
 		System.out.println("triangleButtonHit()");
+		drawingController.triangleButtonHit();
 	}
 
 	@Override
 	public void squareButtonHit()
 	{
 		System.out.println("squareButtonHit()");
+		drawingController.squareButtonHit();
 	}
 
 	@Override
 	public void rectangleButtonHit()
 	{
 		System.out.println("rectangleButtonHit()");
+		drawingController.rectangleButtonHit();
 	}
 
 	@Override
 	public void circleButtonHit()
 	{
 		System.out.println("circleButtonHit()");
+		drawingController.circleButtonHit();
 	}
 
 	@Override
 	public void ellipseButtonHit()
 	{
 		System.out.println("ellipseButtonHit()");
+		drawingController.ellipseButtonHit();
 	}
 
 	@Override
 	public void lineButtonHit()
 	{
 		System.out.println("lineButtonHit()");
+		drawingController.lineButtonHit();
+	}
+
+	@Override
+	public void setDrawingStartPoint(Vector2D p)
+	{
+		drawingController.setDrawingStartPoint(p);
+	}
+
+	@Override
+	public void updateDrawingEndPoint(Vector2D p)
+	{
+		drawingController.updateDrawingEndPoint(p);
+	}
+
+	@Override
+	public void endDrawing()
+	{
+		drawingController.endDrawing();
 	}
 
 	@Override
