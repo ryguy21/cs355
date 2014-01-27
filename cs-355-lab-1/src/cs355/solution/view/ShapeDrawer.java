@@ -3,7 +3,6 @@ package cs355.solution.view;
 import java.awt.Graphics2D;
 
 import cs355.solution.model.shapes.*;
-import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class ShapeDrawer implements IShapeDrawer
@@ -92,8 +91,6 @@ public class ShapeDrawer implements IShapeDrawer
 	@Override
 	public void drawTriangle(Triangle t, Graphics2D g)
 	{
-		Log.d("Drawing triangle %s", t);
-
 		g.setPaint(t.getColor());
 
 		int[] xs = new int[3];

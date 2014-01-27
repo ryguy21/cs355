@@ -29,15 +29,16 @@ public class Log
 	private static List<PrintStream>	testOuts			= new ArrayList<PrintStream>();
 
 	private static final String			TIME_FORMAT_STR		= "%02d:%02d:%02d.%03d";
-	private static final String			STAMP_FORMAT_STR	= "%5s [%%s] :: ";
+	private static final String			CLASS_FORMAT_STR	= "%s.%s(%s:%s)";
+	private static final String			STAMP_FORMAT_STR	= "[%%s : %s] ";
 
-	private static final String			VERB_STAMP			= String.format(STAMP_FORMAT_STR, "VERB ");
+	private static final String			VERB_STAMP			= String.format(STAMP_FORMAT_STR, "VERB");
 	private static final String			DEBUG_STAMP			= String.format(STAMP_FORMAT_STR, "DEBUG");
-	private static final String			INFO_STAMP			= String.format(STAMP_FORMAT_STR, "INFO ");
-	private static final String			WARN_STAMP			= String.format(STAMP_FORMAT_STR, "WARN ");
+	private static final String			INFO_STAMP			= String.format(STAMP_FORMAT_STR, "INFO");
+	private static final String			WARN_STAMP			= String.format(STAMP_FORMAT_STR, "WARN");
 	private static final String			ERROR_STAMP			= String.format(STAMP_FORMAT_STR, "ERROR");
 	private static final String			FATAL_STAMP			= String.format(STAMP_FORMAT_STR, "FATAL");
-	private static final String			TEST_STAMP			= String.format(STAMP_FORMAT_STR, "TEST ");
+	private static final String			TEST_STAMP			= String.format(STAMP_FORMAT_STR, "TEST");
 
 	private static StackTraceStream		stream				= new StackTraceStream();
 
@@ -61,6 +62,37 @@ public class Log
 		int ms = now.get(Calendar.MILLISECOND);
 
 		return String.format(TIME_FORMAT_STR, hour, min, sec, ms);
+	}
+
+	private static String getClassStamp()
+	{
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		boolean foundLog = false;
+
+		for (StackTraceElement e : trace)
+		{
+			if (!foundLog && e.getClassName().equals("cs355.solution.util.Log"))
+			{
+				foundLog = true;
+			}
+			else if (foundLog && !e.getClassName().equals("cs355.solution.util.Log"))
+			{
+				String[] classname = e.getClassName().split("\\.");
+				String cname = classname[classname.length - 1];
+
+				return String.format(CLASS_FORMAT_STR, cname, e.getMethodName(), e.getFileName(), e.getLineNumber());
+			}
+		}
+
+		return "<<Unknown>>";
+	}
+
+	private static String getLinePrefix()
+	{
+		String ts = getTimestamp();
+		String cm = getClassStamp();
+
+		return String.format("%s : %s", ts, cm);
 	}
 
 	public synchronized static void setLogLevel(int level)
@@ -490,7 +522,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
@@ -507,7 +539,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%b\n", stamp, x);
@@ -518,7 +550,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%d\n", stamp, x);
@@ -529,7 +561,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%c\n", stamp, x);
@@ -540,7 +572,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			String[] lines = new String(x).split("\n");
 
@@ -556,7 +588,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -567,7 +599,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -578,7 +610,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%d\n", stamp, x);
@@ -589,7 +621,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 
 			for (PrintStream stream : verbOuts)
 				stream.printf("%s%d\n", stamp, x);
@@ -600,7 +632,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -616,7 +648,7 @@ public class Log
 	{
 		if (level >= VERBOSE)
 		{
-			String stamp = String.format(VERB_STAMP, getTimestamp());
+			String stamp = String.format(VERB_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -631,7 +663,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -647,7 +679,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%b\n", stamp, x);
 		}
@@ -657,7 +689,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -667,7 +699,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%c\n", stamp, x);
 		}
@@ -677,7 +709,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -692,7 +724,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -702,7 +734,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -712,7 +744,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -722,7 +754,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			for (PrintStream stream : debgOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -732,7 +764,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -748,7 +780,7 @@ public class Log
 	{
 		if (level >= DEBUG)
 		{
-			String stamp = String.format(DEBUG_STAMP, getTimestamp());
+			String stamp = String.format(DEBUG_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -763,7 +795,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -779,7 +811,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%b\n", stamp, x);
 		}
@@ -789,7 +821,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -799,7 +831,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%c\n", stamp, x);
 		}
@@ -809,7 +841,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -824,7 +856,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -834,7 +866,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -844,7 +876,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -854,7 +886,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			for (PrintStream stream : infoOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -864,7 +896,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -880,7 +912,7 @@ public class Log
 	{
 		if (level >= INFO)
 		{
-			String stamp = String.format(INFO_STAMP, getTimestamp());
+			String stamp = String.format(INFO_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -895,7 +927,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -911,7 +943,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%b\n", stamp, x);
 		}
@@ -921,7 +953,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -931,7 +963,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%c\n", stamp, x);
 		}
@@ -941,7 +973,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -956,7 +988,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -966,7 +998,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -976,7 +1008,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -986,7 +1018,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			for (PrintStream stream : warnOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -996,7 +1028,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -1012,7 +1044,7 @@ public class Log
 	{
 		if (level >= WARNING)
 		{
-			String stamp = String.format(WARN_STAMP, getTimestamp());
+			String stamp = String.format(WARN_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -1027,7 +1059,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -1043,7 +1075,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%b\n", stamp, x);
 		}
@@ -1053,7 +1085,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1063,7 +1095,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%c\n", stamp, x);
 		}
@@ -1073,7 +1105,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -1088,7 +1120,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -1098,7 +1130,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -1108,7 +1140,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1118,7 +1150,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			for (PrintStream stream : errorOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1128,7 +1160,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -1144,7 +1176,7 @@ public class Log
 	{
 		if (level >= ERROR)
 		{
-			String stamp = String.format(ERROR_STAMP, getTimestamp());
+			String stamp = String.format(ERROR_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -1159,7 +1191,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -1175,7 +1207,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1186,7 +1218,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1197,7 +1229,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%c\n", stamp, x);
@@ -1208,7 +1240,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -1223,7 +1255,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1234,7 +1266,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1245,7 +1277,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1256,7 +1288,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 
 			for (PrintStream stream : fatalOuts)
 				stream.printf("%s%s\n", stamp, x);
@@ -1267,7 +1299,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -1283,7 +1315,7 @@ public class Log
 	{
 		if (level >= FATAL)
 		{
-			String stamp = String.format(FATAL_STAMP, getTimestamp());
+			String stamp = String.format(FATAL_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
@@ -1298,7 +1330,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			message = String.format(message, params);
 			String[] lines = message.split("\n");
 
@@ -1314,7 +1346,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%b\n", stamp, x);
 		}
@@ -1324,7 +1356,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1334,7 +1366,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%c\n", stamp, x);
 		}
@@ -1344,7 +1376,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			String[] lines = new String(x).split("\n");
 
 			for (String line : lines)
@@ -1359,7 +1391,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -1369,7 +1401,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%s\n", stamp, x);
 		}
@@ -1379,7 +1411,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1389,7 +1421,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			for (PrintStream stream : testOuts)
 				stream.printf("%s%d\n", stamp, x);
 		}
@@ -1399,7 +1431,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			String message = x.toString();
 			String[] lines = message.split("\n");
 
@@ -1415,7 +1447,7 @@ public class Log
 	{
 		if (testLoggingEnabled)
 		{
-			String stamp = String.format(TEST_STAMP, getTimestamp());
+			String stamp = String.format(TEST_STAMP, getLinePrefix());
 			String[] lines = x.split("\n");
 
 			for (String line : lines)
