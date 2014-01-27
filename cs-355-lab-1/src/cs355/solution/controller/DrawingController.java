@@ -2,18 +2,21 @@ package cs355.solution.controller;
 
 import java.awt.Color;
 
+import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
 import cs355.solution.model.shapes.ShapeType;
 import cs355.solution.util.math.Vector2D;
 
-public class DrawingController
+public class DrawingController extends ClickListener
 {
 	private final IModelManager	model;
 
 	private final DrawingState	drawingState;
 
 	private Shape				currentShape;
+
+	private ClickListener		next;
 
 	public DrawingController(IModelManager model)
 	{
@@ -137,5 +140,11 @@ public class DrawingController
 		drawingState.reset();
 
 		currentShape = null;
+	}
+
+	@Override
+	public boolean processClick(Vector2D p)
+	{
+		return addTrianglePoint(p);
 	}
 }

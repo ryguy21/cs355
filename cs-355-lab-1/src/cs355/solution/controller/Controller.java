@@ -6,16 +6,20 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
+import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.model.IModelManager;
 import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class Controller implements IController
 {
-	private final IModelManager		model;
-	private final ViewRefresher		refresher;
+	private final IModelManager			model;
+	private final ViewRefresher			refresher;
 
-	private final DrawingController	drawingController;
+	private final DrawingController		drawingController;
+	private final SelectionController	selectionController;
+
+	private final ClickListener			clickListener;
 
 	public Controller(IModelManager model, ViewRefresher refresher)
 	{
@@ -23,6 +27,9 @@ public class Controller implements IController
 		this.refresher = refresher;
 
 		drawingController = new DrawingController(model);
+		clickListener = selectionController = new SelectionController(model);
+
+		clickListener.addNextClickListener(drawingController);
 	}
 
 	@Override
@@ -91,12 +98,7 @@ public class Controller implements IController
 	@Override
 	public void registerClick(Vector2D p)
 	{
-		boolean consumed = drawingController.addTrianglePoint(p);
-		if (!consumed)
-		{
-			// do something here
-		}
-
+		clickListener.mouseClicked(p);
 		refresh();
 	}
 
