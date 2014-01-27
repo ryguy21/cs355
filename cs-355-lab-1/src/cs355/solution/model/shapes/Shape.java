@@ -2,6 +2,8 @@ package cs355.solution.model.shapes;
 
 import java.awt.Color;
 
+import cs355.solution.util.math.Vector2D;
+
 public abstract class Shape
 {
 	public Shape(Color color)
@@ -22,4 +24,6 @@ public abstract class Shape
 	}
 
 	public abstract ShapeType getType();
+
+	public abstract Vector2D getCenter();
 }

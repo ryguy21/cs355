@@ -51,4 +51,10 @@ public class Line extends Shape
 	{
 		return ShapeType.LINE;
 	}
+
+	@Override
+	public Vector2D getCenter()
+	{
+		return Vector2D.average(start, end);
+	}
 }

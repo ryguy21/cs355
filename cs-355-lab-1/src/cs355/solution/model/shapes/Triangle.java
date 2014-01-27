@@ -69,4 +69,10 @@ public class Triangle extends Shape
 		return builder.toString();
 	}
 
+	@Override
+	public Vector2D getCenter()
+	{
+		return Vector2D.average(p1, p2, p3);
+	}
+
 }

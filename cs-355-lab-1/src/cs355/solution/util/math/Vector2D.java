@@ -262,12 +262,17 @@ public class Vector2D
 		return x * other.x + y * other.y;
 	}
 
-	public static Vector2D average(Vector2D v1, Vector2D v2)
+	public static Vector2D average(Vector2D... vs)
 	{
-		float x = (v1.x + v2.x) * 0.5f;
-		float y = (v1.y + v2.y) * 0.5f;
+		float x = 0f, y = 0f;
 
-		return new Vector2D(x, y);
+		for (Vector2D v : vs)
+		{
+			x += v.x;
+			y += v.y;
+		}
+
+		return new Vector2D(x / vs.length, y / vs.length);
 	}
 
 	public Vector3D get3DVector()

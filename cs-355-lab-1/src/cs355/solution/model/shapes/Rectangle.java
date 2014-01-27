@@ -53,4 +53,10 @@ public class Rectangle extends Shape
 	{
 		return ShapeType.RECTANGLE;
 	}
+
+	@Override
+	public Vector2D getCenter()
+	{
+		return topLeft.getAddedCopy(width * 0.5f, height * 0.5f);
+	}
 }
