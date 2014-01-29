@@ -21,9 +21,9 @@ public class Refresher implements ViewRefresher
 	public void refreshView(Graphics2D g)
 	{
 		Log.v("refreshView()");
-		Log.v("Drawing %d shapes\n", model.getShapeStorage().getShapeCount());
+		Log.v("Drawing %d shapes\n", model.getShapeCount());
 
-		Iterator<Shape> itr = model.getShapeStorage().getShapes();
+		Iterator<Shape> itr = model.getShapes();
 
 		while (itr.hasNext())
 		{

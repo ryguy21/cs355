@@ -26,4 +26,6 @@ public abstract class Shape
 	public abstract ShapeType getType();
 
 	public abstract Vector2D getCenter();
+
+	public abstract boolean contains(Vector2D p);
 }

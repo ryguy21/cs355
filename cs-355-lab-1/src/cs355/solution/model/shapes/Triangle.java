@@ -75,4 +75,10 @@ public class Triangle extends Shape
 		return Vector2D.average(p1, p2, p3);
 	}
 
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		return false;
+	}
+
 }

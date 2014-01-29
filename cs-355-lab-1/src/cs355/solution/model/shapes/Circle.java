@@ -2,6 +2,7 @@ package cs355.solution.model.shapes;
 
 import java.awt.Color;
 
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class Circle extends Ellipse
@@ -45,5 +46,21 @@ public class Circle extends Ellipse
 	public ShapeType getType()
 	{
 		return ShapeType.CIRCLE;
+	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		Log.d("Checking if %s is inside circle %s", p, this);
+
+		p = getCenter().subtract(p);
+
+		return p.lengthSquared() <= getRadius() * getRadius();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Circle [center=" + getCenter() + ", radius=" + getRadius() + "]";
 	}
 }

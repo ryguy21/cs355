@@ -41,7 +41,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseClicked(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.registerClick(p);
+		controller.processClick(p);
 	}
 
 	@Override

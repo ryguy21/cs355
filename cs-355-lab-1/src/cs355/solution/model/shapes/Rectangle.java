@@ -59,4 +59,10 @@ public class Rectangle extends Shape
 	{
 		return topLeft.getAddedCopy(width * 0.5f, height * 0.5f);
 	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		return false;
+	}
 }

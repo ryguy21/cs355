@@ -57,4 +57,10 @@ public class Line extends Shape
 	{
 		return Vector2D.average(start, end);
 	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		return false;
+	}
 }

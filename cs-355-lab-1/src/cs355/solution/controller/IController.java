@@ -11,7 +11,7 @@ public interface IController extends CS355Controller
 
 	public void endDrawing();
 
-	public void registerClick(Vector2D p);
+	public void processClick(Vector2D p);
 
 	public void registerMove(Vector2D p);
 }

@@ -68,7 +68,7 @@ public class DrawingController extends ClickListener
 
 			currentShape = ShapeCreator.getInstance().createShape(drawingState);
 
-			model.getShapeStorage().addShape(currentShape);
+			model.addShape(currentShape);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class DrawingController extends ClickListener
 			{
 				drawingState.setStartPoint(p);
 				currentShape = ShapeCreator.getInstance().createShape(drawingState);
-				model.getShapeStorage().addShape(currentShape);
+				model.addShape(currentShape);
 			}
 			else if (!drawingState.hasIntermediatePoint())
 			{

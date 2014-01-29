@@ -18,6 +18,7 @@ public class Ellipse extends Shape
 		this.yRadius = yRadius;
 	}
 
+	@Override
 	public Vector2D getCenter()
 	{
 		return center.getCopy();
@@ -67,5 +68,11 @@ public class Ellipse extends Shape
 	public ShapeType getType()
 	{
 		return ShapeType.ELLIPSE;
+	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		return false;
 	}
 }

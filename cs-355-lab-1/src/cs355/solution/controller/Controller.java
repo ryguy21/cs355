@@ -18,6 +18,8 @@ public class Controller implements IController
 
 	private final DrawingController		drawingController;
 	private final SelectionController	selectionController;
+	private final DragController		dragController;
+	private final RotateController		rotateController;
 
 	private final ClickListener			clickListener;
 
@@ -28,6 +30,8 @@ public class Controller implements IController
 
 		drawingController = new DrawingController(model);
 		clickListener = selectionController = new SelectionController(model);
+		dragController = new DragController(model);
+		rotateController = new RotateController(model);
 
 		clickListener.addNextClickListener(drawingController);
 	}
@@ -96,16 +100,16 @@ public class Controller implements IController
 	}
 
 	@Override
-	public void registerClick(Vector2D p)
+	public void processClick(Vector2D p)
 	{
 		clickListener.mouseClicked(p);
 		refresh();
 	}
 
 	@Override
-	public void registerMove(Vector2D p)
+	public void registerMove(Vector2D to)
 	{
-		drawingController.updateTrianglePoint(p);
+		drawingController.updateTrianglePoint(to);
 		refresh();
 	}
 

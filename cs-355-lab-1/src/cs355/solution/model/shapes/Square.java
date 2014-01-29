@@ -41,4 +41,10 @@ public class Square extends Rectangle
 	{
 		return ShapeType.SQUARE;
 	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		return false;
+	}
 }
