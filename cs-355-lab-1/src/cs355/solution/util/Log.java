@@ -75,7 +75,8 @@ public class Log
 			{
 				foundLog = true;
 			}
-			else if (foundLog && !e.getClassName().equals("cs355.solution.util.Log"))
+			else if (foundLog && !e.getClassName().equals("cs355.solution.util.Log")
+					&& !e.getClassName().equals("cs355.solution.util.Tools"))
 			{
 				String[] classname = e.getClassName().split("\\.");
 				String cname = classname[classname.length - 1];

@@ -1,13 +1,6 @@
 package cs355.solution.util;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Tools
 {
@@ -38,6 +31,20 @@ public class Tools
 		}
 	}
 
+	public static void printStackTrace(String untilClass)
+	{
+		Log.v("Logging stack trace of thread '%s'", Thread.currentThread().getName());
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		for (int i = 2; i < trace.length; i++)
+		{
+			StackTraceElement e = trace[i];
+			Log.v("\tat %s.%s(%s:%d)", e.getClassName(), e.getMethodName(), e.getFileName(), e.getLineNumber());
+
+			if (e.getClassName().contains(untilClass))
+				return;
+		}
+	}
+
 	public static void printStackTraceAtLogLevel(int logLevel)
 	{
 		Log.log(logLevel, "Logging stack trace of thread '%s'", Thread.currentThread().getName());
@@ -57,6 +64,20 @@ public class Tools
 		{
 			StackTraceElement e = trace[i];
 			Log.log(logLevel, "\tat %s.%s(%s:%d)", e.getClassName(), e.getMethodName(), e.getFileName(), e.getLineNumber());
+		}
+	}
+
+	public static void printStackTraceAtLogLevel(int logLevel, String untilClass)
+	{
+		Log.log(logLevel, "Logging stack trace of thread '%s'", Thread.currentThread().getName());
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		for (int i = 2; i < trace.length; i++)
+		{
+			StackTraceElement e = trace[i];
+			Log.log(logLevel, "\tat %s.%s(%s:%d)", e.getClassName(), e.getMethodName(), e.getFileName(), e.getLineNumber());
+
+			if (e.getClassName().contains(untilClass))
+				return;
 		}
 	}
 
