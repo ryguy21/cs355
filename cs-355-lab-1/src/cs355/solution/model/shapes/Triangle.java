@@ -28,6 +28,9 @@ public class Triangle extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
+		if (p1.equals(p2) || p2.equals(p3) || p3.equals(p1))
+			return false;
+
 		//@formatter:off
 		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1)) >= 0
 				&& p.getSubtractedCopy(p2).dot(getPoint3().subtract(p2)) >= 0

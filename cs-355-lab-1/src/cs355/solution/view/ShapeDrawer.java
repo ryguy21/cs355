@@ -109,5 +109,7 @@ public class ShapeDrawer implements IShapeDrawer
 		ys[2] = (int) p3.y;
 
 		g.fillPolygon(xs, ys, 3);
+		if (p1.equals(p2) || p2.equals(p3) || p3.equals(p1))
+			g.drawPolygon(xs, ys, 3);
 	}
 }

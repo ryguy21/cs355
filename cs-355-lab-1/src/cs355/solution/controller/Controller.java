@@ -102,6 +102,12 @@ public class Controller implements IController
 	@Override
 	public void processClick(Vector2D p)
 	{
+		if (drawingController.isActive())
+		{
+			drawingController.addTrianglePoint(p);
+			return;
+		}
+
 		clickListener.mouseClicked(p);
 		refresh();
 	}
