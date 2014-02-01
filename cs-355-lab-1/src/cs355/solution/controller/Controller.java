@@ -41,6 +41,7 @@ public class Controller implements IController
 	{
 		Log.v("colorButtonHit(%s)", c);
 		drawingController.colorButtonHit(c);
+		GUIFunctions.changeSelectedColor(c);
 	}
 
 	@Override
@@ -129,6 +130,7 @@ public class Controller implements IController
 	public void selectButtonHit()
 	{
 		Log.v("selectButtonHit()");
+		drawingController.disable();
 	}
 
 	@Override

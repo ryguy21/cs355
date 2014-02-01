@@ -24,6 +24,12 @@ public class Ellipse extends Shape
 		return center.getCopy();
 	}
 
+	@Override
+	public float getRotation()
+	{
+		return 0f;
+	}
+
 	public void setCenter(Vector2D center)
 	{
 		this.center.copyValues(center);

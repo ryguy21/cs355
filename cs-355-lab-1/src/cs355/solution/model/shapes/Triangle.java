@@ -26,15 +26,21 @@ public class Triangle extends Shape
 	}
 
 	@Override
+	public float getRotation()
+	{
+		return 0f;
+	}
+
+	@Override
 	public boolean contains(Vector2D p)
 	{
 		if (p1.equals(p2) || p2.equals(p3) || p3.equals(p1))
 			return false;
 
 		//@formatter:off
-		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1)) >= 0
-				&& p.getSubtractedCopy(p2).dot(getPoint3().subtract(p2)) >= 0
-				&& p.getSubtractedCopy(p3).dot(getPoint1().subtract(p3)) >= 0)
+		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1).getPerpendicular()) >= 0
+				&& p.getSubtractedCopy(p2).dot(getPoint3().subtract(p2).getPerpendicular()) >= 0
+				&& p.getSubtractedCopy(p3).dot(getPoint1().subtract(p3).getPerpendicular()) >= 0)
 			return true;
 		else
 			return false;

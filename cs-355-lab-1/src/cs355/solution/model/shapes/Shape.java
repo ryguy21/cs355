@@ -27,5 +27,7 @@ public abstract class Shape
 
 	public abstract Vector2D getCenter();
 
+	public abstract float getRotation();
+
 	public abstract boolean contains(Vector2D p);
 }

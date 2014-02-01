@@ -11,7 +11,6 @@ import cs355.solution.util.math.Vector2D;
 public class SelectionController extends ClickListener
 {
 	private final IModelManager	model;
-	private ClickListener		next;
 
 	public SelectionController(IModelManager model)
 	{

@@ -18,6 +18,8 @@ public class DrawingState
 	private ShapeType	currentShape;
 	private Color		color	= Color.white;
 
+	private boolean		enabled;
+
 	public DrawingState()
 	{
 		reset();
@@ -36,6 +38,18 @@ public class DrawingState
 	public void setCurrentShape(ShapeType currentShape)
 	{
 		this.currentShape = currentShape;
+		if (currentShape != null)
+			enabled = true;
+	}
+
+	public void setEnabled(boolean enable)
+	{
+		enabled = enable;
+	}
+
+	public boolean isEnabled()
+	{
+		return enabled;
 	}
 
 	public Vector2D getStartPoint()

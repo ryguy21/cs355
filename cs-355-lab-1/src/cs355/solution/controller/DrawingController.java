@@ -60,12 +60,17 @@ public class DrawingController extends ClickListener
 
 	public boolean isActive()
 	{
-		return currentShape != null;
+		return drawingState.isEnabled();
+	}
+
+	public void disable()
+	{
+		drawingState.setEnabled(false);
 	}
 
 	public void setDrawingStartPoint(Vector2D p)
 	{
-		if (drawingState.isSetUp() && drawingState.getCurrentShape() != ShapeType.TRIANGLE)
+		if (drawingState.isEnabled() && drawingState.isSetUp() && drawingState.getCurrentShape() != ShapeType.TRIANGLE)
 		{
 			drawingState.setStartPoint(p);
 
@@ -77,7 +82,7 @@ public class DrawingController extends ClickListener
 
 	public void updateDrawingEndPoint(Vector2D p)
 	{
-		if (drawingState.isSetUp() && drawingState.getCurrentShape() != ShapeType.TRIANGLE)
+		if (drawingState.isEnabled() && drawingState.isSetUp() && drawingState.getCurrentShape() != ShapeType.TRIANGLE)
 		{
 			drawingState.setEndPoint(p);
 
@@ -87,7 +92,7 @@ public class DrawingController extends ClickListener
 
 	public boolean addTrianglePoint(Vector2D p)
 	{
-		if (drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE)
+		if (drawingState.isEnabled() && drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE)
 		{
 			if (!drawingState.hasStartPoint())
 			{
@@ -117,7 +122,8 @@ public class DrawingController extends ClickListener
 
 	public void updateTrianglePoint(Vector2D p)
 	{
-		if (drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE && drawingState.hasStartPoint())
+		if (drawingState.isEnabled() && drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE
+				&& drawingState.hasStartPoint())
 		{
 			if (!drawingState.hasIntermediatePoint())
 			{
