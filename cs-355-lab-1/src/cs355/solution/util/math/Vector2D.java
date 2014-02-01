@@ -277,7 +277,7 @@ public class Vector2D
 
 	public Vector2D getPerpendicular()
 	{
-		return new Vector2D(-x, y);
+		return new Vector2D(-y, x);
 	}
 
 	public Vector2D projectToCoordinates(Vector2D xaxis, Vector2D yaxis)
