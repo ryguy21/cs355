@@ -6,6 +6,7 @@ import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
 import cs355.solution.model.shapes.ShapeType;
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class DrawingController extends ClickListener
@@ -86,19 +87,23 @@ public class DrawingController extends ClickListener
 	{
 		if (drawingState.isSetUp() && drawingState.getCurrentShape() == ShapeType.TRIANGLE)
 		{
+			Log.d("Adding triangle point %s", p);
 			if (!drawingState.hasStartPoint())
 			{
+				Log.d("as start point");
 				drawingState.setStartPoint(p);
 				currentShape = ShapeCreator.getInstance().createShape(drawingState);
 				model.addShape(currentShape);
 			}
 			else if (!drawingState.hasIntermediatePoint())
 			{
+				Log.d("as intermediate point");
 				drawingState.setIntermediatePoint(p);
 				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
 			}
 			else if (!drawingState.hasEndPoint())
 			{
+				Log.d("as end point");
 				drawingState.setEndPoint(p);
 				ShapeCreator.getInstance().updateShape(drawingState, currentShape);
 				endDrawingInternal();

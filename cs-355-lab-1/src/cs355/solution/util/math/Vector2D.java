@@ -275,6 +275,19 @@ public class Vector2D
 		return new Vector2D(x / vs.length, y / vs.length);
 	}
 
+	public Vector2D getPerpendicular()
+	{
+		return new Vector2D(-x, y);
+	}
+
+	public Vector2D projectToCoordinates(Vector2D xaxis, Vector2D yaxis)
+	{
+		float x = xaxis.getNormalizedCopy().dot(this);
+		float y = yaxis.getNormalizedCopy().dot(this);
+
+		return new Vector2D(x, y);
+	}
+
 	public Vector3D get3DVector()
 	{
 		return new Vector3D(this);

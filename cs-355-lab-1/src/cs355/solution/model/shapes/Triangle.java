@@ -19,6 +19,25 @@ public class Triangle extends Shape
 		this.p3 = p3.getCopy();
 	}
 
+	@Override
+	public Vector2D getCenter()
+	{
+		return Vector2D.average(p1, p2, p3);
+	}
+
+	@Override
+	public boolean contains(Vector2D p)
+	{
+		//@formatter:off
+		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1)) >= 0
+				&& p.getSubtractedCopy(p2).dot(getPoint3().subtract(p2)) >= 0
+				&& p.getSubtractedCopy(p3).dot(getPoint1().subtract(p3)) >= 0)
+			return true;
+		else
+			return false;
+		//@formatter:on
+	}
+
 	public Vector2D getPoint1()
 	{
 		return p1.getCopy();
@@ -68,17 +87,4 @@ public class Triangle extends Shape
 		builder.append("]");
 		return builder.toString();
 	}
-
-	@Override
-	public Vector2D getCenter()
-	{
-		return Vector2D.average(p1, p2, p3);
-	}
-
-	@Override
-	public boolean contains(Vector2D p)
-	{
-		return false;
-	}
-
 }
