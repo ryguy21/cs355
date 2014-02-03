@@ -6,33 +6,20 @@ import cs355.solution.util.math.Vector2D;
 
 public class Ellipse extends Shape
 {
-	private final Vector2D	center;
-	private float			xRadius;
-	private float			yRadius;
+	private float	xRadius;
+	private float	yRadius;
 
 	public Ellipse(Color color, Vector2D center, float xRadius, float yRadius)
 	{
-		super(color);
-		this.center = center.getCopy();
+		super(color, center);
 		this.xRadius = xRadius;
 		this.yRadius = yRadius;
-	}
-
-	@Override
-	public Vector2D getCenter()
-	{
-		return center.getCopy();
 	}
 
 	@Override
 	public float getRotation()
 	{
 		return 0f;
-	}
-
-	public void setCenter(Vector2D center)
-	{
-		this.center.copyValues(center);
 	}
 
 	public Vector2D getTopLeftCorner()
@@ -80,5 +67,11 @@ public class Ellipse extends Shape
 	public boolean contains(Vector2D p)
 	{
 		return false;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Ellipse [center=" + center.print() + ", a=" + xRadius * 2f + ", b=" + yRadius * 2f + "]";
 	}
 }

@@ -66,6 +66,8 @@ public class DrawingController extends ClickListener
 	public void disable()
 	{
 		drawingState.setEnabled(false);
+		model.removeShape(currentShape);
+		endDrawingInternal();
 	}
 
 	public void setDrawingStartPoint(Vector2D p)

@@ -6,26 +6,14 @@ import cs355.solution.util.math.Vector2D;
 
 public class Rectangle extends Shape
 {
-	protected final Vector2D	topLeft;
-	protected float				width;
-	protected float				height;
+	protected float	width;
+	protected float	height;
 
 	public Rectangle(Color color, Vector2D topLeft, float width, float height)
 	{
-		super(color);
-		this.topLeft = topLeft.getCopy();
+		super(color, topLeft.getAddedCopy(width * 0.5f, height * 0.5f));
 		this.width = width;
 		this.height = height;
-	}
-
-	public Vector2D getTopLeftCorner()
-	{
-		return topLeft.getCopy();
-	}
-
-	public void setTopLeftCorner(Vector2D topLeft)
-	{
-		this.topLeft.copyValues(topLeft);
 	}
 
 	public float getWidth()
@@ -48,16 +36,15 @@ public class Rectangle extends Shape
 		this.height = height;
 	}
 
+	public Vector2D getTopLeftCorner()
+	{
+		return center.getSubtractedCopy(width * 0.5f, height * 0.5f);
+	}
+
 	@Override
 	public ShapeType getType()
 	{
 		return ShapeType.RECTANGLE;
-	}
-
-	@Override
-	public Vector2D getCenter()
-	{
-		return topLeft.getAddedCopy(width * 0.5f, height * 0.5f);
 	}
 
 	@Override
@@ -69,6 +56,28 @@ public class Rectangle extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		return false;
+		p = p.getSubtractedCopy(center);
+
+		if (p.x < -width * 0.5f || width * 0.5f < p.x)
+			return false;
+		if (p.y < -height * 0.5f || height * 0.5f < p.y)
+			return false;
+
+		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Rectangle [center=");
+		builder.append(center.print());
+		builder.append(", width=");
+		builder.append(width);
+		builder.append(", height=");
+		builder.append(height);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

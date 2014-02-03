@@ -2,12 +2,15 @@ package cs355.solution.controller;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.model.IModelManager;
+import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
@@ -23,17 +26,21 @@ public class Controller implements IController
 
 	private final ClickListener			clickListener;
 
+	private final Set<Shape>			controlShapes;
+
 	public Controller(IModelManager model, ViewRefresher refresher)
 	{
 		this.model = model;
 		this.refresher = refresher;
 
 		drawingController = new DrawingController(model);
-		clickListener = selectionController = new SelectionController(model);
+		clickListener = selectionController = new SelectionController(model, this);
 		dragController = new DragController(model);
 		rotateController = new RotateController(model);
 
 		clickListener.addNextClickListener(drawingController);
+
+		controlShapes = new HashSet<Shape>();
 	}
 
 	@Override

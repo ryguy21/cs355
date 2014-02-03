@@ -6,12 +6,15 @@ import cs355.solution.util.math.Vector2D;
 
 public abstract class Shape
 {
-	public Shape(Color color)
+	protected final Vector2D	center;
+	protected Color				color;
+	protected float				rotation;
+
+	public Shape(Color color, Vector2D center)
 	{
 		setColor(color);
+		this.center = center.getCopy();
 	}
-
-	private Color	color;
 
 	public Color getColor()
 	{
@@ -25,9 +28,28 @@ public abstract class Shape
 
 	public abstract ShapeType getType();
 
-	public abstract Vector2D getCenter();
-
-	public abstract float getRotation();
-
 	public abstract boolean contains(Vector2D p);
+
+	@Override
+	public abstract String toString();
+
+	public Vector2D getCenter()
+	{
+		return center.getCopy();
+	}
+
+	public void setCenter(Vector2D center)
+	{
+		this.center.copyValues(center);
+	}
+
+	public float getRotation()
+	{
+		return rotation;
+	}
+
+	public void setRotation(float rotation)
+	{
+		this.rotation = rotation;
+	}
 }

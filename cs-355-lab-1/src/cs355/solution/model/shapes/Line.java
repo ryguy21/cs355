@@ -11,7 +11,7 @@ public class Line extends Shape
 
 	public Line(Color color, Vector2D start, Vector2D end)
 	{
-		super(color);
+		super(color, Vector2D.average(start, end));
 		this.start = start.getCopy();
 		this.end = end.getCopy();
 	}
@@ -69,4 +69,19 @@ public class Line extends Shape
 	{
 		return false;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Line [center=");
+		builder.append(center.print());
+		builder.append(", start=");
+		builder.append(start.print());
+		builder.append(", end=");
+		builder.append(end.print());
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

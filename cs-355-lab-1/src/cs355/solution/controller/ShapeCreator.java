@@ -144,12 +144,11 @@ public class ShapeCreator
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
 
-		float leftX = Math.min(start.x, end.x);
-		float topY = Math.min(start.y, end.y);
+		Vector2D center = Vector2D.average(start, end);
 		float width = Math.abs(start.x - end.x);
 		float height = Math.abs(start.y - end.y);
 
-		r.setTopLeftCorner(new Vector2D(leftX, topY));
+		r.setCenter(center);
 		r.setWidth(width);
 		r.setHeight(height);
 	}
@@ -160,12 +159,13 @@ public class ShapeCreator
 		Vector2D end = state.getEndPoint();
 
 		float size = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
+		float half_size = size * 0.5f;
 		float multiplierX = end.x > start.x ? 0 : -1;
 		float multiplierY = end.y > start.y ? 0 : -1;
 
-		Vector2D topLeftCorner = new Vector2D(start.x + size * multiplierX, start.y + size * multiplierY);
+		Vector2D center = new Vector2D(start.x + size * multiplierX + half_size, start.y + size * multiplierY + half_size);
 
-		s.setTopLeftCorner(topLeftCorner);
+		s.setCenter(center);
 		s.setSize(size);
 	}
 

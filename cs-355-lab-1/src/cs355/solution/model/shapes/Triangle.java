@@ -12,23 +12,11 @@ public class Triangle extends Shape
 
 	public Triangle(Color color, Vector2D p1, Vector2D p2, Vector2D p3)
 	{
-		super(color);
+		super(color, Vector2D.average(p1, p2, p3));
 
-		this.p1 = p1.getCopy();
-		this.p2 = p2.getCopy();
-		this.p3 = p3.getCopy();
-	}
-
-	@Override
-	public Vector2D getCenter()
-	{
-		return Vector2D.average(p1, p2, p3);
-	}
-
-	@Override
-	public float getRotation()
-	{
-		return 0f;
+		this.p1 = p1.getSubtractedCopy(center);
+		this.p2 = p2.getSubtractedCopy(center);
+		this.p3 = p3.getSubtractedCopy(center);
 	}
 
 	@Override
@@ -36,6 +24,8 @@ public class Triangle extends Shape
 	{
 		if (p1.equals(p2) || p2.equals(p3) || p3.equals(p1))
 			return false;
+
+		p = p.getSubtractedCopy(center);
 
 		//@formatter:off
 		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1).getPerpendicular()) >= 0
@@ -54,7 +44,9 @@ public class Triangle extends Shape
 
 	public void setPoint1(Vector2D pt1)
 	{
-		p1.copyValues(pt1);
+		p1.x = pt1.x - center.x;
+		p1.y = pt1.y - center.y;
+		resetCenter();
 	}
 
 	public Vector2D getPoint2()
@@ -64,7 +56,9 @@ public class Triangle extends Shape
 
 	public void setPoint2(Vector2D pt2)
 	{
-		p2.copyValues(pt2);
+		p2.x = pt2.x - center.x;
+		p2.y = pt2.y - center.y;
+		resetCenter();
 	}
 
 	public Vector2D getPoint3()
@@ -74,7 +68,20 @@ public class Triangle extends Shape
 
 	public void setPoint3(Vector2D pt3)
 	{
-		p3.copyValues(pt3);
+		p3.x = pt3.x - center.x;
+		p3.y = pt3.y - center.y;
+		resetCenter();
+	}
+
+	private void resetCenter()
+	{
+		Vector2D c = Vector2D.average(p1, p2, p3);
+		Vector2D trans = c.getSubtractedCopy(center);
+
+		p1.subtract(trans);
+		p2.subtract(trans);
+		p3.subtract(trans);
+		center.copyValues(c);
 	}
 
 	@Override
@@ -87,7 +94,9 @@ public class Triangle extends Shape
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("Triangle [p1=");
+		builder.append("Triangle [center=");
+		builder.append(center.print());
+		builder.append(", p1=");
 		builder.append(p1.print());
 		builder.append(", p2=");
 		builder.append(p2.print());

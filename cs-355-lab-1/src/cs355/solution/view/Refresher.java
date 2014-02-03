@@ -19,16 +19,10 @@ public class Refresher implements ViewRefresher
 
 	private final List<Line>	lines	= new ArrayList<Line>();
 
-	private static Refresher	INSTANCE;
-
-	public static Refresher getInstance()
-	{
-		return INSTANCE;
-	}
-
 	public Refresher(IModelManager model)
 	{
 		this.model = model;
+		// for debugging
 		INSTANCE = this;
 	}
 
@@ -50,6 +44,14 @@ public class Refresher implements ViewRefresher
 			ShapeDrawer.getInstance().drawLine(l, g);
 	}
 
+	// for debugging
+	private static Refresher	INSTANCE;
+
+	public static Refresher getInstance()
+	{
+		return INSTANCE;
+	}
+
 	public void addLine(Color c, Vector2D start, Vector2D end)
 	{
 		lines.add(new Line(c, start, end));
@@ -59,4 +61,5 @@ public class Refresher implements ViewRefresher
 	{
 		lines.clear();
 	}
+	// end debugging
 }
