@@ -2,15 +2,13 @@ package cs355.solution.controller;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.controller.interfaces.Control;
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.IModelManager;
 import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
@@ -27,7 +25,7 @@ public class Controller implements IController
 
 	private final ClickListener			clickListener;
 
-	private final Set<Control>			controls;
+	private Control						currentControl;
 
 	public Controller(IModelManager model, ViewRefresher refresher)
 	{
@@ -40,8 +38,6 @@ public class Controller implements IController
 		rotateController = new RotateController(model);
 
 		clickListener.addNextClickListener(drawingController);
-
-		controls = new HashSet<Control>();
 	}
 
 	@Override
@@ -57,7 +53,7 @@ public class Controller implements IController
 	{
 		Log.v("triangleButtonHit()");
 		drawingController.triangleButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -65,7 +61,7 @@ public class Controller implements IController
 	{
 		Log.v("squareButtonHit()");
 		drawingController.squareButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -73,7 +69,7 @@ public class Controller implements IController
 	{
 		Log.v("rectangleButtonHit()");
 		drawingController.rectangleButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -81,7 +77,7 @@ public class Controller implements IController
 	{
 		Log.v("circleButtonHit()");
 		drawingController.circleButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -89,7 +85,7 @@ public class Controller implements IController
 	{
 		Log.v("ellipseButtonHit()");
 		drawingController.ellipseButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -97,7 +93,7 @@ public class Controller implements IController
 	{
 		Log.v("lineButtonHit()");
 		drawingController.lineButtonHit();
-		clearControls();
+		unsetControl();
 	}
 
 	@Override
@@ -244,27 +240,22 @@ public class Controller implements IController
 	}
 
 	@Override
-	public void registerControl(Control controls)
+	public void setCurrentControl(Control control)
 	{
-		this.controls.add(controls);
+		currentControl = control;
 		refresh();
 	}
 
 	@Override
-	public void unregisterControl(Control control)
+	public void unsetControl()
 	{
-		controls.remove(control);
-	}
-
-	private void clearControls()
-	{
-		controls.clear();
+		currentControl = null;
 		refresh();
 	}
 
 	@Override
-	public Iterator<Control> getControls()
+	public Control getControl()
 	{
-		return Collections.unmodifiableSet(controls).iterator();
+		return currentControl;
 	}
 }

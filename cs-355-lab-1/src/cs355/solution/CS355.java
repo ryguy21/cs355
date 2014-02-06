@@ -6,7 +6,7 @@ package cs355.solution;
 import cs355.GUIFunctions;
 import cs355.solution.controller.Controller;
 import cs355.solution.controller.EventHandler;
-import cs355.solution.controller.IController;
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.Model;
 import cs355.solution.view.Refresher;

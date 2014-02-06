@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import cs355.ViewRefresher;
-import cs355.solution.controller.IController;
 import cs355.solution.controller.interfaces.Control;
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Line;
 import cs355.solution.model.shapes.Shape;
@@ -48,13 +48,9 @@ public class Refresher implements ViewRefresher
 
 		if (controller != null)
 		{
-			Iterator<Control> controls = controller.getControls();
-
-			while (controls.hasNext())
-			{
-				Control control = controls.next();
+			Control control = controller.getControl();
+			if (control != null)
 				control.draw(g);
-			}
 		}
 	}
 

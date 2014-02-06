@@ -5,7 +5,7 @@ import cs355.solution.model.shapes.*;
 
 public abstract class SelectionControlsFactory
 {
-	public static Control createControls(Shape shape)
+	public static Control createControl(Shape shape)
 	{
 		switch (shape.getType())
 		{

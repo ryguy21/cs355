@@ -1,9 +1,6 @@
-package cs355.solution.controller;
-
-import java.util.Iterator;
+package cs355.solution.controller.interfaces;
 
 import cs355.CS355Controller;
-import cs355.solution.controller.interfaces.Control;
 import cs355.solution.util.math.Vector2D;
 
 public interface IController extends CS355Controller
@@ -18,9 +15,9 @@ public interface IController extends CS355Controller
 
 	public void registerMove(Vector2D p);
 
-	public void registerControl(Control control);
+	public void setCurrentControl(Control control);
 
-	public void unregisterControl(Control control);
+	public void unsetControl();
 
-	public Iterator<Control> getControls();
+	public Control getControl();
 }

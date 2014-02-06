@@ -3,7 +3,7 @@ package cs355.solution.controller;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import cs355.solution.controller.IController;
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.util.math.Vector2D;
 
 public class EventHandler extends MouseAdapter
