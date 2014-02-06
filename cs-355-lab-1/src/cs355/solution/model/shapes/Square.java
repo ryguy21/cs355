@@ -43,8 +43,15 @@ public class Square extends Rectangle
 	}
 
 	@Override
-	public boolean contains(Vector2D p)
+	public String toString()
 	{
-		return false;
+		StringBuilder builder = new StringBuilder();
+		builder.append("Square [center=");
+		builder.append(center);
+		builder.append(", size=");
+		builder.append(width);
+		builder.append("]");
+		return builder.toString();
 	}
+
 }

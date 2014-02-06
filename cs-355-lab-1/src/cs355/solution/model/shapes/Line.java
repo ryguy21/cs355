@@ -67,7 +67,21 @@ public class Line extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		return false;
+		Vector2D line = new Vector2D(end, start);
+		Vector2D linen = line.getNormalizedCopy();
+		Vector2D linep = linen.getPerpendicular();
+
+		p = new Vector2D(p, start);
+
+		float along = linen.dot(p);
+		float near = linep.dot(p);
+
+		if (along < -4 || along > line.length() + 4)
+			return false;
+		if (near < -4 || 4 < near)
+			return false;
+
+		return true;
 	}
 
 	@Override

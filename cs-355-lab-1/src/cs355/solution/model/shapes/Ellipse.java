@@ -66,7 +66,12 @@ public class Ellipse extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		return false;
+		p = p.getSubtractedCopy(center);
+
+		float pa = p.x / xRadius;
+		float pb = p.y / yRadius;
+
+		return pa * pa + pb * pb <= 1;
 	}
 
 	@Override
