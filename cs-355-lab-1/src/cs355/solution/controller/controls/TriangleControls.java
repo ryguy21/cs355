@@ -11,16 +11,7 @@ import cs355.solution.util.math.Vector2D;
 
 public class TriangleControls implements Control
 {
-	private static final Stroke	rectangleStroke;
-	private static final Stroke	lineStroke;
-	private static final Stroke	basicStroke;
-
-	static
-	{
-		rectangleStroke = new BasicStroke(2.5f);
-		lineStroke = new BasicStroke(1.5f);
-		basicStroke = new BasicStroke(1f);
-	}
+	private static final Stroke	STROKE	= new BasicStroke(1.5f);
 
 	private final SelectionControl	p1control, p2control, p3control;
 
@@ -35,15 +26,14 @@ public class TriangleControls implements Control
 	@Override
 	public void draw(Graphics2D g)
 	{
+		Stroke stroke = g.getStroke();
 		g.setColor(Color.cyan);
-		g.setStroke(rectangleStroke);
 
-		g.drawArc((int) p1control.x, (int) p1control.y - 4, 8, 8, 0, 360);
-		// g.drawRect((int) p1control.x - 4, (int) p1control.y - 4, 8, 8);
-		g.drawRect((int) p2control.x - 4, (int) p2control.y - 4, 8, 8);
-		g.drawRect((int) p3control.x - 4, (int) p3control.y - 4, 8, 8);
+		p1control.draw(g);
+		p2control.draw(g);
+		p3control.draw(g);
 
-		g.setStroke(lineStroke);
+		g.setStroke(STROKE);
 
 		int[] xs = new int[3];
 		int[] ys = new int[3];
@@ -58,12 +48,19 @@ public class TriangleControls implements Control
 
 		g.drawPolygon(xs, ys, 3);
 
-		g.setStroke(basicStroke);
+		g.setStroke(stroke);
 	}
 
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		return false;
+		if (p1control.contains(p))
+			return true;
+		else if (p2control.contains(p))
+			return true;
+		else if (p3control.contains(p))
+			return true;
+		else
+			return false;
 	}
 }
