@@ -75,13 +75,12 @@ public class Triangle extends Shape
 
 	private void resetCenter()
 	{
-		Vector2D c = Vector2D.average(p1, p2, p3);
-		Vector2D trans = c.getSubtractedCopy(center);
+		Vector2D trans = Vector2D.average(p1, p2, p3);
 
 		p1.subtract(trans);
 		p2.subtract(trans);
 		p3.subtract(trans);
-		center.copyValues(c);
+		center.add(trans);
 	}
 
 	@Override
