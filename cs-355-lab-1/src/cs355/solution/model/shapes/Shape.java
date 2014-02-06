@@ -2,9 +2,10 @@ package cs355.solution.model.shapes;
 
 import java.awt.Color;
 
+import cs355.solution.controller.interfaces.Selectable;
 import cs355.solution.util.math.Vector2D;
 
-public abstract class Shape
+public abstract class Shape implements Selectable
 {
 	protected final Vector2D	center;
 	protected Color				color;
@@ -27,8 +28,6 @@ public abstract class Shape
 	}
 
 	public abstract ShapeType getType();
-
-	public abstract boolean contains(Vector2D p);
 
 	@Override
 	public abstract String toString();

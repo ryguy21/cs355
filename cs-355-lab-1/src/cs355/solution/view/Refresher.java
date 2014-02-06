@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import cs355.ViewRefresher;
+import cs355.solution.controller.IController;
+import cs355.solution.controller.interfaces.Control;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Line;
 import cs355.solution.model.shapes.Shape;
@@ -16,6 +18,7 @@ import cs355.solution.util.math.Vector2D;
 public class Refresher implements ViewRefresher
 {
 	private final IModelManager	model;
+	private IController			controller;
 
 	private final List<Line>	lines	= new ArrayList<Line>();
 
@@ -42,6 +45,22 @@ public class Refresher implements ViewRefresher
 
 		for (Line l : lines)
 			ShapeDrawer.getInstance().drawLine(l, g);
+
+		if (controller != null)
+		{
+			Iterator<Control> controls = controller.getControls();
+
+			while (controls.hasNext())
+			{
+				Control control = controls.next();
+				control.draw(g);
+			}
+		}
+	}
+
+	public void setController(IController controller)
+	{
+		this.controller = controller;
 	}
 
 	// for debugging

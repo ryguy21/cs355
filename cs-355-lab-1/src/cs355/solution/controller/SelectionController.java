@@ -2,7 +2,9 @@ package cs355.solution.controller;
 
 import java.util.Iterator;
 
+import cs355.solution.controller.controls.SelectionControlsFactory;
 import cs355.solution.controller.interfaces.ClickListener;
+import cs355.solution.controller.interfaces.Control;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.Log;
@@ -12,6 +14,8 @@ public class SelectionController extends ClickListener
 {
 	private final IModelManager	model;
 	private final IController	controller;
+
+	private Control				controls;
 
 	public SelectionController(IModelManager model, IController controller)
 	{
@@ -31,6 +35,12 @@ public class SelectionController extends ClickListener
 			{
 				// do stuff
 				Log.d("%s contains %s", shape, p);
+				controls = SelectionControlsFactory.createControls(shape);
+
+				if (controls != null)
+					controller.unregisterControl(controls);
+
+				controller.registerControl(controls);
 
 				return true;
 			}
@@ -38,6 +48,10 @@ public class SelectionController extends ClickListener
 
 		Log.d("Nothing contains %s", p);
 
+		if (controls != null)
+			controller.unregisterControl(controls);
+
 		return false;
 	}
+
 }

@@ -1,6 +1,7 @@
 package cs355.solution.util.math;
 
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 
 public class Vector2D
 {
@@ -45,6 +46,12 @@ public class Vector2D
 	{
 		x = to.x - from.x;
 		y = to.y - from.y;
+	}
+
+	public Vector2D(AffineTransform t)
+	{
+		x = (float) t.getTranslateX();
+		y = (float) t.getTranslateY();
 	}
 
 	public Vector2D getCopy()
@@ -237,12 +244,14 @@ public class Vector2D
 
 	public Vector2D normalize()
 	{
-		return limit(1);
+		float l = length();
+		return scale(1 / l);
 	}
 
 	public Vector2D getNormalizedCopy()
 	{
-		return getLimitedCopy(1);
+		float l = length();
+		return getScaledCopy(1 / l);
 	}
 
 	public Vector2D setLength(float length)

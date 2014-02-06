@@ -81,22 +81,22 @@ public class ShapeCreator
 		switch (shape.getType())
 		{
 			case CIRCLE:
-				updateShape((Circle) shape, drawingState);
+				updateCircle((Circle) shape, drawingState);
 				break;
 			case ELLIPSE:
-				updateShape((Ellipse) shape, drawingState);
+				updateEllipse((Ellipse) shape, drawingState);
 				break;
 			case LINE:
-				updateShape((Line) shape, drawingState);
+				updateLine((Line) shape, drawingState);
 				break;
 			case RECTANGLE:
-				updateShape((Rectangle) shape, drawingState);
+				updateRectangle((Rectangle) shape, drawingState);
 				break;
 			case SQUARE:
-				updateShape((Square) shape, drawingState);
+				updateSquare((Square) shape, drawingState);
 				break;
 			case TRIANGLE:
-				updateShape((Triangle) shape, drawingState);
+				updateTriangle((Triangle) shape, drawingState);
 				break;
 			default:
 				break;
@@ -104,7 +104,7 @@ public class ShapeCreator
 		}
 	}
 
-	public void updateShape(Circle c, DrawingState state)
+	public void updateCircle(Circle c, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
@@ -120,7 +120,7 @@ public class ShapeCreator
 		c.setRadius(radius);
 	}
 
-	public void updateShape(Ellipse e, DrawingState state)
+	public void updateEllipse(Ellipse e, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
@@ -134,12 +134,12 @@ public class ShapeCreator
 		e.setyRadius(radY);
 	}
 
-	public void updateShape(Line l, DrawingState state)
+	public void updateLine(Line l, DrawingState state)
 	{
 		l.setEndPoint(state.getEndPoint());
 	}
 
-	public void updateShape(Rectangle r, DrawingState state)
+	public void updateRectangle(Rectangle r, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
@@ -153,7 +153,7 @@ public class ShapeCreator
 		r.setHeight(height);
 	}
 
-	public void updateShape(Square s, DrawingState state)
+	public void updateSquare(Square s, DrawingState state)
 	{
 		Vector2D start = state.getStartPoint();
 		Vector2D end = state.getEndPoint();
@@ -169,7 +169,7 @@ public class ShapeCreator
 		s.setSize(size);
 	}
 
-	public void updateShape(Triangle t, DrawingState state)
+	public void updateTriangle(Triangle t, DrawingState state)
 	{
 		Vector2D p2 = state.getIntermediatePoint();
 		Vector2D p3 = state.getEndPoint();

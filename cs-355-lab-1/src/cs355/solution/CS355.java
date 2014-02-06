@@ -4,7 +4,6 @@
 package cs355.solution;
 
 import cs355.GUIFunctions;
-import cs355.ViewRefresher;
 import cs355.solution.controller.Controller;
 import cs355.solution.controller.EventHandler;
 import cs355.solution.controller.IController;
@@ -25,8 +24,9 @@ public class CS355
 	{
 		IModelManager model = new Model();
 
-		ViewRefresher refresher = new Refresher(model);
+		Refresher refresher = new Refresher(model);
 		IController controller = new Controller(model, refresher);
+		refresher.setController(controller);
 		EventHandler listener = new EventHandler(controller);
 
 		GUIFunctions.createCS355Frame(controller, refresher, listener, listener);

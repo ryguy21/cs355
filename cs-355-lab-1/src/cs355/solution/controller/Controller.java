@@ -2,6 +2,7 @@ package cs355.solution.controller;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,8 +10,8 @@ import java.util.Set;
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.controller.interfaces.ClickListener;
+import cs355.solution.controller.interfaces.Control;
 import cs355.solution.model.IModelManager;
-import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
@@ -26,7 +27,7 @@ public class Controller implements IController
 
 	private final ClickListener			clickListener;
 
-	private final Set<Shape>			controlShapes;
+	private final Set<Control>			controls;
 
 	public Controller(IModelManager model, ViewRefresher refresher)
 	{
@@ -40,7 +41,7 @@ public class Controller implements IController
 
 		clickListener.addNextClickListener(drawingController);
 
-		controlShapes = new HashSet<Shape>();
+		controls = new HashSet<Control>();
 	}
 
 	@Override
@@ -234,5 +235,24 @@ public class Controller implements IController
 	private void refresh()
 	{
 		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void registerControl(Control controls)
+	{
+		this.controls.add(controls);
+		refresh();
+	}
+
+	@Override
+	public void unregisterControl(Control control)
+	{
+		controls.remove(control);
+	}
+
+	@Override
+	public Iterator<Control> getControls()
+	{
+		return Collections.unmodifiableSet(controls).iterator();
 	}
 }
