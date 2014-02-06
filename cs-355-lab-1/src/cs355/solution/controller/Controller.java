@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
+import cs355.solution.controller.controls.SelectionControls;
 import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
@@ -46,6 +47,11 @@ public class Controller implements IController
 		Log.v("colorButtonHit(%s)", c);
 		drawingController.colorButtonHit(c);
 		GUIFunctions.changeSelectedColor(c);
+		if (currentControl != null && currentControl instanceof SelectionControls)
+		{
+			((SelectionControls<?>) currentControl).setShapeColor(c);
+			refresh();
+		}
 	}
 
 	@Override

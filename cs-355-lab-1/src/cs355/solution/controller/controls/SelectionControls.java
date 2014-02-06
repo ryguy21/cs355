@@ -20,6 +20,11 @@ public abstract class SelectionControls<T extends Shape> implements Control
 		this.shape = shape;
 	}
 
+	public void setShapeColor(Color c)
+	{
+		shape.setColor(c);
+	}
+
 	@Override
 	public void draw(Graphics2D g)
 	{
