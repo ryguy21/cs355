@@ -7,16 +7,21 @@ import java.awt.Stroke;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.util.math.Vector2D;
 
-public class SelectionControl extends Vector2D implements Control
+public class HandleControl extends Vector2D implements Control
 {
 	private static final Stroke	STROKE			= new BasicStroke(2.5f);
-	private static final int	HALF_SIZE		= 4;
+	private static final int	HALF_SIZE		= 5;
 	private static final int	SIZE			= HALF_SIZE * 2;
 	private static final int	HALF_SIZE_SQ	= HALF_SIZE * HALF_SIZE;
 
-	public SelectionControl(Vector2D p)
+	public HandleControl(Vector2D p)
 	{
 		super(p);
+	}
+
+	public HandleControl(float x, float y)
+	{
+		super(x, y);
 	}
 
 	@Override

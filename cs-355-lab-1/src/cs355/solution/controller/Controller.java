@@ -57,6 +57,7 @@ public class Controller implements IController
 	{
 		Log.v("triangleButtonHit()");
 		drawingController.triangleButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -64,6 +65,7 @@ public class Controller implements IController
 	{
 		Log.v("squareButtonHit()");
 		drawingController.squareButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -71,6 +73,7 @@ public class Controller implements IController
 	{
 		Log.v("rectangleButtonHit()");
 		drawingController.rectangleButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -78,6 +81,7 @@ public class Controller implements IController
 	{
 		Log.v("circleButtonHit()");
 		drawingController.circleButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -85,6 +89,7 @@ public class Controller implements IController
 	{
 		Log.v("ellipseButtonHit()");
 		drawingController.ellipseButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -92,6 +97,7 @@ public class Controller implements IController
 	{
 		Log.v("lineButtonHit()");
 		drawingController.lineButtonHit();
+		clearControls();
 	}
 
 	@Override
@@ -248,6 +254,12 @@ public class Controller implements IController
 	public void unregisterControl(Control control)
 	{
 		controls.remove(control);
+	}
+
+	private void clearControls()
+	{
+		controls.clear();
+		refresh();
 	}
 
 	@Override

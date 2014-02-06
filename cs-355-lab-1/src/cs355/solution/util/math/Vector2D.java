@@ -334,7 +334,8 @@ public class Vector2D
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("Vector2D [x=");
+		builder.append(getClass().getSimpleName());
+		builder.append(" [x=");
 		builder.append(x);
 		builder.append(", y=");
 		builder.append(y);

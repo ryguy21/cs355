@@ -96,11 +96,9 @@ public class ShapeDrawer implements IShapeDrawer
 		int[] xs = new int[3];
 		int[] ys = new int[3];
 
-		Vector2D c = t.getCenter();
-
-		Vector2D p1 = t.getPoint1().add(c);
-		Vector2D p2 = t.getPoint2().add(c);
-		Vector2D p3 = t.getPoint3().add(c);
+		Vector2D p1 = t.getPoint1();
+		Vector2D p2 = t.getPoint2();
+		Vector2D p3 = t.getPoint3();
 
 		xs[0] = (int) p1.x;
 		xs[1] = (int) p2.x;

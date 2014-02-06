@@ -1,39 +1,41 @@
 package cs355.solution.controller.controls;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 
-import cs355.solution.controller.interfaces.Control;
 import cs355.solution.model.shapes.Triangle;
 import cs355.solution.util.math.Vector2D;
 
-public class TriangleControls implements Control
+public class TriangleControls extends SelectionControls<Triangle>
 {
-	private static final Stroke	STROKE	= new BasicStroke(1.5f);
+	private final HandleControl	p1control, p2control, p3control, rControl;
 
-	private final SelectionControl	p1control, p2control, p3control;
-
-	public TriangleControls(Triangle t)
+	public TriangleControls(Triangle triangle)
 	{
-		Vector2D center = t.getCenter();
-		p1control = new SelectionControl(t.getPoint1().add(center));
-		p2control = new SelectionControl(t.getPoint2().add(center));
-		p3control = new SelectionControl(t.getPoint3().add(center));
+		super(triangle);
+
+		Vector2D center = triangle.getCenter();
+		p1control = new HandleControl(triangle.getPoint1());
+		p2control = new HandleControl(triangle.getPoint2());
+		p3control = new HandleControl(triangle.getPoint3());
+
+		float minY = p1control.y;
+		if (p2control.y < minY)
+			minY = p2control.y;
+		if (p3control.y < minY)
+			minY = p3control.y;
+
+		center.y = minY - 30f;
+
+		rControl = new HandleControl(center);
 	}
 
 	@Override
-	public void draw(Graphics2D g)
+	public void drawComponents(Graphics2D g)
 	{
-		Stroke stroke = g.getStroke();
-		g.setColor(Color.cyan);
-
 		p1control.draw(g);
 		p2control.draw(g);
 		p3control.draw(g);
-
-		g.setStroke(STROKE);
+		rControl.draw(g);
 
 		int[] xs = new int[3];
 		int[] ys = new int[3];
@@ -47,8 +49,6 @@ public class TriangleControls implements Control
 		ys[2] = (int) p3control.y;
 
 		g.drawPolygon(xs, ys, 3);
-
-		g.setStroke(stroke);
 	}
 
 	@Override
@@ -59,6 +59,8 @@ public class TriangleControls implements Control
 		else if (p2control.contains(p))
 			return true;
 		else if (p3control.contains(p))
+			return true;
+		else if (rControl.contains(p))
 			return true;
 		else
 			return false;

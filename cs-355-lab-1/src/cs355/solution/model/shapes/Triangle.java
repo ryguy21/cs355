@@ -27,19 +27,16 @@ public class Triangle extends Shape
 
 		p = p.getSubtractedCopy(center);
 
-		//@formatter:off
-		if (	   p.getSubtractedCopy(p1).dot(getPoint2().subtract(p1).getPerpendicular()) >= 0
-				&& p.getSubtractedCopy(p2).dot(getPoint3().subtract(p2).getPerpendicular()) >= 0
-				&& p.getSubtractedCopy(p3).dot(getPoint1().subtract(p3).getPerpendicular()) >= 0)
-			return true;
-		else
-			return false;
-		//@formatter:on
+		int l1 = (int) Math.signum(p.getSubtractedCopy(p1).dot(p2.getSubtractedCopy(p1).getPerpendicular()));
+		int l2 = (int) Math.signum(p.getSubtractedCopy(p2).dot(p3.getSubtractedCopy(p2).getPerpendicular()));
+		int l3 = (int) Math.signum(p.getSubtractedCopy(p3).dot(p1.getSubtractedCopy(p3).getPerpendicular()));
+
+		return l1 == l2 && l2 == l3;
 	}
 
 	public Vector2D getPoint1()
 	{
-		return p1.getCopy();
+		return p1.getAddedCopy(center);
 	}
 
 	public void setPoint1(Vector2D pt1)
@@ -51,7 +48,7 @@ public class Triangle extends Shape
 
 	public Vector2D getPoint2()
 	{
-		return p2.getCopy();
+		return p2.getAddedCopy(center);
 	}
 
 	public void setPoint2(Vector2D pt2)
@@ -63,7 +60,7 @@ public class Triangle extends Shape
 
 	public Vector2D getPoint3()
 	{
-		return p3.getCopy();
+		return p3.getAddedCopy(center);
 	}
 
 	public void setPoint3(Vector2D pt3)

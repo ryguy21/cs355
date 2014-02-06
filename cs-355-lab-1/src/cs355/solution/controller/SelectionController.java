@@ -7,7 +7,6 @@ import cs355.solution.controller.interfaces.ClickListener;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
-import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class SelectionController extends ClickListener
@@ -26,15 +25,29 @@ public class SelectionController extends ClickListener
 	@Override
 	public boolean processClick(Vector2D p)
 	{
-		Iterator<Shape> itr = model.getShapesInReverseOrder();
+		Iterator<Control> controlItr = controller.getControls();
 
-		while (itr.hasNext())
+		while (controlItr.hasNext())
 		{
-			Shape shape = itr.next();
+			Control control = controlItr.next();
+			if (control.contains(p))
+			{
+				// Log.d("%s contains %s", control, p);
+				return true;
+			}
+		}
+
+		if (controls != null)
+			controller.unregisterControl(controls);
+
+		Iterator<Shape> shapeItr = model.getShapesInReverseOrder();
+
+		while (shapeItr.hasNext())
+		{
+			Shape shape = shapeItr.next();
 			if (shape.contains(p))
 			{
-				// do stuff
-				Log.d("%s contains %s", shape, p);
+				// Log.d("%s contains %s", shape, p);
 				controls = SelectionControlsFactory.createControls(shape);
 
 				if (controls != null)
@@ -46,10 +59,7 @@ public class SelectionController extends ClickListener
 			}
 		}
 
-		Log.d("Nothing contains %s", p);
-
-		if (controls != null)
-			controller.unregisterControl(controls);
+		// Log.d("Nothing contains %s", p);
 
 		return false;
 	}
