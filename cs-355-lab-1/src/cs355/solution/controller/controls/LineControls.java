@@ -2,6 +2,7 @@ package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Line;
 import cs355.solution.util.math.Vector2D;
 
@@ -9,9 +10,9 @@ public class LineControls extends SelectionControls<Line>
 {
 	private final HandleControl	handle1, handle2;
 
-	public LineControls(Line l)
+	public LineControls(IController controller, Line l)
 	{
-		super(l);
+		super(controller, l);
 
 		handle1 = new HandleControl(l.getStartPoint());
 		handle2 = new HandleControl(l.getEndPoint());

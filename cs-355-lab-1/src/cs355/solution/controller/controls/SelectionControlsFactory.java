@@ -1,26 +1,26 @@
 package cs355.solution.controller.controls;
 
-import cs355.solution.controller.interfaces.Control;
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.*;
 
 public abstract class SelectionControlsFactory
 {
-	public static Control createControl(Shape shape)
+	public static SelectionControls<?> createControl(IController controller, Shape shape)
 	{
 		switch (shape.getType())
 		{
 			case CIRCLE:
-				return new CircleControls((Circle) shape);
+				return new CircleControls(controller, (Circle) shape);
 			case ELLIPSE:
-				return new EllipseControls((Ellipse) shape);
+				return new EllipseControls(controller, (Ellipse) shape);
 			case LINE:
-				return new LineControls((Line) shape);
+				return new LineControls(controller, (Line) shape);
 			case RECTANGLE:
-				return new RectangleControls((Rectangle) shape);
+				return new RectangleControls(controller, (Rectangle) shape);
 			case SQUARE:
-				return new SquareControls((Square) shape);
+				return new SquareControls(controller, (Square) shape);
 			case TRIANGLE:
-				return new TriangleControls((Triangle) shape);
+				return new TriangleControls(controller, (Triangle) shape);
 			default:
 				return null;
 		}

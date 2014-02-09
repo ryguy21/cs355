@@ -6,8 +6,8 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
-import cs355.solution.controller.handlers.*;
-import cs355.solution.controller.interfaces.Control;
+import cs355.solution.controller.handlers.ShapeCreationHandler;
+import cs355.solution.controller.handlers.creation.*;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
@@ -16,24 +16,20 @@ import cs355.solution.util.Log;
 
 public class Controller implements IController
 {
-	private final IModelManager			model;
-	private final ViewRefresher			refresher;
-	private final EventHandler			handler;
+	private final IModelManager	model;
+	// private final ViewRefresher refresher;
+	private final EventHandler	handler;
 
-	private final SelectionController	selectionController;
+	private InputResponder		currentResponder;
 
-	private Control						currentControl;
-	private InputResponder				currentResponder;
-
-	private final DrawingState			state;
+	private final DrawingState	state;
 
 	public Controller(IModelManager model, ViewRefresher refresher, EventHandler handler)
 	{
 		this.model = model;
-		this.refresher = refresher;
+		// this.refresher = refresher;
 		this.handler = handler;
 
-		selectionController = new SelectionController(model, this);
 		state = new DrawingState();
 	}
 
@@ -70,8 +66,6 @@ public class Controller implements IController
 	public void triangleButtonHit()
 	{
 		Log.v("triangleButtonHit()");
-
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new TriangleCreationHandler(this, state.getColor());
@@ -82,7 +76,6 @@ public class Controller implements IController
 	public void squareButtonHit()
 	{
 		Log.v("squareButtonHit()");
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new SquareCreationHandler(this, state.getColor());
@@ -93,7 +86,6 @@ public class Controller implements IController
 	public void rectangleButtonHit()
 	{
 		Log.v("rectangleButtonHit()");
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new RectangleCreationHandler(this, state.getColor());
@@ -104,7 +96,6 @@ public class Controller implements IController
 	public void circleButtonHit()
 	{
 		Log.v("circleButtonHit()");
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new CircleCreationHandler(this, state.getColor());
@@ -115,7 +106,6 @@ public class Controller implements IController
 	public void ellipseButtonHit()
 	{
 		Log.v("ellipseButtonHit()");
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new EllipseCreationHandler(this, state.getColor());
@@ -126,10 +116,19 @@ public class Controller implements IController
 	public void lineButtonHit()
 	{
 		Log.v("lineButtonHit()");
-		unsetControl();
 		unsetInputResponder();
 
 		currentResponder = new LineCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
+	}
+
+	@Override
+	public void selectButtonHit()
+	{
+		Log.v("selectButtonHit()");
+		unsetInputResponder();
+
+		currentResponder = new SelectionController(model, this);
 		handler.registerInputResponder(currentResponder);
 	}
 
@@ -138,12 +137,6 @@ public class Controller implements IController
 	{
 		handler.unregisterInputResponder();
 		currentResponder = null;
-	}
-
-	@Override
-	public void selectButtonHit()
-	{
-		Log.v("selectButtonHit()");
 	}
 
 	@Override
@@ -241,26 +234,6 @@ public class Controller implements IController
 	public void refresh()
 	{
 		GUIFunctions.refresh();
-	}
-
-	@Override
-	public void setCurrentControl(Control control)
-	{
-		currentControl = control;
-		refresh();
-	}
-
-	@Override
-	public void unsetControl()
-	{
-		currentControl = null;
-		refresh();
-	}
-
-	@Override
-	public Control getControl()
-	{
-		return currentControl;
 	}
 
 	private void unsetInputResponder()

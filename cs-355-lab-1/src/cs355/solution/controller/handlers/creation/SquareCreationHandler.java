@@ -1,7 +1,8 @@
-package cs355.solution.controller.handlers;
+package cs355.solution.controller.handlers.creation;
 
 import java.awt.Color;
 
+import cs355.solution.controller.handlers.ShapeCreationHandler;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Square;
 import cs355.solution.util.math.Vector2D;

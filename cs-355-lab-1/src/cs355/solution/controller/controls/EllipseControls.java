@@ -2,6 +2,7 @@ package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Ellipse;
 import cs355.solution.util.math.Vector2D;
 
@@ -9,9 +10,9 @@ public class EllipseControls extends SelectionControls<Ellipse>
 {
 	private final HandleControl	rotate;
 
-	public EllipseControls(Ellipse e)
+	public EllipseControls(IController controller, Ellipse e)
 	{
-		super(e);
+		super(controller, e);
 
 		rotate = new HandleControl(e.getCenter().subtract(0, e.getyRadius() + 30));
 	}

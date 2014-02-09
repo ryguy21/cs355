@@ -2,37 +2,36 @@ package cs355.solution.controller;
 
 import java.util.Iterator;
 
+import cs355.solution.controller.controls.SelectionControls;
 import cs355.solution.controller.controls.SelectionControlsFactory;
-import cs355.solution.controller.interfaces.ClickListener;
-import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
+import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.math.Vector2D;
 
-public class SelectionController extends ClickListener
+public class SelectionController extends InputResponder
 {
-	private final IModelManager	model;
-	private final IController	controller;
+	private final IModelManager		model;
+	private SelectionControls<?>	control;
 
 	public SelectionController(IModelManager model, IController controller)
 	{
+		super(controller);
 		this.model = model;
-		this.controller = controller;
 	}
 
 	@Override
-	public boolean processClick(Vector2D p)
+	public void mouseClicked(Vector2D p)
 	{
-		Control control = controller.getControl();
-
-		if (control != null && control.contains(p))
+		if (control != null)
 		{
-			// Log.d("%s contains %s", control, p);
-			return true;
+			if (control.contains(p))
+			{
+				control.mouseClicked(p);
+				return;
+			}
 		}
-
-		controller.unsetControl();
 
 		Iterator<Shape> shapeItr = model.getShapesInReverseOrder();
 
@@ -41,17 +40,30 @@ public class SelectionController extends ClickListener
 			Shape shape = shapeItr.next();
 			if (shape.contains(p))
 			{
-				// Log.d("%s contains %s", shape, p);
-				control = SelectionControlsFactory.createControl(shape);
-				controller.setCurrentControl(control);
-
-				return true;
+				control = SelectionControlsFactory.createControl(controller, shape);
+				break;
 			}
 		}
-
-		// Log.d("Nothing contains %s", p);
-
-		return false;
 	}
 
+	@Override
+	public void mousePressed(Vector2D p)
+	{
+		if (control != null)
+			control.mousePressed(p);
+	}
+
+	@Override
+	public void mouseDragged(Vector2D p)
+	{
+		if (control != null)
+			control.mouseDragged(p);
+	}
+
+	@Override
+	public void mouseReleased(Vector2D p)
+	{
+		if (control != null)
+			control.mouseReleased(p);
+	}
 }

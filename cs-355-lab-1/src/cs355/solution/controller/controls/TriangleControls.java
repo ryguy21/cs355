@@ -2,6 +2,7 @@ package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Triangle;
 import cs355.solution.util.math.Vector2D;
 
@@ -9,9 +10,9 @@ public class TriangleControls extends SelectionControls<Triangle>
 {
 	private final HandleControl	p1control, p2control, p3control, rControl;
 
-	public TriangleControls(Triangle triangle)
+	public TriangleControls(IController controller, Triangle triangle)
 	{
-		super(triangle);
+		super(controller, triangle);
 
 		Vector2D center = triangle.getCenter();
 		p1control = new HandleControl(triangle.getPoint1());

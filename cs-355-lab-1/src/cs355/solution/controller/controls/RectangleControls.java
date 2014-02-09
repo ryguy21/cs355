@@ -2,6 +2,7 @@ package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
 import cs355.solution.util.math.Vector2D;
 
@@ -9,9 +10,9 @@ public class RectangleControls extends SelectionControls<Rectangle>
 {
 	private final HandleControl	topLeft, topRight, bottomLeft, bottomRight, rotate;
 
-	public RectangleControls(Rectangle s)
+	public RectangleControls(IController controller, Rectangle s)
 	{
-		super(s);
+		super(controller, s);
 
 		Vector2D tlCorner = shape.getTopLeftCorner();
 
