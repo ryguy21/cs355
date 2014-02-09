@@ -92,4 +92,9 @@ public abstract class Shape implements Selectable
 		Vector2D result = new Vector2D(p);
 		return result;
 	}
+
+	public AffineTransform getTransform()
+	{
+		return transform;
+	}
 }

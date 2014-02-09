@@ -48,12 +48,6 @@ public class Rectangle extends Shape
 	}
 
 	@Override
-	public float getRotation()
-	{
-		return 0f;
-	}
-
-	@Override
 	public boolean contains(Vector2D p)
 	{
 		p = worldToObject(p);
