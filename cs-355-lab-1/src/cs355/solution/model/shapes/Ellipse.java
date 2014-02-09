@@ -24,7 +24,7 @@ public class Ellipse extends Shape
 
 	public Vector2D getTopLeftCorner()
 	{
-		return getCenter().getSubtractedCopy(xRadius, yRadius);
+		return new Vector2D(-xRadius, -yRadius);
 	}
 
 	public float getxRadius()

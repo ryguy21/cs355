@@ -79,18 +79,16 @@ public abstract class Shape implements Selectable
 		inverseTransform.translate(-trans.x, -trans.y);
 	}
 
-	protected Vector2D objectToWorld(Vector2D o)
+	public Vector2D objectToWorld(Vector2D o)
 	{
 		Point2D p = transform.transform(o.toPoint2D(), null);
-		Vector2D result = new Vector2D(p);
-		return result;
+		return new Vector2D(p);
 	}
 
-	protected Vector2D worldToObject(Vector2D w)
+	public Vector2D worldToObject(Vector2D w)
 	{
 		Point2D p = inverseTransform.transform(w.toPoint2D(), null);
-		Vector2D result = new Vector2D(p);
-		return result;
+		return new Vector2D(p);
 	}
 
 	public AffineTransform getTransform()

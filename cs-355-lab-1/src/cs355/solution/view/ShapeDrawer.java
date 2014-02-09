@@ -1,6 +1,7 @@
 package cs355.solution.view;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.model.shapes.*;
 import cs355.solution.util.math.Vector2D;
@@ -56,9 +57,15 @@ public class ShapeDrawer implements IShapeDrawer
 	{
 		g.setPaint(e.getColor());
 
+		AffineTransform original = g.getTransform();
+		AffineTransform otow = e.getTransform();
+		g.setTransform(otow);
+
 		Vector2D tlc = e.getTopLeftCorner();
 
 		g.fillOval((int) tlc.x, (int) tlc.y, (int) e.getxDiameter(), (int) e.getyDiameter());
+
+		g.setTransform(original);
 	}
 
 	@Override
@@ -77,9 +84,15 @@ public class ShapeDrawer implements IShapeDrawer
 	{
 		g.setPaint(r.getColor());
 
+		AffineTransform original = g.getTransform();
+		AffineTransform otow = r.getTransform();
+		g.setTransform(otow);
+
 		Vector2D tlc = r.getTopLeftCorner();
 
 		g.fillRect((int) tlc.x, (int) tlc.y, (int) r.getWidth(), (int) r.getHeight());
+
+		g.setTransform(original);
 	}
 
 	@Override

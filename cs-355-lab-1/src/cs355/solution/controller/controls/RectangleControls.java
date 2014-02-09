@@ -1,6 +1,7 @@
 package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
@@ -27,7 +28,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		bottomLeft = new HandleControl(tlCorner.x, bottom);
 		bottomRight = new HandleControl(right, bottom);
 
-		rotate = new HandleControl(shape.getCenter().x, tlCorner.y - 30f);
+		rotate = new HandleControl(0, tlCorner.y - 30f);
 
 		activeHandle = -1;
 	}
@@ -44,7 +45,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		bottomLeft.copyValues(tlCorner.x, bottom);
 		bottomRight.copyValues(right, bottom);
 
-		rotate.copyValues(shape.getCenter().x, tlCorner.y - 30f);
+		rotate.copyValues(0, tlCorner.y - 30f);
 	}
 
 	@Override
@@ -52,7 +53,10 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	{
 		if (shape.contains(p))
 			return true;
-		else if (topLeft.contains(p))
+
+		p = shape.worldToObject(p);
+
+		if (topLeft.contains(p))
 			return true;
 		else if (topRight.contains(p))
 			return true;
@@ -69,6 +73,11 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	@Override
 	protected void drawComponents(Graphics2D g)
 	{
+		AffineTransform original = g.getTransform();
+		AffineTransform otow = shape.getTransform();
+
+		g.setTransform(otow);
+
 		topLeft.draw(g);
 		topRight.draw(g);
 		bottomLeft.draw(g);
@@ -82,46 +91,52 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		int height = (int) shape.getHeight();
 
 		g.drawRect(x, y, width, height);
+
+		g.setTransform(original);
 	}
 
 	@Override
 	public void mousePressed(Vector2D p)
 	{
-		if (topLeft.contains(p))
+		Vector2D obj = shape.worldToObject(p);
+
+		if (topLeft.contains(obj))
 		{
 			activeHandle = 1;
-			oldPoint = p;
+			oldPoint = obj;
 		}
-		else if (topRight.contains(p))
+		else if (topRight.contains(obj))
 		{
 			activeHandle = 2;
-			oldPoint = p;
+			oldPoint = obj;
 		}
-		else if (bottomLeft.contains(p))
+		else if (bottomLeft.contains(obj))
 		{
 			activeHandle = 3;
-			oldPoint = p;
+			oldPoint = obj;
 		}
-		else if (bottomRight.contains(p))
+		else if (bottomRight.contains(obj))
 		{
 			activeHandle = 4;
-			oldPoint = p;
+			oldPoint = obj;
 		}
-		else if (rotate.contains(p))
+		else if (rotate.contains(obj))
 		{
 			activeHandle = 5;
-			oldPoint = p;
+			oldPoint = obj;
 		}
 		else if (shape.contains(p))
 		{
 			activeHandle = 0;
-			oldPoint = p;
+			oldPoint = obj;
 		}
 	}
 
 	@Override
 	public void mouseDragged(Vector2D p)
 	{
+		p = shape.worldToObject(p);
+
 		Vector2D trans = p.getSubtractedCopy(oldPoint);
 		Vector2D halfTrans = trans.getScaledCopy(0.5f);
 		float width, height;
@@ -130,11 +145,11 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		{
 			case 0:
 				shape.translate(trans);
-				topLeft.add(trans);
-				topRight.add(trans);
-				bottomLeft.add(trans);
-				bottomRight.add(trans);
-				rotate.add(trans);
+				// topLeft.add(trans);
+				// topRight.add(trans);
+				// bottomLeft.add(trans);
+				// bottomRight.add(trans);
+				// rotate.add(trans);
 				break;
 			case 1:
 				topLeft.add(trans);

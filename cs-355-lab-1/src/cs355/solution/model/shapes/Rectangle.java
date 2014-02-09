@@ -38,7 +38,7 @@ public class Rectangle extends Shape
 
 	public Vector2D getTopLeftCorner()
 	{
-		return objectToWorld(new Vector2D(width * -0.5f, height * -0.5f));
+		return new Vector2D(width * -0.5f, height * -0.5f);
 	}
 
 	@Override
