@@ -10,11 +10,16 @@ public class EllipseControls extends SelectionControls<Ellipse>
 {
 	private final HandleControl	rotate;
 
+	private int					activeHandle;
+	private Vector2D			oldPoint;
+
 	public EllipseControls(IController controller, Ellipse e)
 	{
 		super(controller, e);
 
 		rotate = new HandleControl(e.getCenter().subtract(0, e.getyRadius() + 30));
+
+		activeHandle = -1;
 	}
 
 	@Override
@@ -46,18 +51,46 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	@Override
 	public void mousePressed(Vector2D p)
 	{
-
+		if (rotate.contains(p))
+		{
+			activeHandle = 1;
+			oldPoint = p;
+		}
+		else if (shape.contains(p))
+		{
+			activeHandle = 0;
+			oldPoint = p;
+		}
 	}
 
 	@Override
 	public void mouseDragged(Vector2D p)
 	{
+		switch (activeHandle)
+		{
+			case 1:
+				Vector2D center = shape.getCenter();
+				Vector2D before = oldPoint.getSubtractedCopy(center);
+				Vector2D after = p.getSubtractedCopy(center);
+				float angle = Vector2D.angleBetween(before, after);
+				shape.rotate(angle);
+				break;
+			case 0:
+				Vector2D trans = p.getSubtractedCopy(oldPoint);
+				shape.translate(trans);
+				rotate.add(trans);
+				break;
+			default:
+				return;
+		}
 
+		oldPoint = p;
+		controller.refresh();
 	}
 
 	@Override
 	public void mouseReleased(Vector2D p)
 	{
-
+		activeHandle = -1;
 	}
 }

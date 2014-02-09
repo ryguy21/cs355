@@ -76,28 +76,22 @@ public class LineControls extends SelectionControls<Line>
 				shape.translateEndPoint(trans);
 				handle1.add(trans);
 				handle2.add(trans);
-				oldPoint = p;
-
-				controller.refresh();
 			case 1:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translateStartPoint(trans);
 				handle1.add(trans);
-				oldPoint = p;
-
-				controller.refresh();
 				break;
 			case 2:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translateEndPoint(trans);
 				handle2.add(trans);
-				oldPoint = p;
-
-				controller.refresh();
 				break;
 			default:
 				return;
 		}
+
+		oldPoint = p;
+		controller.refresh();
 	}
 
 	@Override

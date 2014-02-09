@@ -8,7 +8,10 @@ import cs355.solution.util.math.Vector2D;
 
 public class RectangleControls extends SelectionControls<Rectangle>
 {
-	private final HandleControl	topLeft, topRight, bottomLeft, bottomRight, rotate;
+	protected final HandleControl	topLeft, topRight, bottomLeft, bottomRight, rotate;
+
+	protected int					activeHandle;
+	protected Vector2D				oldPoint;
 
 	public RectangleControls(IController controller, Rectangle s)
 	{
@@ -25,6 +28,23 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		bottomRight = new HandleControl(right, bottom);
 
 		rotate = new HandleControl(shape.getCenter().x, tlCorner.y - 30f);
+
+		activeHandle = -1;
+	}
+
+	protected void positionHandles()
+	{
+		Vector2D tlCorner = shape.getTopLeftCorner();
+
+		float right = tlCorner.x + shape.getWidth();
+		float bottom = tlCorner.y + shape.getHeight();
+
+		topLeft.copyValues(tlCorner);
+		topRight.copyValues(right, tlCorner.y);
+		bottomLeft.copyValues(tlCorner.x, bottom);
+		bottomRight.copyValues(right, bottom);
+
+		rotate.copyValues(shape.getCenter().x, tlCorner.y - 30f);
 	}
 
 	@Override
@@ -39,6 +59,8 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		else if (bottomLeft.contains(p))
 			return true;
 		else if (bottomRight.contains(p))
+			return true;
+		else if (rotate.contains(p))
 			return true;
 		else
 			return false;
@@ -65,18 +87,177 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	@Override
 	public void mousePressed(Vector2D p)
 	{
-
+		if (topLeft.contains(p))
+		{
+			activeHandle = 1;
+			oldPoint = p;
+		}
+		else if (topRight.contains(p))
+		{
+			activeHandle = 2;
+			oldPoint = p;
+		}
+		else if (bottomLeft.contains(p))
+		{
+			activeHandle = 3;
+			oldPoint = p;
+		}
+		else if (bottomRight.contains(p))
+		{
+			activeHandle = 4;
+			oldPoint = p;
+		}
+		else if (rotate.contains(p))
+		{
+			activeHandle = 5;
+			oldPoint = p;
+		}
+		else if (shape.contains(p))
+		{
+			activeHandle = 0;
+			oldPoint = p;
+		}
 	}
 
 	@Override
 	public void mouseDragged(Vector2D p)
 	{
+		Vector2D trans = p.getSubtractedCopy(oldPoint);
+		Vector2D halfTrans = trans.getScaledCopy(0.5f);
+		float width, height;
 
+		switch (activeHandle)
+		{
+			case 0:
+				shape.translate(trans);
+				topLeft.add(trans);
+				topRight.add(trans);
+				bottomLeft.add(trans);
+				bottomRight.add(trans);
+				rotate.add(trans);
+				break;
+			case 1:
+				topLeft.add(trans);
+				topRight.add(0f, trans.y);
+				bottomLeft.add(trans.x, 0f);
+
+				shape.translate(halfTrans);
+
+				width = shape.getWidth() - trans.x;
+				height = shape.getHeight() - trans.y;
+
+				if (width < 0)
+				{
+					width *= -1;
+					activeHandle = 2;
+				}
+				if (height < 0)
+				{
+					height *= -1;
+					activeHandle += 2;
+				}
+
+				shape.setWidth(width);
+				shape.setHeight(height);
+
+				positionHandles();
+				break;
+			case 2:
+				topRight.add(trans);
+				topLeft.add(0f, trans.y);
+				bottomRight.add(trans.x, 0f);
+
+				shape.translate(halfTrans);
+
+				width = shape.getWidth() + trans.x;
+				height = shape.getHeight() - trans.y;
+
+				if (width < 0)
+				{
+					width *= -1;
+					activeHandle = 1;
+				}
+				if (height < 0)
+				{
+					height *= -1;
+					activeHandle += 2;
+				}
+
+				shape.setWidth(width);
+				shape.setHeight(height);
+
+				positionHandles();
+				break;
+			case 3:
+				bottomLeft.add(trans);
+				topLeft.add(trans.x, 0f);
+				bottomRight.add(0f, trans.y);
+
+				shape.translate(halfTrans);
+
+				width = shape.getWidth() - trans.x;
+				height = shape.getHeight() + trans.y;
+
+				if (width < 0)
+				{
+					width *= -1;
+					activeHandle = 4;
+				}
+				if (height < 0)
+				{
+					height *= -1;
+					activeHandle -= 2;
+				}
+
+				shape.setWidth(width);
+				shape.setHeight(height);
+
+				positionHandles();
+				break;
+			case 4:
+				bottomRight.add(trans);
+				topRight.add(trans.x, 0f);
+				bottomLeft.add(0f, trans.y);
+
+				shape.translate(halfTrans);
+
+				width = shape.getWidth() + trans.x;
+				height = shape.getHeight() + trans.y;
+
+				if (width < 0)
+				{
+					width *= -1;
+					activeHandle = 3;
+				}
+				if (height < 0)
+				{
+					height *= -1;
+					activeHandle -= 2;
+				}
+
+				shape.setWidth(width);
+				shape.setHeight(height);
+
+				positionHandles();
+				break;
+			case 5:
+				Vector2D center = shape.getCenter();
+				Vector2D before = oldPoint.getSubtractedCopy(center);
+				Vector2D after = p.getSubtractedCopy(center);
+				float angle = Vector2D.angleBetween(before, after);
+				shape.rotate(angle);
+				break;
+			default:
+				return;
+		}
+
+		oldPoint = p;
+		controller.refresh();
 	}
 
 	@Override
 	public void mouseReleased(Vector2D p)
 	{
-
+		activeHandle = -1;
 	}
 }

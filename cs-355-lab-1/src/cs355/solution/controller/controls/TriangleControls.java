@@ -122,36 +122,27 @@ public class TriangleControls extends SelectionControls<Triangle>
 				handle2.add(trans);
 				handle3.add(trans);
 				rHandle.add(trans);
-				oldPoint = p;
-
-				controller.refresh();
 				break;
 			case 1:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translatePoint1(trans);
 				handle1.add(trans);
-				oldPoint = p;
 
 				positionRotateHandle();
-				controller.refresh();
 				break;
 			case 2:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translatePoint2(trans);
 				handle2.add(trans);
-				oldPoint = p;
 
 				positionRotateHandle();
-				controller.refresh();
 				break;
 			case 3:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translatePoint3(trans);
 				handle3.add(trans);
-				oldPoint = p;
 
 				positionRotateHandle();
-				controller.refresh();
 				break;
 			case 4:
 				Vector2D center = shape.getCenter();
@@ -159,13 +150,13 @@ public class TriangleControls extends SelectionControls<Triangle>
 				Vector2D after = p.getSubtractedCopy(center);
 				float angle = Vector2D.angleBetween(before, after);
 				shape.rotate(angle);
-				oldPoint = p;
-
-				controller.refresh();
 				break;
 			default:
 				return;
 		}
+
+		oldPoint = p;
+		controller.refresh();
 	}
 
 	@Override
