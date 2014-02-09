@@ -52,6 +52,7 @@ public class TriangleCreationHandler extends ShapeCreationHandler
 			case TWO_POINTS:
 				triangle.setPoint3(p);
 				state = State.DONE;
+				controller.inputSequenceComplete();
 				break;
 			default:
 				return;

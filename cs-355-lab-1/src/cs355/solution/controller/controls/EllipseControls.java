@@ -42,4 +42,22 @@ public class EllipseControls extends SelectionControls<Ellipse>
 
 		g.drawArc(x, y, width, height, 0, 360);
 	}
+
+	@Override
+	public void mousePressed(Vector2D p)
+	{
+
+	}
+
+	@Override
+	public void mouseDragged(Vector2D p)
+	{
+
+	}
+
+	@Override
+	public void mouseReleased(Vector2D p)
+	{
+
+	}
 }

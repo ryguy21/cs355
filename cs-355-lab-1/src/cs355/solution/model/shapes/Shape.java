@@ -51,4 +51,9 @@ public abstract class Shape implements Selectable
 	{
 		this.rotation = rotation;
 	}
+
+	public void translate(Vector2D trans)
+	{
+		center.add(trans);
+	}
 }

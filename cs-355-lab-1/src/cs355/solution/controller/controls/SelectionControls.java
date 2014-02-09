@@ -26,6 +26,7 @@ public abstract class SelectionControls<T extends Shape> extends InputResponder 
 	public void setShapeColor(Color c)
 	{
 		shape.setColor(c);
+		controller.refresh();
 	}
 
 	@Override

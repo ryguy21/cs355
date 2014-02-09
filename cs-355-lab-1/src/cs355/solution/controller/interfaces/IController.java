@@ -12,4 +12,6 @@ public interface IController extends CS355Controller
 	public void refresh();
 
 	public void inputSequenceComplete();
+
+	public Control getControl();
 }

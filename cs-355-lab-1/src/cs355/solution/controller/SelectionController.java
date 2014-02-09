@@ -1,9 +1,12 @@
 package cs355.solution.controller;
 
+import java.awt.Color;
 import java.util.Iterator;
 
+import cs355.GUIFunctions;
 import cs355.solution.controller.controls.SelectionControls;
 import cs355.solution.controller.controls.SelectionControlsFactory;
+import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
@@ -41,8 +44,26 @@ public class SelectionController extends InputResponder
 			if (shape.contains(p))
 			{
 				control = SelectionControlsFactory.createControl(controller, shape);
-				break;
+				GUIFunctions.changeSelectedColor(shape.getColor());
+				controller.refresh();
+				return;
 			}
+		}
+
+		control = null;
+		controller.refresh();
+	}
+
+	public Control getControl()
+	{
+		return control;
+	}
+
+	public void setColor(Color c)
+	{
+		if (control != null)
+		{
+			control.setShapeColor(c);
 		}
 	}
 
@@ -50,7 +71,16 @@ public class SelectionController extends InputResponder
 	public void mousePressed(Vector2D p)
 	{
 		if (control != null)
-			control.mousePressed(p);
+		{
+			if (control.contains(p))
+			{
+				control.mousePressed(p);
+				return;
+			}
+		}
+
+		control = null;
+		controller.refresh();
 	}
 
 	@Override

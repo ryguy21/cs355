@@ -8,6 +8,7 @@ import cs355.GUIFunctions;
 import cs355.ViewRefresher;
 import cs355.solution.controller.handlers.ShapeCreationHandler;
 import cs355.solution.controller.handlers.creation.*;
+import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
@@ -59,6 +60,10 @@ public class Controller implements IController
 			{
 				((ShapeCreationHandler) currentResponder).setColor(c);
 			}
+			else if (currentResponder instanceof SelectionController)
+			{
+				((SelectionController) currentResponder).setColor(c);
+			}
 		}
 	}
 
@@ -70,6 +75,7 @@ public class Controller implements IController
 
 		currentResponder = new TriangleCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -80,6 +86,7 @@ public class Controller implements IController
 
 		currentResponder = new SquareCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -90,6 +97,7 @@ public class Controller implements IController
 
 		currentResponder = new RectangleCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -100,6 +108,7 @@ public class Controller implements IController
 
 		currentResponder = new CircleCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -110,6 +119,7 @@ public class Controller implements IController
 
 		currentResponder = new EllipseCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -120,6 +130,7 @@ public class Controller implements IController
 
 		currentResponder = new LineCreationHandler(this, state.getColor());
 		handler.registerInputResponder(currentResponder);
+		refresh();
 	}
 
 	@Override
@@ -130,6 +141,18 @@ public class Controller implements IController
 
 		currentResponder = new SelectionController(model, this);
 		handler.registerInputResponder(currentResponder);
+		refresh();
+	}
+
+	@Override
+	public Control getControl()
+	{
+		if (currentResponder != null && currentResponder instanceof SelectionController)
+		{
+			return ((SelectionController) currentResponder).getControl();
+		}
+
+		return null;
 	}
 
 	@Override

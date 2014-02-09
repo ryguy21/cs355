@@ -61,4 +61,22 @@ public class RectangleControls extends SelectionControls<Rectangle>
 
 		g.drawRect(x, y, width, height);
 	}
+
+	@Override
+	public void mousePressed(Vector2D p)
+	{
+
+	}
+
+	@Override
+	public void mouseDragged(Vector2D p)
+	{
+
+	}
+
+	@Override
+	public void mouseReleased(Vector2D p)
+	{
+
+	}
 }

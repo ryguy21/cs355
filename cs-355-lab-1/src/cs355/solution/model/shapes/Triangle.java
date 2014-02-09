@@ -46,6 +46,12 @@ public class Triangle extends Shape
 		resetCenter();
 	}
 
+	public void translatePoint1(Vector2D trans)
+	{
+		p1.add(trans);
+		resetCenter();
+	}
+
 	public Vector2D getPoint2()
 	{
 		return p2.getAddedCopy(center);
@@ -58,6 +64,12 @@ public class Triangle extends Shape
 		resetCenter();
 	}
 
+	public void translatePoint2(Vector2D trans)
+	{
+		p2.add(trans);
+		resetCenter();
+	}
+
 	public Vector2D getPoint3()
 	{
 		return p3.getAddedCopy(center);
@@ -67,6 +79,12 @@ public class Triangle extends Shape
 	{
 		p3.x = pt3.x - center.x;
 		p3.y = pt3.y - center.y;
+		resetCenter();
+	}
+
+	public void translatePoint3(Vector2D trans)
+	{
+		p3.add(trans);
 		resetCenter();
 	}
 
