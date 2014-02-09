@@ -1,19 +1,17 @@
 package cs355.solution.controller.interfaces;
 
 import cs355.CS355Controller;
-import cs355.solution.util.math.Vector2D;
+import cs355.solution.model.shapes.Shape;
 
 public interface IController extends CS355Controller
 {
-	public void setDrawingStartPoint(Vector2D p);
+	public void addShape(Shape shape);
 
-	public void updateDrawingEndPoint(Vector2D p);
+	public void removeShape(Shape shape);
 
-	public void endDrawing();
+	public void refresh();
 
-	public void processClick(Vector2D p);
-
-	public void registerMove(Vector2D p);
+	public void inputSequenceComplete();
 
 	public void setCurrentControl(Control control);
 

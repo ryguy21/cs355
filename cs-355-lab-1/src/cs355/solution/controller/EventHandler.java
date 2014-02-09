@@ -3,61 +3,79 @@ package cs355.solution.controller;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import cs355.solution.controller.interfaces.IController;
+import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.util.math.Vector2D;
 
 public class EventHandler extends MouseAdapter
 {
-	private final IController	controller;
+	private InputResponder	responder;
 
-	public EventHandler(IController controller)
+	public EventHandler()
+	{}
+
+	public void registerInputResponder(InputResponder responder)
 	{
-		this.controller = controller;
+		this.responder = responder;
+	}
+
+	public void unregisterInputResponder()
+	{
+		responder = null;
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.setDrawingStartPoint(p);
+		if (responder != null)
+			responder.mousePressed(p);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.updateDrawingEndPoint(p);
+		if (responder != null)
+			responder.mouseDragged(p);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.updateDrawingEndPoint(p);
-		controller.endDrawing();
+		if (responder != null)
+			responder.mouseReleased(p);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.processClick(p);
+		if (responder != null)
+			responder.mouseClicked(p);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
-		controller.registerMove(p);
+		if (responder != null)
+			responder.mouseMoved(p);
 	}
 
-	// @Override
-	// public void mouseEntered(MouseEvent e)
-	// {
-	// }
-	//
-	// @Override
-	// public void mouseExited(MouseEvent e)
-	// {
-	// }
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+		Vector2D p = new Vector2D(e.getPoint());
+		if (responder != null)
+			responder.mouseEntered(p);
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+		Vector2D p = new Vector2D(e.getPoint());
+		if (responder != null)
+			responder.mouseExited(p);
+	}
 }

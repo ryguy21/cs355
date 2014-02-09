@@ -6,7 +6,7 @@ import cs355.solution.util.math.Vector2D;
 
 public class Square extends Rectangle
 {
-	public Square(Color color, Vector2D topLeft, int size)
+	public Square(Color color, Vector2D topLeft, float size)
 	{
 		super(color, topLeft, size, size);
 	}

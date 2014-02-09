@@ -6,51 +6,63 @@ import java.util.Iterator;
 
 import cs355.GUIFunctions;
 import cs355.ViewRefresher;
-import cs355.solution.controller.controls.SelectionControls;
-import cs355.solution.controller.interfaces.ClickListener;
+import cs355.solution.controller.handlers.*;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
+import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
+import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.Log;
-import cs355.solution.util.math.Vector2D;
 
 public class Controller implements IController
 {
 	private final IModelManager			model;
 	private final ViewRefresher			refresher;
+	private final EventHandler			handler;
 
-	private final DrawingController		drawingController;
 	private final SelectionController	selectionController;
-	private final DragController		dragController;
-	private final RotateController		rotateController;
-
-	private final ClickListener			clickListener;
 
 	private Control						currentControl;
+	private InputResponder				currentResponder;
 
-	public Controller(IModelManager model, ViewRefresher refresher)
+	private final DrawingState			state;
+
+	public Controller(IModelManager model, ViewRefresher refresher, EventHandler handler)
 	{
 		this.model = model;
 		this.refresher = refresher;
+		this.handler = handler;
 
-		drawingController = new DrawingController(model);
-		clickListener = selectionController = new SelectionController(model, this);
-		dragController = new DragController(model);
-		rotateController = new RotateController(model);
+		selectionController = new SelectionController(model, this);
+		state = new DrawingState();
+	}
 
-		clickListener.addNextClickListener(drawingController);
+	@Override
+	public void addShape(Shape shape)
+	{
+		model.addShape(shape);
+	}
+
+	@Override
+	public void removeShape(Shape shape)
+	{
+		model.removeShape(shape);
 	}
 
 	@Override
 	public void colorButtonHit(Color c)
 	{
 		Log.v("colorButtonHit(%s)", c);
-		drawingController.colorButtonHit(c);
+
 		GUIFunctions.changeSelectedColor(c);
-		if (currentControl != null && currentControl instanceof SelectionControls)
+		state.setColor(c);
+
+		if (currentResponder != null)
 		{
-			((SelectionControls<?>) currentControl).setShapeColor(c);
-			refresh();
+			if (currentResponder instanceof ShapeCreationHandler)
+			{
+				((ShapeCreationHandler) currentResponder).setColor(c);
+			}
 		}
 	}
 
@@ -58,95 +70,80 @@ public class Controller implements IController
 	public void triangleButtonHit()
 	{
 		Log.v("triangleButtonHit()");
-		drawingController.triangleButtonHit();
+
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new TriangleCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
 	public void squareButtonHit()
 	{
 		Log.v("squareButtonHit()");
-		drawingController.squareButtonHit();
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new SquareCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
 	public void rectangleButtonHit()
 	{
 		Log.v("rectangleButtonHit()");
-		drawingController.rectangleButtonHit();
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new RectangleCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
 	public void circleButtonHit()
 	{
 		Log.v("circleButtonHit()");
-		drawingController.circleButtonHit();
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new CircleCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
 	public void ellipseButtonHit()
 	{
 		Log.v("ellipseButtonHit()");
-		drawingController.ellipseButtonHit();
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new EllipseCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
 	public void lineButtonHit()
 	{
 		Log.v("lineButtonHit()");
-		drawingController.lineButtonHit();
 		unsetControl();
+		unsetInputResponder();
+
+		currentResponder = new LineCreationHandler(this, state.getColor());
+		handler.registerInputResponder(currentResponder);
 	}
 
 	@Override
-	public void setDrawingStartPoint(Vector2D p)
+	public void inputSequenceComplete()
 	{
-		drawingController.setDrawingStartPoint(p);
-		refresh();
-	}
-
-	@Override
-	public void updateDrawingEndPoint(Vector2D p)
-	{
-		drawingController.updateDrawingEndPoint(p);
-		refresh();
-	}
-
-	@Override
-	public void processClick(Vector2D p)
-	{
-		if (drawingController.isActive())
-		{
-			drawingController.addTrianglePoint(p);
-			return;
-		}
-
-		clickListener.mouseClicked(p);
-		refresh();
-	}
-
-	@Override
-	public void registerMove(Vector2D to)
-	{
-		drawingController.updateTrianglePoint(to);
-		refresh();
-	}
-
-	@Override
-	public void endDrawing()
-	{
-		drawingController.endDrawing();
+		handler.unregisterInputResponder();
+		currentResponder = null;
 	}
 
 	@Override
 	public void selectButtonHit()
 	{
 		Log.v("selectButtonHit()");
-		drawingController.disable();
 	}
 
 	@Override
@@ -240,7 +237,8 @@ public class Controller implements IController
 		Log.v("toggleBackgroundDisplay()");
 	}
 
-	private void refresh()
+	@Override
+	public void refresh()
 	{
 		GUIFunctions.refresh();
 	}
@@ -263,5 +261,18 @@ public class Controller implements IController
 	public Control getControl()
 	{
 		return currentControl;
+	}
+
+	private void unsetInputResponder()
+	{
+		if (currentResponder != null)
+		{
+			if (currentResponder instanceof ShapeCreationHandler)
+			{
+				((ShapeCreationHandler) currentResponder).cancel();
+			}
+
+			currentResponder = null;
+		}
 	}
 }
