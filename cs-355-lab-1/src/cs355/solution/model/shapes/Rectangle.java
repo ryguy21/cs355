@@ -38,7 +38,7 @@ public class Rectangle extends Shape
 
 	public Vector2D getTopLeftCorner()
 	{
-		return center.getSubtractedCopy(width * 0.5f, height * 0.5f);
+		return getCenter().getSubtractedCopy(width * 0.5f, height * 0.5f);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class Rectangle extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		p = p.getSubtractedCopy(center);
+		p = worldToObject(p);
 
 		if (p.x < -width * 0.5f || width * 0.5f < p.x)
 			return false;
@@ -71,7 +71,7 @@ public class Rectangle extends Shape
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Rectangle [center=");
-		builder.append(center.print());
+		builder.append(getCenter().print());
 		builder.append(", width=");
 		builder.append(width);
 		builder.append(", height=");

@@ -24,7 +24,7 @@ public class Ellipse extends Shape
 
 	public Vector2D getTopLeftCorner()
 	{
-		return center.getSubtractedCopy(xRadius, yRadius);
+		return getCenter().getSubtractedCopy(xRadius, yRadius);
 	}
 
 	public float getxRadius()
@@ -66,7 +66,7 @@ public class Ellipse extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		p = p.getSubtractedCopy(center);
+		p = worldToObject(p);
 
 		float pa = p.x / xRadius;
 		float pb = p.y / yRadius;
@@ -77,6 +77,6 @@ public class Ellipse extends Shape
 	@Override
 	public String toString()
 	{
-		return "Ellipse [center=" + center.print() + ", a=" + xRadius * 2f + ", b=" + yRadius * 2f + "]";
+		return "Ellipse [center=" + getCenter().print() + ", a=" + xRadius * 2f + ", b=" + yRadius * 2f + "]";
 	}
 }

@@ -47,7 +47,7 @@ public class Square extends Rectangle
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Square [center=");
-		builder.append(center);
+		builder.append(getCenter());
 		builder.append(", size=");
 		builder.append(width);
 		builder.append("]");

@@ -154,7 +154,14 @@ public class TriangleControls extends SelectionControls<Triangle>
 				controller.refresh();
 				break;
 			case 4:
+				Vector2D center = shape.getCenter();
+				Vector2D before = oldPoint.getSubtractedCopy(center);
+				Vector2D after = p.getSubtractedCopy(center);
+				float angle = Vector2D.angleBetween(before, after);
+				shape.rotate(angle);
+				oldPoint = p;
 
+				controller.refresh();
 				break;
 			default:
 				return;

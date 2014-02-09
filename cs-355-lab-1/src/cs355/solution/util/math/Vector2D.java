@@ -1,7 +1,9 @@
 package cs355.solution.util.math;
 
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+
+import cs355.solution.util.Log;
 
 public class Vector2D
 {
@@ -48,10 +50,10 @@ public class Vector2D
 		y = to.y - from.y;
 	}
 
-	public Vector2D(AffineTransform t)
+	public Vector2D(Point2D p)
 	{
-		x = (float) t.getTranslateX();
-		y = (float) t.getTranslateY();
+		x = (float) p.getX();
+		y = (float) p.getY();
 	}
 
 	public Vector2D getCopy()
@@ -59,20 +61,7 @@ public class Vector2D
 		return new Vector2D(x, y);
 	}
 
-	public IntVector2D getIntCopy()
-	{
-		return new IntVector2D(this);
-	}
-
 	public Vector2D copyValues(Vector2D other)
-	{
-		x = other.x;
-		y = other.y;
-
-		return this;
-	}
-
-	public Vector2D copyValues(IntVector2D other)
 	{
 		x = other.x;
 		y = other.y;
@@ -289,12 +278,37 @@ public class Vector2D
 		return new Vector2D(-y, x);
 	}
 
+	public static void main(String[] args)
+	{
+		Log.d(angleBetween(X_AXIS, Y_AXIS) / Math.PI);
+		Log.d(angleBetween(Y_AXIS, X_AXIS) / Math.PI);
+		Log.d(angleBetween(new Vector2D(1, 1), new Vector2D(1, -1)) / Math.PI);
+	}
+
+	public float polarAngle()
+	{
+		return (float) Math.atan2(x, y);
+	}
+
+	public static float angleBetween(Vector2D v1, Vector2D v2)
+	{
+		float a1 = v1.polarAngle();
+		float a2 = v2.polarAngle();
+
+		return a1 - a2;
+	}
+
 	public Vector2D projectToCoordinates(Vector2D xaxis, Vector2D yaxis)
 	{
 		float x = xaxis.getNormalizedCopy().dot(this);
 		float y = yaxis.getNormalizedCopy().dot(this);
 
 		return new Vector2D(x, y);
+	}
+
+	public Point2D toPoint2D()
+	{
+		return new Point2D.Float(x, y);
 	}
 
 	public Vector3D get3DVector()

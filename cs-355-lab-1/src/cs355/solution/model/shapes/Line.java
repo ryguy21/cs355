@@ -89,7 +89,7 @@ public class Line extends Shape
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Line [center=");
-		builder.append(center.print());
+		builder.append(getCenter().print());
 		builder.append(", start=");
 		builder.append(start.print());
 		builder.append(", end=");
