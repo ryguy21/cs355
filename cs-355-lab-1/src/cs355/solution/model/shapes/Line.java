@@ -1,6 +1,7 @@
 package cs355.solution.model.shapes;
 
 import java.awt.Color;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.util.math.Vector2D;
 
@@ -65,6 +66,18 @@ public class Line extends Shape
 	}
 
 	@Override
+	public AffineTransform getTransform()
+	{
+		return new AffineTransform();
+	}
+
+	@Override
+	public AffineTransform getInverseTransform()
+	{
+		return new AffineTransform();
+	}
+
+	@Override
 	public boolean contains(Vector2D p)
 	{
 		Vector2D line = new Vector2D(end, start);
@@ -97,5 +110,4 @@ public class Line extends Shape
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

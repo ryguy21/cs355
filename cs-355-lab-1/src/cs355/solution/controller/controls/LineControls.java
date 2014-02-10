@@ -76,6 +76,7 @@ public class LineControls extends SelectionControls<Line>
 				shape.translateEndPoint(trans);
 				handle1.add(trans);
 				handle2.add(trans);
+				break;
 			case 1:
 				trans = p.getSubtractedCopy(oldPoint);
 				shape.translateStartPoint(trans);
