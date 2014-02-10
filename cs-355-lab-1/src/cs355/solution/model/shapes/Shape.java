@@ -11,16 +11,27 @@ public abstract class Shape implements Selectable
 {
 	protected Color					color;
 
-	private final AffineTransform	transform;
-	private final AffineTransform	inverseTransform;
-	private float					rotation;
+	private final AffineTransform	translation;
+	private final AffineTransform	inverseTranslation;
+	private final AffineTransform	rotation;
+	private final AffineTransform	inverseRotation;
+
+	private AffineTransform			transform;
+	private AffineTransform			inverseTransform;
+
+	private float					rotationAngle;
+
+	private boolean					dirty;
 
 	public Shape(Color color, Vector2D center)
 	{
 		setColor(color);
-		transform = AffineTransform.getTranslateInstance(center.x, center.y);
-		inverseTransform = AffineTransform.getTranslateInstance(-center.x, -center.y);
-		rotation = 0;
+		translation = AffineTransform.getTranslateInstance(center.x, center.y);
+		inverseTranslation = AffineTransform.getTranslateInstance(-center.x, -center.y);
+		rotation = new AffineTransform();
+		inverseRotation = new AffineTransform();
+		rotationAngle = 0;
+		dirty = true;
 	}
 
 	public Color getColor()
@@ -45,7 +56,6 @@ public abstract class Shape implements Selectable
 
 	public void setCenter(Vector2D center)
 	{
-		// center = worldToObject(center);
 		Vector2D cc = getCenter();
 		Vector2D trans = center.subtract(cc);
 		translate(trans);
@@ -53,46 +63,74 @@ public abstract class Shape implements Selectable
 
 	public float getRotation()
 	{
-		return rotation;
+		return rotationAngle;
 	}
 
 	public void setRotation(float rotation)
 	{
-		float dr = rotation - this.rotation;
-		this.rotation = rotation;
+		float dr = rotation - rotationAngle;
+		rotationAngle = rotation;
 
-		transform.rotate(dr);
-		inverseTransform.rotate(-dr);
+		this.rotation.rotate(dr);
+		inverseRotation.rotate(-dr);
+
+		dirty = true;
 	}
 
 	public void rotate(float rotation)
 	{
-		this.rotation += rotation;
+		rotationAngle += rotation;
 
-		transform.rotate(rotation);
-		inverseTransform.rotate(-rotation);
+		this.rotation.rotate(rotation);
+		inverseRotation.rotate(-rotation);
+
+		dirty = true;
 	}
 
 	public void translate(Vector2D trans)
 	{
-		transform.translate(trans.x, trans.y);
-		inverseTransform.translate(-trans.x, -trans.y);
+		translation.translate(trans.x, trans.y);
+		inverseTranslation.translate(-trans.x, -trans.y);
+
+		dirty = true;
 	}
 
 	public Vector2D objectToWorld(Vector2D o)
 	{
-		Point2D p = transform.transform(o.toPoint2D(), null);
+		Point2D p = getTransform().transform(o.toPoint2D(), null);
 		return new Vector2D(p);
 	}
 
 	public Vector2D worldToObject(Vector2D w)
 	{
-		Point2D p = inverseTransform.transform(w.toPoint2D(), null);
+		Point2D p = getInverseTransform().transform(w.toPoint2D(), null);
 		return new Vector2D(p);
 	}
 
 	public AffineTransform getTransform()
 	{
+		if (dirty)
+			updateTransforms();
+
 		return transform;
+	}
+
+	public AffineTransform getInverseTransform()
+	{
+		if (dirty)
+			updateTransforms();
+
+		return inverseTransform;
+	}
+
+	private void updateTransforms()
+	{
+		transform = new AffineTransform(translation);
+		transform.concatenate(rotation);
+
+		inverseTransform = new AffineTransform(inverseRotation);
+		inverseTransform.concatenate(inverseTranslation);
+
+		dirty = false;
 	}
 }

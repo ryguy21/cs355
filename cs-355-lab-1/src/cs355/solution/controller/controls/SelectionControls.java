@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
@@ -34,14 +35,17 @@ public abstract class SelectionControls<T extends Shape> extends InputResponder 
 	{
 		Stroke stroke = g.getStroke();
 		Color color = g.getColor();
+		AffineTransform transform = g.getTransform();
 
 		g.setStroke(STROKE);
 		g.setColor(STROKE_COLOR);
+		g.setTransform(shape.getTransform());
 
 		drawComponents(g);
 
 		g.setStroke(stroke);
 		g.setColor(color);
+		g.setTransform(transform);
 	}
 
 	protected abstract void drawComponents(Graphics2D g);

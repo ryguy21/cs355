@@ -17,17 +17,19 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	{
 		super(controller, e);
 
-		rotate = new HandleControl(e.getCenter().subtract(0, e.getyRadius() + 30));
+		rotate = new HandleControl(new Vector2D(0, -e.getyRadius() - 30));
 
 		activeHandle = -1;
 	}
 
 	@Override
-	public boolean contains(Vector2D p)
+	public boolean contains(Vector2D w)
 	{
-		if (shape.contains(p))
+		Vector2D o = shape.worldToObject(w);
+
+		if (shape.contains(w))
 			return true;
-		else if (rotate.contains(p))
+		else if (rotate.contains(o))
 			return true;
 		else
 			return false;
@@ -38,10 +40,8 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	{
 		rotate.draw(g);
 
-		Vector2D center = shape.getCenter();
-
-		int x = (int) (center.x - shape.getxRadius());
-		int y = (int) (center.y - shape.getyRadius());
+		int x = (int) (-shape.getxRadius());
+		int y = (int) (-shape.getyRadius());
 		int width = (int) shape.getxDiameter();
 		int height = (int) shape.getyDiameter();
 
@@ -49,42 +49,40 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	}
 
 	@Override
-	public void mousePressed(Vector2D p)
+	public void mousePressed(Vector2D w)
 	{
-		if (rotate.contains(p))
+		Vector2D o = shape.worldToObject(w);
+
+		if (rotate.contains(o))
 		{
 			activeHandle = 1;
-			oldPoint = p;
 		}
-		else if (shape.contains(p))
+		else if (shape.contains(w))
 		{
 			activeHandle = 0;
-			oldPoint = p;
+			oldPoint = w;
 		}
 	}
 
 	@Override
-	public void mouseDragged(Vector2D p)
+	public void mouseDragged(Vector2D w)
 	{
 		switch (activeHandle)
 		{
 			case 1:
-				Vector2D center = shape.getCenter();
-				Vector2D before = oldPoint.getSubtractedCopy(center);
-				Vector2D after = p.getSubtractedCopy(center);
-				float angle = Vector2D.angleBetween(before, after);
-				shape.rotate(angle);
+				Vector2D o = w.getSubtractedCopy(shape.getCenter());
+				float angle = Vector2D.angleBetween(Vector2D.Y_AXIS.getInvertedCopy(), o);
+				shape.setRotation(angle);
 				break;
 			case 0:
-				Vector2D trans = p.getSubtractedCopy(oldPoint);
+				Vector2D trans = w.getSubtractedCopy(oldPoint);
 				shape.translate(trans);
-				rotate.add(trans);
+				oldPoint = w;
 				break;
 			default:
 				return;
 		}
 
-		oldPoint = p;
 		controller.refresh();
 	}
 

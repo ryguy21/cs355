@@ -18,10 +18,8 @@ public class CircleControls extends SelectionControls<Circle>
 	@Override
 	public void drawComponents(Graphics2D g)
 	{
-		Vector2D center = shape.getCenter();
-
-		int x = (int) (center.x - shape.getRadius());
-		int y = (int) (center.y - shape.getRadius());
+		int x = (int) (-shape.getRadius());
+		int y = (int) (-shape.getRadius());
 		int size = (int) shape.getDiameter();
 
 		g.drawArc(x, y, size, size, 0, 360);
