@@ -14,17 +14,12 @@ public class SquareControls extends RectangleControls
 	@Override
 	public void mouseDragged(Vector2D p)
 	{
-		Vector2D trans = p.getSubtractedCopy(oldPoint);
+		Vector2D trans = p.getSubtractedCopy(oldPointO);
 
 		switch (activeHandle)
 		{
 			case 0:
 				shape.translate(trans);
-				topLeft.add(trans);
-				topRight.add(trans);
-				bottomLeft.add(trans);
-				bottomRight.add(trans);
-				rotate.add(trans);
 				break;
 			case 1:
 				update(bottomRight, p);
@@ -44,7 +39,7 @@ public class SquareControls extends RectangleControls
 				break;
 			case 5:
 				Vector2D center = shape.getCenter();
-				Vector2D before = oldPoint.getSubtractedCopy(center);
+				Vector2D before = oldPointO.getSubtractedCopy(center);
 				Vector2D after = p.getSubtractedCopy(center);
 				float angle = Vector2D.angleBetween(before, after);
 				shape.rotate(angle);
@@ -53,7 +48,7 @@ public class SquareControls extends RectangleControls
 				return;
 		}
 
-		oldPoint = p;
+		oldPointO = p;
 		controller.refresh();
 	}
 

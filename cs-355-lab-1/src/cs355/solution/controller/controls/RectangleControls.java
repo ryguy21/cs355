@@ -12,7 +12,8 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	protected final HandleControl	topLeft, topRight, bottomLeft, bottomRight, rotate;
 
 	protected int					activeHandle;
-	protected Vector2D				oldPoint;
+	protected Vector2D				oldPointO;
+	protected Vector2D				oldPointW;
 
 	public RectangleControls(IController controller, Rectangle s)
 	{
@@ -96,178 +97,114 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	}
 
 	@Override
-	public void mousePressed(Vector2D p)
+	public void mousePressed(Vector2D w)
 	{
-		Vector2D obj = shape.worldToObject(p);
+		Vector2D o = shape.worldToObject(w);
 
-		if (topLeft.contains(obj))
+		if (topLeft.contains(o))
 		{
 			activeHandle = 1;
-			oldPoint = obj;
 		}
-		else if (topRight.contains(obj))
+		else if (topRight.contains(o))
 		{
 			activeHandle = 2;
-			oldPoint = obj;
 		}
-		else if (bottomLeft.contains(obj))
+		else if (bottomLeft.contains(o))
 		{
 			activeHandle = 3;
-			oldPoint = obj;
 		}
-		else if (bottomRight.contains(obj))
+		else if (bottomRight.contains(o))
 		{
 			activeHandle = 4;
-			oldPoint = obj;
 		}
-		else if (rotate.contains(obj))
+		else if (rotate.contains(o))
 		{
 			activeHandle = 5;
-			oldPoint = obj;
 		}
-		else if (shape.contains(p))
+		else if (shape.contains(w))
 		{
 			activeHandle = 0;
-			oldPoint = obj;
 		}
+
+		oldPointW = w;
+		oldPointO = o;
 	}
 
 	@Override
-	public void mouseDragged(Vector2D p)
+	public void mouseDragged(Vector2D w)
 	{
-		p = shape.worldToObject(p);
+		Vector2D o = shape.worldToObject(w);
 
-		Vector2D trans = p.getSubtractedCopy(oldPoint);
-		Vector2D halfTrans = trans.getScaledCopy(0.5f);
-		float width, height;
+		Vector2D transW = w.getSubtractedCopy(oldPointW);
+		Vector2D transO = o.getSubtractedCopy(oldPointO);
+
+		Vector2D halfTransW = transW.getScaledCopy(0.5f);
+		Vector2D halfTransO = transO.getScaledCopy(0.5f);
 
 		switch (activeHandle)
 		{
 			case 0:
-				shape.translate(trans);
-				// topLeft.add(trans);
-				// topRight.add(trans);
-				// bottomLeft.add(trans);
-				// bottomRight.add(trans);
-				// rotate.add(trans);
+				shape.translate(transW);
+				o.subtract(transW);
 				break;
 			case 1:
-				topLeft.add(trans);
-				topRight.add(0f, trans.y);
-				bottomLeft.add(trans.x, 0f);
-
-				shape.translate(halfTrans);
-
-				width = shape.getWidth() - trans.x;
-				height = shape.getHeight() - trans.y;
-
-				if (width < 0)
-				{
-					width *= -1;
-					activeHandle = 2;
-				}
-				if (height < 0)
-				{
-					height *= -1;
-					activeHandle += 2;
-				}
-
-				shape.setWidth(width);
-				shape.setHeight(height);
-
-				positionHandles();
+				update(transO, halfTransW);
+				o.subtract(halfTransO);
 				break;
 			case 2:
-				topRight.add(trans);
-				topLeft.add(0f, trans.y);
-				bottomRight.add(trans.x, 0f);
-
-				shape.translate(halfTrans);
-
-				width = shape.getWidth() + trans.x;
-				height = shape.getHeight() - trans.y;
-
-				if (width < 0)
-				{
-					width *= -1;
-					activeHandle = 1;
-				}
-				if (height < 0)
-				{
-					height *= -1;
-					activeHandle += 2;
-				}
-
-				shape.setWidth(width);
-				shape.setHeight(height);
-
-				positionHandles();
+				update(transO, halfTransW);
+				o.subtract(halfTransO);
 				break;
 			case 3:
-				bottomLeft.add(trans);
-				topLeft.add(trans.x, 0f);
-				bottomRight.add(0f, trans.y);
-
-				shape.translate(halfTrans);
-
-				width = shape.getWidth() - trans.x;
-				height = shape.getHeight() + trans.y;
-
-				if (width < 0)
-				{
-					width *= -1;
-					activeHandle = 4;
-				}
-				if (height < 0)
-				{
-					height *= -1;
-					activeHandle -= 2;
-				}
-
-				shape.setWidth(width);
-				shape.setHeight(height);
-
-				positionHandles();
+				update(transO, halfTransW);
+				o.subtract(halfTransO);
 				break;
 			case 4:
-				bottomRight.add(trans);
-				topRight.add(trans.x, 0f);
-				bottomLeft.add(0f, trans.y);
-
-				shape.translate(halfTrans);
-
-				width = shape.getWidth() + trans.x;
-				height = shape.getHeight() + trans.y;
-
-				if (width < 0)
-				{
-					width *= -1;
-					activeHandle = 3;
-				}
-				if (height < 0)
-				{
-					height *= -1;
-					activeHandle -= 2;
-				}
-
-				shape.setWidth(width);
-				shape.setHeight(height);
-
-				positionHandles();
+				update(transO, halfTransW);
+				o.subtract(halfTransO);
 				break;
 			case 5:
-				Vector2D center = shape.getCenter();
-				Vector2D before = oldPoint.getSubtractedCopy(center);
-				Vector2D after = p.getSubtractedCopy(center);
-				float angle = Vector2D.angleBetween(before, after);
-				shape.rotate(angle);
+				o = w.getSubtractedCopy(shape.getCenter());
+				float angle = Vector2D.angleBetween(Vector2D.Y_AXIS.getInvertedCopy(), o);
+				shape.setRotation(angle);
 				break;
 			default:
 				return;
 		}
 
-		oldPoint = p;
+		oldPointW = w;
+		oldPointO = o;
 		controller.refresh();
+	}
+
+	private void update(Vector2D transO, Vector2D halfTransW)
+	{
+		float width = shape.getWidth() + (activeHandle % 2 == 1 ? -1 : 1) * transO.x;
+		float height = shape.getHeight() + (activeHandle <= 2 ? -1 : 1) * transO.y;
+
+		shape.setWidth(width);
+		shape.setHeight(height);
+
+		shape.translate(halfTransW);
+
+		if (activeHandle % 2 == 1 && width < 0)
+		{
+			activeHandle++;
+		}
+		else if (activeHandle % 2 == 0 && width < 0)
+		{
+			activeHandle--;
+		}
+		if (activeHandle <= 2 && height < 0)
+		{
+			activeHandle += 2;
+		}
+		else if (activeHandle > 2 && height < 0)
+		{
+			activeHandle -= 2;
+		}
+
+		positionHandles();
 	}
 
 	@Override
