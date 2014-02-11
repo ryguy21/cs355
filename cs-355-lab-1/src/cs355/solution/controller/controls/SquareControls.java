@@ -21,8 +21,6 @@ public class SquareControls extends RectangleControls
 
 		Vector2D halfTransO = transO.getScaledCopy(0.5f);
 
-		float oldSize = ((Square) shape).getSize();
-
 		switch (activeHandle)
 		{
 			case 0:
@@ -30,23 +28,19 @@ public class SquareControls extends RectangleControls
 				o.subtract(transW);
 				break;
 			case 1:
-				updateSize(bottomRight, o);
-				updateLocation(oldSize, w);
+				update(bottomRight, o);
 				o.subtract(halfTransO);
 				break;
 			case 2:
-				updateSize(bottomLeft, o);
-				updateLocation(oldSize, w);
+				update(bottomLeft, o);
 				o.subtract(halfTransO);
 				break;
 			case 3:
-				updateSize(topRight, o);
-				updateLocation(oldSize, w);
+				update(topRight, o);
 				o.subtract(halfTransO);
 				break;
 			case 4:
-				updateSize(topLeft, o);
-				updateLocation(oldSize, w);
+				update(topLeft, o);
 				o.subtract(halfTransO);
 				break;
 			case 5:
@@ -62,57 +56,59 @@ public class SquareControls extends RectangleControls
 		controller.refresh();
 	}
 
-	private void updateSize(Vector2D start, Vector2D end)
+	private void update(Vector2D start, Vector2D end)
 	{
+		float oldSize = ((Square) shape).getSize();
 		float size = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
 
 		((Square) shape).setSize(size);
 
-		if (activeHandle % 2 == 1 && end.x > start.x)
-		{
-			activeHandle++;
-		}
-		else if (activeHandle % 2 == 0 && end.x < start.x)
-		{
-			activeHandle--;
-		}
-		if (activeHandle <= 2 && end.y > start.y)
-		{
-			activeHandle += 2;
-		}
-		else if (activeHandle > 2 && end.y < start.y)
-		{
-			activeHandle -= 2;
-		}
-
-		updateHandles();
-	}
-
-	private void updateLocation(float oldSize, Vector2D w)
-	{
-		float dsize = (((Square) shape).getSize() - oldSize) * 0.5f;
-		Vector2D trans;
+		float diff = (size - oldSize) * 0.5f;
+		Vector2D trans = null;
 
 		switch (activeHandle)
 		{
 			case 1:
-				trans = new Vector2D(-dsize, -dsize);
+				trans = new Vector2D(-diff, -diff);
 				break;
 			case 2:
-				trans = new Vector2D(dsize, -dsize);
+				trans = new Vector2D(diff, -diff);
 				break;
 			case 3:
-				trans = new Vector2D(-dsize, dsize);
+				trans = new Vector2D(-diff, diff);
 				break;
 			case 4:
-				trans = new Vector2D(dsize, dsize);
+				trans = new Vector2D(diff, diff);
 				break;
 			default:
 				return;
 		}
 
-		trans = ((Square) shape).rotateObjectToWorld(trans);
+		if (activeHandle % 2 == 1 && end.x > start.x)
+		{
+			activeHandle++;
+			trans.x += oldSize;
+		}
+		else if (activeHandle % 2 == 0 && end.x < start.x)
+		{
+			activeHandle--;
+			trans.x -= oldSize;
+		}
+		if (activeHandle <= 2 && end.y > start.y)
+		{
+			activeHandle += 2;
+			trans.y += oldSize;
+		}
+		else if (activeHandle > 2 && end.y < start.y)
+		{
+			activeHandle -= 2;
+			trans.y -= oldSize;
+		}
+
+		trans = shape.rotateObjectToWorld(trans);
 		shape.translate(trans);
+
+		updateHandles();
 	}
 
 	private void updateHandles()
