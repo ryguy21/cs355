@@ -107,6 +107,18 @@ public abstract class Shape implements Selectable
 		return new Vector2D(p);
 	}
 
+	public Vector2D rotateObjectToWorld(Vector2D o)
+	{
+		Point2D w = rotation.transform(o.toPoint2D(), null);
+		return new Vector2D(w);
+	}
+
+	public Vector2D rotateWorldToObject(Vector2D w)
+	{
+		Point2D o = inverseRotation.transform(w.toPoint2D(), null);
+		return new Vector2D(o);
+	}
+
 	public AffineTransform getTransform()
 	{
 		if (dirty)

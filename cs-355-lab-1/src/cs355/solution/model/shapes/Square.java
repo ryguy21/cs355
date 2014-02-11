@@ -1,7 +1,6 @@
 package cs355.solution.model.shapes;
 
 import java.awt.Color;
-import java.awt.geom.Point2D;
 
 import cs355.solution.util.math.Vector2D;
 
@@ -21,18 +20,6 @@ public class Square extends Rectangle
 	{
 		super.setWidth(size);
 		super.setHeight(size);
-	}
-
-	public Vector2D rotateObjectToWorld(Vector2D o)
-	{
-		Point2D w = rotation.transform(o.toPoint2D(), null);
-		return new Vector2D(w);
-	}
-
-	public Vector2D rotateWorldToObject(Vector2D w)
-	{
-		Point2D o = inverseRotation.transform(w.toPoint2D(), null);
-		return new Vector2D(o);
 	}
 
 	@Override

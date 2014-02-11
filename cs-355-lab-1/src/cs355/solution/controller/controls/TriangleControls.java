@@ -11,7 +11,7 @@ public class TriangleControls extends SelectionControls<Triangle>
 	private final HandleControl	handle1, handle2, handle3, rHandle;
 
 	private int					activeHandle;
-	private Vector2D			oldPoint;
+	private Vector2D			oldPointW, oldPointO;
 
 	public TriangleControls(IController controller, Triangle triangle)
 	{
@@ -23,20 +23,24 @@ public class TriangleControls extends SelectionControls<Triangle>
 		handle3 = new HandleControl(triangle.getPoint3());
 		rHandle = new HandleControl(center);
 
-		positionRotateHandle();
+		positionHandles();
 
 		activeHandle = -1;
 	}
 
-	private void positionRotateHandle()
+	private void positionHandles()
 	{
+		handle1.copyValues(shape.getPoint1());
+		handle2.copyValues(shape.getPoint2());
+		handle3.copyValues(shape.getPoint3());
+
 		float minY = handle1.y;
 		if (handle2.y < minY)
 			minY = handle2.y;
 		if (handle3.y < minY)
 			minY = handle3.y;
 
-		rHandle.copyValues(shape.getCenter().x, minY - 30f);
+		rHandle.copyValues(0, minY - 30f);
 	}
 
 	@Override
@@ -62,100 +66,102 @@ public class TriangleControls extends SelectionControls<Triangle>
 	}
 
 	@Override
-	public boolean contains(Vector2D p)
+	public boolean contains(Vector2D w)
 	{
-		if (handle1.contains(p))
+		Vector2D o = shape.worldToObject(w);
+
+		if (handle1.contains(o))
 			return true;
-		else if (handle2.contains(p))
+		else if (handle2.contains(o))
 			return true;
-		else if (handle3.contains(p))
+		else if (handle3.contains(o))
 			return true;
-		else if (rHandle.contains(p))
+		else if (rHandle.contains(o))
 			return true;
-		else if (shape.contains(p))
+		else if (shape.contains(w))
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public void mousePressed(Vector2D p)
+	public void mousePressed(Vector2D w)
 	{
-		if (handle1.contains(p))
+		Vector2D o = shape.worldToObject(w);
+
+		if (handle1.contains(o))
 		{
 			activeHandle = 1;
-			oldPoint = p;
+			oldPointW = w;
+			oldPointO = o;
 		}
-		else if (handle2.contains(p))
+		else if (handle2.contains(o))
 		{
 			activeHandle = 2;
-			oldPoint = p;
+			oldPointW = w;
+			oldPointO = o;
 		}
-		else if (handle3.contains(p))
+		else if (handle3.contains(o))
 		{
 			activeHandle = 3;
-			oldPoint = p;
+			oldPointW = w;
+			oldPointO = o;
 		}
-		else if (rHandle.contains(p))
+		else if (rHandle.contains(o))
 		{
 			activeHandle = 4;
-			oldPoint = p;
+			oldPointW = w;
+			oldPointO = o;
 		}
-		else if (shape.contains(p))
+		else if (shape.contains(w))
 		{
 			activeHandle = 0;
-			oldPoint = p;
+			oldPointW = w;
+			oldPointO = o;
 		}
 	}
 
 	@Override
-	public void mouseDragged(Vector2D p)
+	public void mouseDragged(Vector2D w)
 	{
-		Vector2D trans;
+		Vector2D o = shape.worldToObject(w);
+
+		Vector2D transW = w.getSubtractedCopy(oldPointW);
+		Vector2D transO = o.getSubtractedCopy(oldPointO);
 
 		switch (activeHandle)
 		{
 			case 0:
-				trans = p.getSubtractedCopy(oldPoint);
-				shape.translate(trans);
-				handle1.add(trans);
-				handle2.add(trans);
-				handle3.add(trans);
-				rHandle.add(trans);
+				shape.translate(transW);
 				break;
 			case 1:
-				trans = p.getSubtractedCopy(oldPoint);
-				shape.translatePoint1(trans);
-				handle1.add(trans);
+				shape.translatePoint1(transO);
 
-				positionRotateHandle();
+				positionHandles();
+				oldPointO = handle1.getCopy();
 				break;
 			case 2:
-				trans = p.getSubtractedCopy(oldPoint);
-				shape.translatePoint2(trans);
-				handle2.add(trans);
+				shape.translatePoint2(transO);
 
-				positionRotateHandle();
+				positionHandles();
+				oldPointO = handle2.getCopy();
 				break;
 			case 3:
-				trans = p.getSubtractedCopy(oldPoint);
-				shape.translatePoint3(trans);
-				handle3.add(trans);
+				shape.translatePoint3(transO);
 
-				positionRotateHandle();
+				positionHandles();
+				oldPointO = handle3.getCopy();
 				break;
 			case 4:
-				Vector2D center = shape.getCenter();
-				Vector2D before = oldPoint.getSubtractedCopy(center);
-				Vector2D after = p.getSubtractedCopy(center);
-				float angle = Vector2D.angleBetween(before, after);
-				shape.rotate(angle);
+				o = w.getSubtractedCopy(shape.getCenter());
+				float angle = Vector2D.angleBetween(Vector2D.Y_AXIS.getInvertedCopy(), o);
+				shape.setRotation(angle);
 				break;
 			default:
 				return;
 		}
 
-		oldPoint = p;
+		oldPointW = w;
 		controller.refresh();
 	}
 

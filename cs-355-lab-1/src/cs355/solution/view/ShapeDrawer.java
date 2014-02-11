@@ -106,6 +106,10 @@ public class ShapeDrawer implements IShapeDrawer
 	{
 		g.setPaint(t.getColor());
 
+		AffineTransform original = g.getTransform();
+		AffineTransform otow = t.getTransform();
+		g.setTransform(otow);
+
 		int[] xs = new int[3];
 		int[] ys = new int[3];
 
@@ -125,5 +129,7 @@ public class ShapeDrawer implements IShapeDrawer
 			g.drawPolygon(xs, ys, 3);
 		else
 			g.fillPolygon(xs, ys, 3);
+
+		g.setTransform(original);
 	}
 }

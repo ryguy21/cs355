@@ -37,7 +37,7 @@ public class Triangle extends Shape
 
 	public Vector2D getPoint1()
 	{
-		return objectToWorld(p1);
+		return p1.getCopy();
 	}
 
 	public void setPoint1(Vector2D pt1)
@@ -54,7 +54,7 @@ public class Triangle extends Shape
 
 	public Vector2D getPoint2()
 	{
-		return objectToWorld(p2);
+		return p2.getCopy();
 	}
 
 	public void setPoint2(Vector2D pt2)
@@ -71,7 +71,7 @@ public class Triangle extends Shape
 
 	public Vector2D getPoint3()
 	{
-		return objectToWorld(p3);
+		return p3.getCopy();
 	}
 
 	public void setPoint3(Vector2D pt3)
@@ -93,6 +93,8 @@ public class Triangle extends Shape
 		p1.subtract(trans);
 		p2.subtract(trans);
 		p3.subtract(trans);
+
+		trans = rotateObjectToWorld(trans);
 		translate(trans);
 	}
 
