@@ -182,6 +182,8 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		float width = shape.getWidth() + (activeHandle % 2 == 1 ? -1 : 1) * transO.x;
 		float height = shape.getHeight() + (activeHandle <= 2 ? -1 : 1) * transO.y;
 
+		// int ah = activeHandle;
+
 		shape.setWidth(width);
 		shape.setHeight(height);
 
@@ -203,6 +205,8 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		{
 			activeHandle -= 2;
 		}
+
+		// Log.d("%d => %d : %f, %f", ah, activeHandle, width, height);
 
 		positionHandles();
 	}

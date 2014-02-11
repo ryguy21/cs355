@@ -11,10 +11,10 @@ public abstract class Shape implements Selectable
 {
 	protected Color					color;
 
-	private final AffineTransform	translation;
-	private final AffineTransform	inverseTranslation;
-	private final AffineTransform	rotation;
-	private final AffineTransform	inverseRotation;
+	protected final AffineTransform	translation;
+	protected final AffineTransform	inverseTranslation;
+	protected final AffineTransform	rotation;
+	protected final AffineTransform	inverseRotation;
 
 	private AffineTransform			transform;
 	private AffineTransform			inverseTransform;

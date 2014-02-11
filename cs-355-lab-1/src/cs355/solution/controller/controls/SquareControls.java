@@ -12,56 +12,60 @@ public class SquareControls extends RectangleControls
 	}
 
 	@Override
-	public void mouseDragged(Vector2D p)
+	public void mouseDragged(Vector2D w)
 	{
-		Vector2D trans = p.getSubtractedCopy(oldPointO);
+		Vector2D o = shape.worldToObject(w);
+
+		Vector2D transW = w.getSubtractedCopy(oldPointW);
+		Vector2D transO = o.getSubtractedCopy(oldPointO);
+
+		Vector2D halfTransO = transO.getScaledCopy(0.5f);
+
+		float oldSize = ((Square) shape).getSize();
 
 		switch (activeHandle)
 		{
 			case 0:
-				shape.translate(trans);
+				shape.translate(transW);
+				o.subtract(transW);
 				break;
 			case 1:
-				update(bottomRight, p);
-				updateHandles();
+				updateSize(bottomRight, o);
+				updateLocation(oldSize, w);
+				o.subtract(halfTransO);
 				break;
 			case 2:
-				update(bottomLeft, p);
-				updateHandles();
+				updateSize(bottomLeft, o);
+				updateLocation(oldSize, w);
+				o.subtract(halfTransO);
 				break;
 			case 3:
-				update(topRight, p);
-				updateHandles();
+				updateSize(topRight, o);
+				updateLocation(oldSize, w);
+				o.subtract(halfTransO);
 				break;
 			case 4:
-				update(topLeft, p);
-				updateHandles();
+				updateSize(topLeft, o);
+				updateLocation(oldSize, w);
+				o.subtract(halfTransO);
 				break;
 			case 5:
-				Vector2D center = shape.getCenter();
-				Vector2D before = oldPointO.getSubtractedCopy(center);
-				Vector2D after = p.getSubtractedCopy(center);
-				float angle = Vector2D.angleBetween(before, after);
-				shape.rotate(angle);
+				o = w.getSubtractedCopy(shape.getCenter());
+				float angle = Vector2D.angleBetween(Vector2D.Y_AXIS.getInvertedCopy(), o);
+				shape.setRotation(angle);
 				break;
 			default:
 				return;
 		}
 
-		oldPointO = p;
+		oldPointW = w;
 		controller.refresh();
 	}
 
-	private void update(Vector2D start, Vector2D end)
+	private void updateSize(Vector2D start, Vector2D end)
 	{
 		float size = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
-		float half_size = size * 0.5f;
-		float multiplierX = end.x > start.x ? 0 : -1;
-		float multiplierY = end.y > start.y ? 0 : -1;
 
-		Vector2D center = new Vector2D(start.x + size * multiplierX + half_size, start.y + size * multiplierY + half_size);
-
-		shape.setCenter(center);
 		((Square) shape).setSize(size);
 
 		if (activeHandle % 2 == 1 && end.x > start.x)
@@ -80,20 +84,47 @@ public class SquareControls extends RectangleControls
 		{
 			activeHandle -= 2;
 		}
+
+		updateHandles();
+	}
+
+	private void updateLocation(float oldSize, Vector2D w)
+	{
+		float dsize = (((Square) shape).getSize() - oldSize) * 0.5f;
+		Vector2D trans;
+
+		switch (activeHandle)
+		{
+			case 1:
+				trans = new Vector2D(-dsize, -dsize);
+				break;
+			case 2:
+				trans = new Vector2D(dsize, -dsize);
+				break;
+			case 3:
+				trans = new Vector2D(-dsize, dsize);
+				break;
+			case 4:
+				trans = new Vector2D(dsize, dsize);
+				break;
+			default:
+				return;
+		}
+
+		trans = ((Square) shape).rotateObjectToWorld(trans);
+		shape.translate(trans);
 	}
 
 	private void updateHandles()
 	{
-		Vector2D tlCorner = shape.getTopLeftCorner();
+		float halfWidth = shape.getWidth() * 0.5f;
+		float halfHeight = shape.getHeight() * 0.5f;
 
-		float right = tlCorner.x + shape.getWidth();
-		float bottom = tlCorner.y + shape.getHeight();
+		topLeft.copyValues(-halfWidth, -halfHeight);
+		topRight.copyValues(halfWidth, -halfHeight);
+		bottomLeft.copyValues(-halfWidth, halfHeight);
+		bottomRight.copyValues(halfWidth, halfHeight);
 
-		topLeft.copyValues(tlCorner);
-		topRight.copyValues(right, tlCorner.y);
-		bottomLeft.copyValues(tlCorner.x, bottom);
-		bottomRight.copyValues(right, bottom);
-
-		rotate.copyValues(shape.getCenter().x, tlCorner.y - 30f);
+		rotate.copyValues(0, -halfHeight - 30f);
 	}
 }
