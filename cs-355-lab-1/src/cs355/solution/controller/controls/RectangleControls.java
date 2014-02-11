@@ -5,7 +5,6 @@ import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
-import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class RectangleControls extends SelectionControls<Rectangle>
@@ -185,9 +184,6 @@ public class RectangleControls extends SelectionControls<Rectangle>
 
 		if (width < 0)
 		{
-			Vector2D trans = new Vector2D(transO.x * 0.5f, 0);
-			trans = shape.rotateWorldToObject(trans);
-			shape.translate(trans);
 			shape.setWidth(-width);
 
 			if (activeHandle % 2 == 1)
@@ -198,18 +194,12 @@ public class RectangleControls extends SelectionControls<Rectangle>
 			{
 				activeHandle--;
 			}
-
-			Log.d("==========\nbefore: %s", halfTransW);
-			Vector2D y_axis = shape.rotateObjectToWorld(Vector2D.Y_AXIS);
-			halfTransW.projectOnto(y_axis);
-			Log.d(" after: %s", halfTransW);
 		}
+		else
+			shape.setWidth(width);
 
 		if (height < 0)
 		{
-			Vector2D trans = new Vector2D(0, transO.y * 0.5f);
-			trans = shape.rotateWorldToObject(trans);
-			shape.translate(trans);
 			shape.setHeight(-height);
 
 			if (activeHandle <= 2)
@@ -220,22 +210,9 @@ public class RectangleControls extends SelectionControls<Rectangle>
 			{
 				activeHandle -= 2;
 			}
-
-			Log.d("==========\nbefore: %s", halfTransW);
-			Vector2D x_axis = shape.rotateObjectToWorld(Vector2D.X_AXIS);
-			halfTransW.projectOnto(x_axis);
-			Log.d(" after: %s", halfTransW);
 		}
-
-		if (width >= 0)
-		{
-			shape.setWidth(width);
-		}
-
-		if (height >= 0)
-		{
+		else
 			shape.setHeight(height);
-		}
 
 		shape.translate(halfTransW);
 
