@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class RectangleControls extends SelectionControls<Rectangle>
@@ -182,31 +183,61 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		float width = shape.getWidth() + (activeHandle % 2 == 1 ? -1 : 1) * transO.x;
 		float height = shape.getHeight() + (activeHandle <= 2 ? -1 : 1) * transO.y;
 
-		// int ah = activeHandle;
+		if (width < 0)
+		{
+			Vector2D trans = new Vector2D(transO.x * 0.5f, 0);
+			trans = shape.rotateWorldToObject(trans);
+			shape.translate(trans);
+			shape.setWidth(-width);
 
-		shape.setWidth(width);
-		shape.setHeight(height);
+			if (activeHandle % 2 == 1)
+			{
+				activeHandle++;
+			}
+			else if (activeHandle % 2 == 0)
+			{
+				activeHandle--;
+			}
+
+			Log.d("==========\nbefore: %s", halfTransW);
+			Vector2D y_axis = shape.rotateObjectToWorld(Vector2D.Y_AXIS);
+			halfTransW.projectOnto(y_axis);
+			Log.d(" after: %s", halfTransW);
+		}
+
+		if (height < 0)
+		{
+			Vector2D trans = new Vector2D(0, transO.y * 0.5f);
+			trans = shape.rotateWorldToObject(trans);
+			shape.translate(trans);
+			shape.setHeight(-height);
+
+			if (activeHandle <= 2)
+			{
+				activeHandle += 2;
+			}
+			else if (activeHandle > 2)
+			{
+				activeHandle -= 2;
+			}
+
+			Log.d("==========\nbefore: %s", halfTransW);
+			Vector2D x_axis = shape.rotateObjectToWorld(Vector2D.X_AXIS);
+			halfTransW.projectOnto(x_axis);
+			Log.d(" after: %s", halfTransW);
+		}
+
+		if (width >= 0)
+		{
+			shape.setWidth(width);
+		}
+
+		if (height >= 0)
+		{
+			shape.setHeight(height);
+		}
 
 		shape.translate(halfTransW);
-
-		if (activeHandle % 2 == 1 && width < 0)
-		{
-			activeHandle++;
-		}
-		else if (activeHandle % 2 == 0 && width < 0)
-		{
-			activeHandle--;
-		}
-		if (activeHandle <= 2 && height < 0)
-		{
-			activeHandle += 2;
-		}
-		else if (activeHandle > 2 && height < 0)
-		{
-			activeHandle -= 2;
-		}
-
-		// Log.d("%d => %d : %f, %f", ah, activeHandle, width, height);
 
 		positionHandles();
 	}

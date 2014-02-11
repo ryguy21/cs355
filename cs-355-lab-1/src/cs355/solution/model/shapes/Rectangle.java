@@ -65,7 +65,7 @@ public class Rectangle extends Shape
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Rectangle [center=");
-		builder.append(getCenter().print());
+		builder.append(getCenter().print(3, 2));
 		builder.append(", width=");
 		builder.append(width);
 		builder.append(", height=");

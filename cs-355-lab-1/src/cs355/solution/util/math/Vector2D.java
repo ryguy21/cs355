@@ -278,13 +278,6 @@ public class Vector2D
 		return new Vector2D(-y, x);
 	}
 
-	public static void main(String[] args)
-	{
-		Log.d(angleBetween(X_AXIS, Y_AXIS) / Math.PI);
-		Log.d(angleBetween(Y_AXIS, X_AXIS) / Math.PI);
-		Log.d(angleBetween(new Vector2D(1, 1), new Vector2D(1, -1)) / Math.PI);
-	}
-
 	public float polarAngle()
 	{
 		return (float) Math.atan2(x, y);
@@ -304,6 +297,39 @@ public class Vector2D
 		float y = yaxis.getNormalizedCopy().dot(this);
 
 		return new Vector2D(x, y);
+	}
+
+	public static void main(String[] args)
+	{
+		Log.d(X_AXIS.getProjectedOnto(X_AXIS));
+		Log.d(X_AXIS.getProjectedOnto(Y_AXIS));
+		Log.d(Y_AXIS.getProjectedOnto(X_AXIS));
+		Log.d(Y_AXIS.getProjectedOnto(Y_AXIS));
+		Log.d(new Vector2D().projectOnto(X_AXIS));
+		Log.d(new Vector2D().projectOnto(Y_AXIS));
+		Log.d(new Vector2D(1, 1).projectOnto(X_AXIS));
+		Log.d(new Vector2D(1, 1).projectOnto(Y_AXIS));
+		Log.d(new Vector2D(-1, 1).projectOnto(X_AXIS));
+		Log.d(new Vector2D(-1, 1).projectOnto(Y_AXIS));
+		Log.d(new Vector2D(-1, -1).projectOnto(X_AXIS));
+		Log.d(new Vector2D(-1, -1).projectOnto(Y_AXIS));
+		Log.d(new Vector2D(1, -1).projectOnto(X_AXIS));
+		Log.d(new Vector2D(1, -1).projectOnto(Y_AXIS));
+	}
+
+	public Vector2D projectOnto(Vector2D other)
+	{
+		other = other.getNormalizedCopy();
+		float length = dot(other);
+		other.scale(length);
+		return this.copyValues(other);
+	}
+
+	public Vector2D getProjectedOnto(Vector2D other)
+	{
+		other = other.getNormalizedCopy();
+		float length = dot(other);
+		return other.scale(length);
 	}
 
 	public Point2D toPoint2D()
