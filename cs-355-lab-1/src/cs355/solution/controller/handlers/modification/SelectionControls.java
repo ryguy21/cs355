@@ -1,4 +1,4 @@
-package cs355.solution.controller.controls;
+package cs355.solution.controller.handlers.modification;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

@@ -1,7 +1,8 @@
-package cs355.solution.controller.controls;
+package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.handlers.modification.HandleControl;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Triangle;
 import cs355.solution.util.math.Vector2D;

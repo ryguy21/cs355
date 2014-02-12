@@ -1,5 +1,6 @@
-package cs355.solution.controller.controls;
+package cs355.solution.controller.handlers.modification;
 
+import cs355.solution.controller.handlers.modification.*;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.*;
 

@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.Iterator;
 
 import cs355.GUIFunctions;
-import cs355.solution.controller.controls.SelectionControls;
-import cs355.solution.controller.controls.SelectionControlsFactory;
+import cs355.solution.controller.handlers.modification.SelectionControls;
+import cs355.solution.controller.handlers.modification.SelectionControlsFactory;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;

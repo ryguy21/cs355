@@ -1,12 +1,13 @@
-package cs355.solution.controller.controls;
+package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.handlers.modification.HandleControl;
 import cs355.solution.controller.interfaces.IController;
-import cs355.solution.model.shapes.Ellipse;
+import cs355.solution.model.shapes.Rectangle;
 import cs355.solution.util.math.Vector2D;
 
-public class EllipseControls extends SelectionControls<Ellipse>
+public class RectangleControls extends SelectionControls<Rectangle>
 {
 	protected final HandleControl	topLeft, topRight, bottomLeft, bottomRight, rotate;
 
@@ -14,21 +15,21 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	protected Vector2D				oldPointO;
 	protected Vector2D				oldPointW;
 
-	public EllipseControls(IController controller, Ellipse e)
+	public RectangleControls(IController controller, Rectangle s)
 	{
-		super(controller, e);
+		super(controller, s);
 
 		Vector2D tlCorner = shape.getTopLeftCorner();
 
-		float right = tlCorner.x + shape.getxDiameter();
-		float bottom = tlCorner.y + shape.getyDiameter();
+		float right = tlCorner.x + shape.getWidth();
+		float bottom = tlCorner.y + shape.getHeight();
 
 		topLeft = new HandleControl(tlCorner);
 		topRight = new HandleControl(right, tlCorner.y);
 		bottomLeft = new HandleControl(tlCorner.x, bottom);
 		bottomRight = new HandleControl(right, bottom);
 
-		rotate = new HandleControl(0, -e.getyRadius() - 30f);
+		rotate = new HandleControl(0, tlCorner.y - 30f);
 
 		activeHandle = -1;
 	}
@@ -37,8 +38,8 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	{
 		Vector2D tlCorner = shape.getTopLeftCorner();
 
-		float right = tlCorner.x + shape.getxDiameter();
-		float bottom = tlCorner.y + shape.getyDiameter();
+		float right = tlCorner.x + shape.getWidth();
+		float bottom = tlCorner.y + shape.getHeight();
 
 		topLeft.copyValues(tlCorner);
 		topRight.copyValues(right, tlCorner.y);
@@ -79,12 +80,13 @@ public class EllipseControls extends SelectionControls<Ellipse>
 		bottomRight.draw(g);
 		rotate.draw(g);
 
-		int x = (int) (-shape.getxRadius());
-		int y = (int) (-shape.getyRadius());
-		int width = (int) shape.getxDiameter();
-		int height = (int) shape.getyDiameter();
+		Vector2D tlCorner = shape.getTopLeftCorner();
+		int x = (int) tlCorner.x;
+		int y = (int) tlCorner.y;
+		int width = (int) shape.getWidth();
+		int height = (int) shape.getHeight();
 
-		g.drawArc(x, y, width, height, 0, 360);
+		g.drawRect(x, y, width, height);
 	}
 
 	@Override
@@ -170,12 +172,12 @@ public class EllipseControls extends SelectionControls<Ellipse>
 
 	private void update(Vector2D transO, Vector2D halfTransW)
 	{
-		float width = shape.getxDiameter() + (activeHandle % 2 == 1 ? -1 : 1) * transO.x;
-		float height = shape.getyDiameter() + (activeHandle <= 2 ? -1 : 1) * transO.y;
+		float width = shape.getWidth() + (activeHandle % 2 == 1 ? -1 : 1) * transO.x;
+		float height = shape.getHeight() + (activeHandle <= 2 ? -1 : 1) * transO.y;
 
 		if (width < 0)
 		{
-			shape.setxRadius(width * -0.5f);
+			shape.setWidth(-width);
 
 			if (activeHandle % 2 == 1)
 			{
@@ -187,11 +189,11 @@ public class EllipseControls extends SelectionControls<Ellipse>
 			}
 		}
 		else
-			shape.setxRadius(width * 0.5f);
+			shape.setWidth(width);
 
 		if (height < 0)
 		{
-			shape.setyRadius(height * -0.5f);
+			shape.setHeight(-height);
 
 			if (activeHandle <= 2)
 			{
@@ -203,7 +205,7 @@ public class EllipseControls extends SelectionControls<Ellipse>
 			}
 		}
 		else
-			shape.setyRadius(height * 0.5f);
+			shape.setHeight(height);
 
 		shape.translate(halfTransW);
 
