@@ -1,62 +1,126 @@
 package cs355.solution.controller.controls;
 
-import java.awt.Graphics2D;
-
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Circle;
 import cs355.solution.util.math.Vector2D;
 
-public class CircleControls extends SelectionControls<Circle>
+public class CircleControls extends EllipseControls
 {
-	private Vector2D	oldPoint;
-
 	public CircleControls(IController controller, Circle circle)
 	{
 		super(controller, circle);
 	}
 
 	@Override
-	public void drawComponents(Graphics2D g)
+	public void mouseDragged(Vector2D w)
 	{
-		int x = (int) (-shape.getRadius());
-		int y = (int) (-shape.getRadius());
-		int size = (int) shape.getDiameter();
+		Vector2D o = shape.worldToObject(w);
 
-		g.drawArc(x, y, size, size, 0, 360);
-	}
+		Vector2D transW = w.getSubtractedCopy(oldPointW);
+		Vector2D transO = o.getSubtractedCopy(oldPointO);
 
-	@Override
-	public boolean contains(Vector2D p)
-	{
-		return shape.contains(p);
-	}
+		Vector2D halfTransO = transO.getScaledCopy(0.5f);
 
-	@Override
-	public void mousePressed(Vector2D p)
-	{
-		if (shape.contains(p))
+		switch (activeHandle)
 		{
-			oldPoint = p;
+			case 0:
+				shape.translate(transW);
+				o.subtract(transW);
+				break;
+			case 1:
+				update(bottomRight, o);
+				o.subtract(halfTransO);
+				break;
+			case 2:
+				update(bottomLeft, o);
+				o.subtract(halfTransO);
+				break;
+			case 3:
+				update(topRight, o);
+				o.subtract(halfTransO);
+				break;
+			case 4:
+				update(topLeft, o);
+				o.subtract(halfTransO);
+				break;
+			case 5:
+				o = w.getSubtractedCopy(shape.getCenter());
+				float angle = Vector2D.angleBetween(Vector2D.Y_AXIS.getInvertedCopy(), o);
+				shape.setRotation(angle);
+				break;
+			default:
+				return;
 		}
+
+		oldPointW = w;
+		controller.refresh();
 	}
 
-	@Override
-	public void mouseDragged(Vector2D p)
+	private void update(Vector2D start, Vector2D end)
 	{
-		if (oldPoint != null)
+		float oldSize = ((Circle) shape).getDiameter();
+		float size = Math.min(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
+
+		((Circle) shape).setRadius(size * 0.5f);
+
+		float diff = (size - oldSize) * 0.5f;
+		Vector2D trans = null;
+
+		switch (activeHandle)
 		{
-			Vector2D trans = p.getSubtractedCopy(oldPoint);
-			shape.translate(trans);
-			oldPoint = p;
-
-			controller.refresh();
+			case 1:
+				trans = new Vector2D(-diff, -diff);
+				break;
+			case 2:
+				trans = new Vector2D(diff, -diff);
+				break;
+			case 3:
+				trans = new Vector2D(-diff, diff);
+				break;
+			case 4:
+				trans = new Vector2D(diff, diff);
+				break;
+			default:
+				return;
 		}
+
+		if (activeHandle % 2 == 1 && end.x > start.x)
+		{
+			activeHandle++;
+			trans.x += size;
+		}
+		else if (activeHandle % 2 == 0 && end.x < start.x)
+		{
+			activeHandle--;
+			trans.x -= size;
+		}
+		if (activeHandle <= 2 && end.y > start.y)
+		{
+			activeHandle += 2;
+			trans.y += size;
+		}
+		else if (activeHandle > 2 && end.y < start.y)
+		{
+			activeHandle -= 2;
+			trans.y -= size;
+		}
+
+		trans = shape.rotateObjectToWorld(trans);
+		shape.translate(trans);
+
+		updateHandles();
 	}
 
-	@Override
-	public void mouseReleased(Vector2D p)
+	private void updateHandles()
 	{
-		mouseDragged(p);
-		oldPoint = null;
+		float halfWidth = shape.getxDiameter() * 0.5f;
+		float halfHeight = shape.getyDiameter() * 0.5f;
+
+		topLeft.copyValues(-halfWidth, -halfHeight);
+		topRight.copyValues(halfWidth, -halfHeight);
+		bottomLeft.copyValues(-halfWidth, halfHeight);
+		bottomRight.copyValues(halfWidth, halfHeight);
+
+		rotate.copyValues(0, -halfHeight - 30f);
 	}
 }

@@ -1,7 +1,6 @@
 package cs355.solution.controller.controls;
 
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
@@ -74,11 +73,6 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	@Override
 	protected void drawComponents(Graphics2D g)
 	{
-		AffineTransform original = g.getTransform();
-		AffineTransform otow = shape.getTransform();
-
-		g.setTransform(otow);
-
 		topLeft.draw(g);
 		topRight.draw(g);
 		bottomLeft.draw(g);
@@ -92,8 +86,6 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		int height = (int) shape.getHeight();
 
 		g.drawRect(x, y, width, height);
-
-		g.setTransform(original);
 	}
 
 	@Override
