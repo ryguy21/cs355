@@ -87,22 +87,22 @@ public class SquareControls extends RectangleControls
 		if (activeHandle % 2 == 1 && end.x > start.x)
 		{
 			activeHandle++;
-			trans.x += oldSize;
+			trans.x += size;
 		}
 		else if (activeHandle % 2 == 0 && end.x < start.x)
 		{
 			activeHandle--;
-			trans.x -= oldSize;
+			trans.x -= size;
 		}
 		if (activeHandle <= 2 && end.y > start.y)
 		{
 			activeHandle += 2;
-			trans.y += oldSize;
+			trans.y += size;
 		}
 		else if (activeHandle > 2 && end.y < start.y)
 		{
 			activeHandle -= 2;
-			trans.y -= oldSize;
+			trans.y -= size;
 		}
 
 		trans = shape.rotateObjectToWorld(trans);
