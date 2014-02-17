@@ -58,7 +58,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(e.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = e.getTransform();
+		AffineTransform otow = e.getTransform().toAffineTransform();
 		g.setTransform(otow);
 
 		Vector2D tlc = e.getTopLeftCorner();
@@ -85,7 +85,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(r.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = r.getTransform();
+		AffineTransform otow = r.getTransform().toAffineTransform();
 		g.setTransform(otow);
 
 		Vector2D tlc = r.getTopLeftCorner();
@@ -107,7 +107,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(t.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = t.getTransform();
+		AffineTransform otow = t.getTransform().toAffineTransform();
 		g.setTransform(otow);
 
 		int[] xs = new int[3];

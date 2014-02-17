@@ -3,8 +3,6 @@ package cs355.solution.util.math;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import cs355.solution.util.Log;
-
 public class Vector2D
 {
 	public static final Vector2D	ZERO	= new Vector2D();
@@ -299,22 +297,20 @@ public class Vector2D
 		return new Vector2D(x, y);
 	}
 
-	public static void main(String[] args)
+	public Vector2D multiply(Matrix m)
 	{
-		Log.d(X_AXIS.getProjectedOnto(X_AXIS));
-		Log.d(X_AXIS.getProjectedOnto(Y_AXIS));
-		Log.d(Y_AXIS.getProjectedOnto(X_AXIS));
-		Log.d(Y_AXIS.getProjectedOnto(Y_AXIS));
-		Log.d(new Vector2D().projectOnto(X_AXIS));
-		Log.d(new Vector2D().projectOnto(Y_AXIS));
-		Log.d(new Vector2D(1, 1).projectOnto(X_AXIS));
-		Log.d(new Vector2D(1, 1).projectOnto(Y_AXIS));
-		Log.d(new Vector2D(-1, 1).projectOnto(X_AXIS));
-		Log.d(new Vector2D(-1, 1).projectOnto(Y_AXIS));
-		Log.d(new Vector2D(-1, -1).projectOnto(X_AXIS));
-		Log.d(new Vector2D(-1, -1).projectOnto(Y_AXIS));
-		Log.d(new Vector2D(1, -1).projectOnto(X_AXIS));
-		Log.d(new Vector2D(1, -1).projectOnto(Y_AXIS));
+		x = m.m00 * x + m.m01 * y + m.m03;
+		y = m.m10 * x + m.m11 * y + m.m13;
+
+		return this;
+	}
+
+	public Vector2D getMultipliedCopy(Matrix m)
+	{
+		float x = m.m00 * this.x + m.m01 * y + m.m03;
+		float y = m.m10 * this.x + m.m11 * this.y + m.m13;
+
+		return new Vector2D(x, y);
 	}
 
 	public Vector2D projectOnto(Vector2D other)

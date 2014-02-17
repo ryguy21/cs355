@@ -35,6 +35,7 @@ public class Refresher implements ViewRefresher
 		while (itr.hasNext())
 		{
 			Shape shape = itr.next();
+			Log.v("Drawing %s", shape);
 			ShapeDrawer.getInstance().drawShape(shape, g);
 		}
 

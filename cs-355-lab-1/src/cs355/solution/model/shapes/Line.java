@@ -1,8 +1,8 @@
 package cs355.solution.model.shapes;
 
 import java.awt.Color;
-import java.awt.geom.AffineTransform;
 
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
 public class Line extends Shape
@@ -66,15 +66,15 @@ public class Line extends Shape
 	}
 
 	@Override
-	public AffineTransform getTransform()
+	public Matrix getTransform()
 	{
-		return new AffineTransform();
+		return new Matrix();
 	}
 
 	@Override
-	public AffineTransform getInverseTransform()
+	public Matrix getInverseTransform()
 	{
-		return new AffineTransform();
+		return new Matrix();
 	}
 
 	@Override

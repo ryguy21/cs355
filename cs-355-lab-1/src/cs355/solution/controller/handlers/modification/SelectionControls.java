@@ -39,7 +39,7 @@ public abstract class SelectionControls<T extends Shape> extends InputResponder 
 
 		g.setStroke(STROKE);
 		g.setColor(STROKE_COLOR);
-		g.setTransform(shape.getTransform());
+		g.setTransform(shape.getTransform().toAffineTransform());
 
 		drawComponents(g);
 

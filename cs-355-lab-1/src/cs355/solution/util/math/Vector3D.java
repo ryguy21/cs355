@@ -285,6 +285,26 @@ public class Vector3D
 		return new Vector3D(_x, _y, _z, _w);
 	}
 
+	public Vector3D multiply(Matrix m)
+	{
+		x = m.m00 * x + m.m01 * y + m.m02 * z + m.m03 * w;
+		y = m.m10 * x + m.m11 * y + m.m12 * z + m.m13 * w;
+		z = m.m20 * x + m.m21 * y + m.m22 * z + m.m23 * w;
+		w = m.m30 * x + m.m31 * y + m.m32 * z + m.m33 * w;
+
+		return this;
+	}
+
+	public Vector3D getMultipliedCopy(Matrix m)
+	{
+		float x = m.m00 * this.x + m.m01 * y + m.m02 * z + m.m03 * w;
+		float y = m.m10 * this.x + m.m11 * this.y + m.m12 * z + m.m13 * w;
+		float z = m.m20 * this.x + m.m21 * this.y + m.m22 * this.z + m.m23 * w;
+		float w = m.m30 * this.x + m.m31 * this.y + m.m32 * this.z + m.m33 * this.w;
+
+		return new Vector3D(x, y, z, w);
+	}
+
 	public String print()
 	{
 		return String.format("(%5.1f,%5.1f,%5.1f,%5.1f)", x, y, z, w);

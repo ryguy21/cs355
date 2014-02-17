@@ -11,6 +11,7 @@ import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
 import cs355.solution.model.shapes.Shape;
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
 public class SelectionController extends InputResponder
@@ -43,12 +44,16 @@ public class SelectionController extends InputResponder
 			Shape shape = shapeItr.next();
 			if (shape.contains(p))
 			{
+				Log.v("%s contains %s", shape, p);
+
 				control = SelectionControlsFactory.createControl(controller, shape);
 				GUIFunctions.changeSelectedColor(shape.getColor());
 				controller.refresh();
 				return;
 			}
 		}
+
+		Log.v("No shapes contain %s", p);
 
 		control = null;
 		controller.refresh();
