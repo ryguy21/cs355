@@ -3,22 +3,18 @@ package cs355.solution.view;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import cs355.solution.controller.ViewTransformController;
 import cs355.solution.model.shapes.*;
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
 public class ShapeDrawer implements IShapeDrawer
 {
-	private abstract static class SingletonHolder
-	{
-		public static final ShapeDrawer	INSTANCE	= new ShapeDrawer();
-	}
+	private ViewTransformController	controller;
 
-	private ShapeDrawer()
-	{}
-
-	public static ShapeDrawer getInstance()
+	public void setViewTransformController(ViewTransformController controller)
 	{
-		return SingletonHolder.INSTANCE;
+		this.controller = controller;
 	}
 
 	@Override
@@ -58,7 +54,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(e.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = e.getTransform().toAffineTransform();
+		AffineTransform otow = getTransform(e);
 		g.setTransform(otow);
 
 		Vector2D tlc = e.getTopLeftCorner();
@@ -73,10 +69,16 @@ public class ShapeDrawer implements IShapeDrawer
 	{
 		g.setPaint(l.getColor());
 
+		AffineTransform original = g.getTransform();
+		AffineTransform wtov = controller.getTransform().toAffineTransform();
+		g.setTransform(wtov);
+
 		Vector2D start = l.getStartPoint();
 		Vector2D end = l.getEndPoint();
 
 		g.drawLine((int) start.x, (int) start.y, (int) end.x, (int) end.y);
+
+		g.setTransform(original);
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(r.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = r.getTransform().toAffineTransform();
+		AffineTransform otow = getTransform(r);
 		g.setTransform(otow);
 
 		Vector2D tlc = r.getTopLeftCorner();
@@ -107,7 +109,7 @@ public class ShapeDrawer implements IShapeDrawer
 		g.setPaint(t.getColor());
 
 		AffineTransform original = g.getTransform();
-		AffineTransform otow = t.getTransform().toAffineTransform();
+		AffineTransform otow = getTransform(t);
 		g.setTransform(otow);
 
 		int[] xs = new int[3];
@@ -131,5 +133,13 @@ public class ShapeDrawer implements IShapeDrawer
 			g.fillPolygon(xs, ys, 3);
 
 		g.setTransform(original);
+	}
+
+	private AffineTransform getTransform(Shape s)
+	{
+		Matrix otow = s.getTransform();
+		Matrix wtov = controller.getTransform();
+
+		return wtov.getMultipliedCopy(otow).toAffineTransform();
 	}
 }

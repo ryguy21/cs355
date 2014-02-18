@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import cs355.GUIFunctions;
-import cs355.ViewRefresher;
 import cs355.solution.controller.handlers.ShapeCreationHandler;
 import cs355.solution.controller.handlers.creation.*;
 import cs355.solution.controller.interfaces.Control;
@@ -17,21 +16,41 @@ import cs355.solution.util.Log;
 
 public class Controller implements IController
 {
-	private final IModelManager	model;
-	// private final ViewRefresher refresher;
-	private final EventHandler	handler;
+	private final IModelManager				model;
+	private final EventHandler				handler;
 
-	private InputResponder		currentResponder;
+	private InputResponder					currentResponder;
 
-	private final DrawingState	state;
+	private final DrawingState				state;
+	private final ViewTransformController	viewTransform;
 
-	public Controller(IModelManager model, ViewRefresher refresher, EventHandler handler)
+	public Controller(IModelManager model, EventHandler handler)
 	{
 		this.model = model;
-		// this.refresher = refresher;
 		this.handler = handler;
 
 		state = new DrawingState();
+		viewTransform = new ViewTransformController();
+		handler.setViewTransformController(viewTransform);
+	}
+
+	@Override
+	public ViewTransformController getViewTransformController()
+	{
+		return viewTransform;
+	}
+
+	@Override
+	public void initialize()
+	{
+		GUIFunctions.setHScrollBarMin(0);
+		GUIFunctions.setHScrollBarMax(2048);
+		GUIFunctions.setHScrollBarKnob(2048);
+		GUIFunctions.setHScrollBarPosit(0);
+		GUIFunctions.setVScrollBarMin(0);
+		GUIFunctions.setVScrollBarMax(2048);
+		GUIFunctions.setVScrollBarKnob(2048);
+		GUIFunctions.setVScrollBarPosit(0);
 	}
 
 	@Override
@@ -166,24 +185,32 @@ public class Controller implements IController
 	public void zoomInButtonHit()
 	{
 		Log.v("zoomInButtonHit()");
+		viewTransform.zoomIn();
+		refresh();
 	}
 
 	@Override
 	public void zoomOutButtonHit()
 	{
 		Log.v("zoomOutButtonHit()");
+		viewTransform.zoomOut();
+		refresh();
 	}
 
 	@Override
 	public void hScrollbarChanged(int value)
 	{
 		Log.v("hScrollbarChanged(" + value + ")");
+		viewTransform.setHorizontalPosition(value);
+		refresh();
 	}
 
 	@Override
 	public void vScrollbarChanged(int value)
 	{
 		Log.v("vScrollbarChanged(" + value + ")");
+		viewTransform.setVerticalPosition(value);
+		refresh();
 	}
 
 	@Override

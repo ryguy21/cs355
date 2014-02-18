@@ -14,11 +14,13 @@ import cs355.solution.util.Log;
 public class Refresher implements ViewRefresher
 {
 	private final IModelManager	model;
+	private final ShapeDrawer	drawer;
 	private IController			controller;
 
 	public Refresher(IModelManager model)
 	{
 		this.model = model;
+		drawer = new ShapeDrawer();
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class Refresher implements ViewRefresher
 		{
 			Shape shape = itr.next();
 			Log.v("Drawing %s", shape);
-			ShapeDrawer.getInstance().drawShape(shape, g);
+			drawer.drawShape(shape, g);
 		}
 
 		if (controller != null)
@@ -52,5 +54,6 @@ public class Refresher implements ViewRefresher
 	public void setController(IController controller)
 	{
 		this.controller = controller;
+		drawer.setViewTransformController(controller.getViewTransformController());
 	}
 }

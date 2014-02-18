@@ -26,9 +26,11 @@ public class CS355
 
 		Refresher refresher = new Refresher(model);
 		EventHandler listener = new EventHandler();
-		IController controller = new Controller(model, refresher, listener);
+		IController controller = new Controller(model, listener);
 		refresher.setController(controller);
 
 		GUIFunctions.createCS355Frame(controller, refresher, listener, listener);
+
+		controller.initialize();
 	}
 }

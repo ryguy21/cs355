@@ -8,10 +8,16 @@ import cs355.solution.util.math.Vector2D;
 
 public class EventHandler extends MouseAdapter
 {
-	private InputResponder	responder;
+	private InputResponder			responder;
+	private ViewTransformController	controller;
 
 	public EventHandler()
 	{}
+
+	public void setViewTransformController(ViewTransformController controller)
+	{
+		this.controller = controller;
+	}
 
 	public void registerInputResponder(InputResponder responder)
 	{
@@ -27,6 +33,7 @@ public class EventHandler extends MouseAdapter
 	public void mousePressed(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mousePressed(p);
 	}
@@ -35,6 +42,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseDragged(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseDragged(p);
 	}
@@ -43,6 +51,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseReleased(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseReleased(p);
 	}
@@ -51,6 +60,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseClicked(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseClicked(p);
 	}
@@ -59,6 +69,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseMoved(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseMoved(p);
 	}
@@ -67,6 +78,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseEntered(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseEntered(p);
 	}
@@ -75,6 +87,7 @@ public class EventHandler extends MouseAdapter
 	public void mouseExited(MouseEvent e)
 	{
 		Vector2D p = new Vector2D(e.getPoint());
+		p = controller.viewToWorld(p);
 		if (responder != null)
 			responder.mouseExited(p);
 	}

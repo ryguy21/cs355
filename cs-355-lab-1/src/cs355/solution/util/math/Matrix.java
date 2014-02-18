@@ -440,6 +440,20 @@ public class Matrix
 		return translate(x, y, 0);
 	}
 
+	public Matrix setTranslation(float x, float y, float z)
+	{
+		m03 = x;
+		m13 = y;
+		m23 = z;
+
+		return this;
+	}
+
+	public Matrix setTranslation2D(float x, float y)
+	{
+		return setTranslation(x, y, 0);
+	}
+
 	public AffineTransform toAffineTransform()
 	{
 		double[] arr = new double[]
