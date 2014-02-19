@@ -2,9 +2,9 @@ package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
-import cs355.solution.controller.handlers.modification.HandleControl;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Line;
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
 public class LineControls extends SelectionControls<Line>
@@ -38,10 +38,10 @@ public class LineControls extends SelectionControls<Line>
 	}
 
 	@Override
-	protected void drawComponents(Graphics2D g)
+	protected void drawComponents(Graphics2D g, Matrix otov)
 	{
-		handle1.draw(g);
-		handle2.draw(g);
+		handle1.draw(g, otov);
+		handle2.draw(g, otov);
 	}
 
 	@Override

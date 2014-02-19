@@ -4,15 +4,21 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import cs355.solution.controller.interfaces.Control;
+import cs355.solution.controller.interfaces.Selectable;
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
-public class HandleControl extends Vector2D implements Control
+public class HandleControl extends Vector2D implements Selectable
 {
-	private static final Stroke	STROKE			= new BasicStroke(2.5f);
-	private static final int	HALF_SIZE		= 5;
-	private static final int	SIZE			= HALF_SIZE * 2;
-	private static final int	HALF_SIZE_SQ	= HALF_SIZE * HALF_SIZE;
+	public static final BasicStroke	STROKE			= new BasicStroke(2f);
+	public static final int			HALF_SIZE		= 5;
+	public static final int			SIZE			= HALF_SIZE * 2;
+	private static final int		HALF_SIZE_SQ	= HALF_SIZE * HALF_SIZE;
+
+	public HandleControl()
+	{
+		super();
+	}
 
 	public HandleControl(Vector2D p)
 	{
@@ -24,17 +30,18 @@ public class HandleControl extends Vector2D implements Control
 		super(x, y);
 	}
 
-	@Override
-	public void draw(Graphics2D g)
+	public void draw(Graphics2D g, Matrix otov)
 	{
-		Stroke stroke = g.getStroke();
+		Stroke oldStroke = g.getStroke();
 		g.setStroke(STROKE);
 
-		int x = (int) this.x - HALF_SIZE;
-		int y = (int) this.y - HALF_SIZE;
+		Vector2D v = getMultipliedCopy(otov);
+
+		int x = (int) v.x - HALF_SIZE;
+		int y = (int) v.y - HALF_SIZE;
 
 		g.drawArc(x, y, SIZE, SIZE, 0, 360);
-		g.setStroke(stroke);
+		g.setStroke(oldStroke);
 	}
 
 	@Override

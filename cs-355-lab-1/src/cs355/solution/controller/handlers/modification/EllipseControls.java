@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Ellipse;
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
 public class EllipseControls extends SelectionControls<Ellipse>
@@ -18,17 +19,13 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	{
 		super(controller, e);
 
-		Vector2D tlCorner = shape.getTopLeftCorner();
+		topLeft = new HandleControl();
+		topRight = new HandleControl();
+		bottomLeft = new HandleControl();
+		bottomRight = new HandleControl();
+		rotate = new HandleControl();
 
-		float right = tlCorner.x + shape.getxDiameter();
-		float bottom = tlCorner.y + shape.getyDiameter();
-
-		topLeft = new HandleControl(tlCorner);
-		topRight = new HandleControl(right, tlCorner.y);
-		bottomLeft = new HandleControl(tlCorner.x, bottom);
-		bottomRight = new HandleControl(right, bottom);
-
-		rotate = new HandleControl(0, -e.getyRadius() - 30f);
+		positionHandles();
 
 		activeHandle = -1;
 	}
@@ -44,8 +41,7 @@ public class EllipseControls extends SelectionControls<Ellipse>
 		topRight.copyValues(right, tlCorner.y);
 		bottomLeft.copyValues(tlCorner.x, bottom);
 		bottomRight.copyValues(right, bottom);
-
-		rotate.copyValues(0, tlCorner.y - 30f);
+		rotate.copyValues(0, tlCorner.y);
 	}
 
 	@Override
@@ -71,20 +67,24 @@ public class EllipseControls extends SelectionControls<Ellipse>
 	}
 
 	@Override
-	protected void drawComponents(Graphics2D g)
+	protected void drawComponents(Graphics2D g, Matrix otov)
 	{
-		topLeft.draw(g);
-		topRight.draw(g);
-		bottomLeft.draw(g);
-		bottomRight.draw(g);
-		rotate.draw(g);
+		topLeft.draw(g, otov);
+		topRight.draw(g, otov);
+		bottomLeft.draw(g, otov);
+		bottomRight.draw(g, otov);
+		drawRotateHandle(rotate, g, otov);
 
-		int x = (int) (-shape.getxRadius());
-		int y = (int) (-shape.getyRadius());
-		int width = (int) shape.getxDiameter();
-		int height = (int) shape.getyDiameter();
+		float x = -shape.getxRadius();
+		float y = -shape.getyRadius();
 
-		g.drawArc(x, y, width, height, 0, 360);
+		Vector2D tlc = new Vector2D(x, y);
+		tlc.multiply(otov);
+
+		int width = (int) (shape.getxDiameter() * otov.getScaleX());
+		int height = (int) (shape.getyDiameter() * otov.getScaleY());
+
+		g.drawArc((int) tlc.x, (int) tlc.y, width, height, 0, 360);
 	}
 
 	@Override

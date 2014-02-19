@@ -120,7 +120,6 @@ public class CircleControls extends EllipseControls
 		topRight.copyValues(halfWidth, -halfHeight);
 		bottomLeft.copyValues(-halfWidth, halfHeight);
 		bottomRight.copyValues(halfWidth, halfHeight);
-
 		rotate.copyValues(0, -halfHeight - 30f);
 	}
 }

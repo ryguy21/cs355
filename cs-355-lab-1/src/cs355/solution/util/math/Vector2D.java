@@ -328,6 +328,25 @@ public class Vector2D
 		return other.scale(length);
 	}
 
+	public Vector2D rotate(float angle)
+	{
+		double cs = Math.cos(angle);
+		double sn = Math.sin(angle);
+
+		double px = x * cs - y * sn;
+		double py = x * sn + y * cs;
+
+		x = (float) px;
+		y = (float) py;
+
+		return this;
+	}
+
+	public Vector2D getRotatedCopy(float angle)
+	{
+		return getCopy().rotate(angle);
+	}
+
 	public Point2D toPoint2D()
 	{
 		return new Point2D.Float(x, y);

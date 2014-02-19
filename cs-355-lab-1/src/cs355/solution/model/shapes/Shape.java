@@ -131,6 +131,16 @@ public abstract class Shape implements Selectable
 		return inverseTransform;
 	}
 
+	public Matrix getRotationTransform()
+	{
+		return rotation;
+	}
+
+	public Matrix getInverseRotationTransform()
+	{
+		return inverseRotation;
+	}
+
 	private void updateTransforms()
 	{
 		transform = new Matrix(translation);

@@ -4,11 +4,12 @@ import java.awt.Graphics2D;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Triangle;
+import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
 public class TriangleControls extends SelectionControls<Triangle>
 {
-	private final HandleControl	handle1, handle2, handle3, rHandle;
+	private final HandleControl	handle1, handle2, handle3, rotate;
 
 	private int					activeHandle;
 	private Vector2D			oldPointW, oldPointO;
@@ -17,11 +18,10 @@ public class TriangleControls extends SelectionControls<Triangle>
 	{
 		super(controller, triangle);
 
-		Vector2D center = triangle.getCenter();
-		handle1 = new HandleControl(triangle.getPoint1());
-		handle2 = new HandleControl(triangle.getPoint2());
-		handle3 = new HandleControl(triangle.getPoint3());
-		rHandle = new HandleControl(center);
+		handle1 = new HandleControl();
+		handle2 = new HandleControl();
+		handle3 = new HandleControl();
+		rotate = new HandleControl();
 
 		positionHandles();
 
@@ -40,27 +40,31 @@ public class TriangleControls extends SelectionControls<Triangle>
 		if (handle3.y < minY)
 			minY = handle3.y;
 
-		rHandle.copyValues(0, minY - 30f);
+		rotate.copyValues(0, minY);
 	}
 
 	@Override
-	public void drawComponents(Graphics2D g)
+	public void drawComponents(Graphics2D g, Matrix otov)
 	{
-		handle1.draw(g);
-		handle2.draw(g);
-		handle3.draw(g);
-		rHandle.draw(g);
+		handle1.draw(g, otov);
+		handle2.draw(g, otov);
+		handle3.draw(g, otov);
+		drawRotateHandle(rotate, g, otov);
+
+		Vector2D p1 = handle1.getMultipliedCopy(otov);
+		Vector2D p2 = handle2.getMultipliedCopy(otov);
+		Vector2D p3 = handle3.getMultipliedCopy(otov);
 
 		int[] xs = new int[3];
 		int[] ys = new int[3];
 
-		xs[0] = (int) handle1.x;
-		xs[1] = (int) handle2.x;
-		xs[2] = (int) handle3.x;
+		xs[0] = (int) p1.x;
+		xs[1] = (int) p2.x;
+		xs[2] = (int) p3.x;
 
-		ys[0] = (int) handle1.y;
-		ys[1] = (int) handle2.y;
-		ys[2] = (int) handle3.y;
+		ys[0] = (int) p1.y;
+		ys[1] = (int) p2.y;
+		ys[2] = (int) p3.y;
 
 		g.drawPolygon(xs, ys, 3);
 	}
@@ -76,7 +80,7 @@ public class TriangleControls extends SelectionControls<Triangle>
 			return true;
 		else if (handle3.contains(o))
 			return true;
-		else if (rHandle.contains(o))
+		else if (rotate.contains(o))
 			return true;
 		else if (shape.contains(w))
 			return true;
@@ -107,7 +111,7 @@ public class TriangleControls extends SelectionControls<Triangle>
 			oldPointW = w;
 			oldPointO = o;
 		}
-		else if (rHandle.contains(o))
+		else if (rotate.contains(o))
 		{
 			activeHandle = 4;
 			oldPointW = w;

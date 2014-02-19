@@ -337,7 +337,6 @@ public class Matrix
 		m00 *= scale;
 		m11 *= scale;
 		m22 *= scale;
-		m33 *= scale;
 
 		return this;
 	}
@@ -345,6 +344,21 @@ public class Matrix
 	public Matrix getScaledCopy(float scale)
 	{
 		return getCopy().scale(scale);
+	}
+
+	public float getScaleX()
+	{
+		return m00;
+	}
+
+	public float getScaleY()
+	{
+		return m11;
+	}
+
+	public float getScaleZ()
+	{
+		return m22;
 	}
 
 	public Matrix setXRotation(float angle)
@@ -449,9 +463,19 @@ public class Matrix
 		return this;
 	}
 
+	public Matrix setTranslation(Vector3D v)
+	{
+		return setTranslation(v.x, v.y, v.z);
+	}
+
 	public Matrix setTranslation2D(float x, float y)
 	{
-		return setTranslation(x, y, 0);
+		return setTranslation(x, y, m23);
+	}
+
+	public Matrix setTranslation2D(Vector2D v)
+	{
+		return setTranslation(v.x, v.y, m23);
 	}
 
 	public AffineTransform toAffineTransform()
