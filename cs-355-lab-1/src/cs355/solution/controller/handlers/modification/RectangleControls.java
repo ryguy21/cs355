@@ -1,7 +1,6 @@
 package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
@@ -42,7 +41,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		topRight.copyValues(right, tlCorner.y);
 		bottomLeft.copyValues(tlCorner.x, bottom);
 		bottomRight.copyValues(right, bottom);
-		rotate.copyValues(0, tlCorner.y);
+		rotate.copyValues(0, tlCorner.y - 30f);
 	}
 
 	@Override
@@ -51,9 +50,9 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		if (shape.contains(p))
 			return true;
 
-		Vector2D offset = getRotationHandleOffset();
-		Vector2D r = p.getAddedCopy(offset);
-		r = shape.worldToObject(r);
+		// Vector2D offset = getRotationHandleOffset();
+		// Vector2D r = p.getAddedCopy(offset);
+		// r = shape.worldToObject(r);
 		p = shape.worldToObject(p);
 
 		if (topLeft.contains(p))
@@ -64,7 +63,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 			return true;
 		else if (bottomRight.contains(p))
 			return true;
-		else if (rotate.contains(r))
+		else if (rotate.contains(p))
 			return true;
 		else
 			return false;
@@ -77,14 +76,15 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		topRight.draw(g, otov);
 		bottomLeft.draw(g, otov);
 		bottomRight.draw(g, otov);
-		drawRotateHandle(rotate, g, otov);
+		rotate.draw(g, otov);
+		// drawRotateHandle(rotate, g, otov);
 
 		Vector2D tlCorner = shape.getTopLeftCorner();
-		tlCorner.multiply(otov);
-
-		AffineTransform rotate = shape.getRotationTransform().toAffineTransform();
-		AffineTransform original = g.getTransform();
-		g.setTransform(rotate);
+		// tlCorner.multiply(otov);
+		//
+		// AffineTransform rotate = shape.getRotationTransform().toAffineTransform();
+		// AffineTransform original = g.getTransform();
+		// g.setTransform(rotate);
 
 		int x = (int) tlCorner.x;
 		int y = (int) tlCorner.y;
@@ -93,7 +93,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		int height = (int) (shape.getHeight() * otov.getScaleY());
 
 		g.drawRect(x, y, width, height);
-		g.setTransform(original);
+		// g.setTransform(original);
 	}
 
 	@Override
@@ -101,9 +101,9 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	{
 		Vector2D o = shape.worldToObject(w);
 
-		Vector2D offset = getRotationHandleOffset();
-		Vector2D r = w.getAddedCopy(offset);
-		r = shape.worldToObject(r);
+		// Vector2D offset = getRotationHandleOffset();
+		// Vector2D r = w.getAddedCopy(offset);
+		// r = shape.worldToObject(r);
 
 		if (topLeft.contains(o))
 		{
@@ -121,7 +121,7 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		{
 			activeHandle = 4;
 		}
-		else if (rotate.contains(r))
+		else if (rotate.contains(o))
 		{
 			activeHandle = 5;
 		}

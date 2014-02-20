@@ -8,7 +8,7 @@ public class ViewTransformController
 {
 	private static final int	MIN_ZOOM		= 0x1;
 	private static final int	MAX_ZOOM		= 0x10;
-	private static final int	DEFAULT_ZOOM	= 0x1;
+	private static final int	DEFAULT_ZOOM	= 0x4;
 
 	private final Matrix		translation;
 	private final Matrix		scale;

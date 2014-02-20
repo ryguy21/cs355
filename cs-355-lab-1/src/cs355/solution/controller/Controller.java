@@ -45,12 +45,12 @@ public class Controller implements IController
 	{
 		GUIFunctions.setHScrollBarMin(0);
 		GUIFunctions.setHScrollBarMax(2048);
-		GUIFunctions.setHScrollBarKnob(2048);
-		GUIFunctions.setHScrollBarPosit(0);
+		GUIFunctions.setHScrollBarKnob(512);
+		GUIFunctions.setHScrollBarPosit(768);
 		GUIFunctions.setVScrollBarMin(0);
 		GUIFunctions.setVScrollBarMax(2048);
-		GUIFunctions.setVScrollBarKnob(2048);
-		GUIFunctions.setVScrollBarPosit(0);
+		GUIFunctions.setVScrollBarKnob(512);
+		GUIFunctions.setVScrollBarPosit(768);
 	}
 
 	@Override
