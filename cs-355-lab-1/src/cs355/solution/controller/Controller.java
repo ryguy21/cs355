@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import cs355.GUIFunctions;
-import cs355.solution.controller.handlers.ShapeCreationHandler;
 import cs355.solution.controller.handlers.creation.*;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;

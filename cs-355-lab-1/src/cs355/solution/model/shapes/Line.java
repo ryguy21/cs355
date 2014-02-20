@@ -2,6 +2,7 @@ package cs355.solution.model.shapes;
 
 import java.awt.Color;
 
+import cs355.solution.util.Log;
 import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector2D;
 
@@ -80,6 +81,8 @@ public class Line extends Shape
 	@Override
 	public boolean contains(Vector2D p)
 	{
+		Log.f("This method should never be called!!");
+
 		Vector2D line = new Vector2D(end, start);
 		Vector2D linen = line.getNormalizedCopy();
 		Vector2D linep = linen.getPerpendicular();

@@ -99,10 +99,6 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	{
 		Vector2D o = shape.worldToObject(w);
 
-		// Vector2D offset = getRotationHandleOffset();
-		// Vector2D r = w.getAddedCopy(offset);
-		// r = shape.worldToObject(r);
-
 		if (topLeft.contains(o))
 		{
 			activeHandle = 1;

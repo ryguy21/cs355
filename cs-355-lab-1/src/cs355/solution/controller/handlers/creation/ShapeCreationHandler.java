@@ -1,4 +1,4 @@
-package cs355.solution.controller.handlers;
+package cs355.solution.controller.handlers.creation;
 
 import java.awt.Color;
 
