@@ -30,7 +30,7 @@ public class LineControls extends SelectionControls<Line>
 	@Override
 	public boolean contains(Vector2D p)
 	{
-		if (shape.contains(p))
+		if (shape.contains(p, getSelectionTolerance()))
 			return true;
 		else if (handle1.contains(p))
 			return true;
@@ -60,7 +60,7 @@ public class LineControls extends SelectionControls<Line>
 			activeHandle = 2;
 			oldPoint = p;
 		}
-		else if (shape.contains(p))
+		else if (shape.contains(p, getSelectionTolerance()))
 		{
 			activeHandle = 0;
 			oldPoint = p;
@@ -108,4 +108,9 @@ public class LineControls extends SelectionControls<Line>
 	@Override
 	public void update()
 	{}
+
+	private float getSelectionTolerance()
+	{
+		return 4 * controller.getViewTransformController().getInverseTransform().getScaleX();
+	}
 }

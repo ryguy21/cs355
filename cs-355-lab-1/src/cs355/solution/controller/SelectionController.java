@@ -10,7 +10,9 @@ import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
+import cs355.solution.model.shapes.Line;
 import cs355.solution.model.shapes.Shape;
+import cs355.solution.model.shapes.ShapeType;
 import cs355.solution.util.Log;
 import cs355.solution.util.math.Vector2D;
 
@@ -42,7 +44,7 @@ public class SelectionController extends InputResponder
 		while (shapeItr.hasNext())
 		{
 			Shape shape = shapeItr.next();
-			if (shape.contains(p))
+			if (shapeContains(shape, p))
 			{
 				Log.v("%s contains %s", shape, p);
 
@@ -57,6 +59,21 @@ public class SelectionController extends InputResponder
 
 		control = null;
 		controller.refresh();
+	}
+
+	private boolean shapeContains(Shape shape, Vector2D p)
+	{
+		if (shape.getType() == ShapeType.LINE)
+		{
+			Line line = (Line) shape;
+			float tolerance = 4 * controller.getViewTransformController().getInverseTransform().getScaleX();
+
+			return line.contains(p, tolerance);
+		}
+		else
+		{
+			return shape.contains(p);
+		}
 	}
 
 	public Control getControl()
