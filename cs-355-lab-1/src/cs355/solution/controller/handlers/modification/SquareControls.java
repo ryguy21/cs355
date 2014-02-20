@@ -108,18 +108,6 @@ public class SquareControls extends RectangleControls
 		trans = shape.rotateObjectToWorld(trans);
 		shape.translate(trans);
 
-		updateHandles();
-	}
-
-	private void updateHandles()
-	{
-		float halfWidth = shape.getWidth() * 0.5f;
-		float halfHeight = shape.getHeight() * 0.5f;
-
-		topLeft.copyValues(-halfWidth, -halfHeight);
-		topRight.copyValues(halfWidth, -halfHeight);
-		bottomLeft.copyValues(-halfWidth, halfHeight);
-		bottomRight.copyValues(halfWidth, halfHeight);
-		rotate.copyValues(0, -halfHeight - 30f);
+		positionHandles();
 	}
 }

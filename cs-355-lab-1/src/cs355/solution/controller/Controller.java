@@ -186,6 +186,7 @@ public class Controller implements IController
 	{
 		Log.v("zoomInButtonHit()");
 		viewTransform.zoomIn();
+		updateControl();
 		refresh();
 	}
 
@@ -194,7 +195,17 @@ public class Controller implements IController
 	{
 		Log.v("zoomOutButtonHit()");
 		viewTransform.zoomOut();
+		updateControl();
 		refresh();
+	}
+
+	private void updateControl()
+	{
+		Control control = getControl();
+		if (control != null)
+		{
+			control.update();
+		}
 	}
 
 	@Override

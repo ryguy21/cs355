@@ -108,18 +108,6 @@ public class CircleControls extends EllipseControls
 		trans = shape.rotateObjectToWorld(trans);
 		shape.translate(trans);
 
-		updateHandles();
-	}
-
-	private void updateHandles()
-	{
-		float halfWidth = shape.getxDiameter() * 0.5f;
-		float halfHeight = shape.getyDiameter() * 0.5f;
-
-		topLeft.copyValues(-halfWidth, -halfHeight);
-		topRight.copyValues(halfWidth, -halfHeight);
-		bottomLeft.copyValues(-halfWidth, halfHeight);
-		bottomRight.copyValues(halfWidth, halfHeight);
-		rotate.copyValues(0, -halfHeight - 30f);
+		positionHandles();
 	}
 }

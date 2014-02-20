@@ -2,6 +2,7 @@ package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Line;
 import cs355.solution.util.math.Matrix;
@@ -18,8 +19,10 @@ public class LineControls extends SelectionControls<Line>
 	{
 		super(controller, l);
 
-		handle1 = new HandleControl(l.getStartPoint());
-		handle2 = new HandleControl(l.getEndPoint());
+		ViewTransformController vtc = controller.getViewTransformController();
+
+		handle1 = new HandleControl(l.getStartPoint(), vtc);
+		handle2 = new HandleControl(l.getEndPoint(), vtc);
 
 		activeHandle = -1;
 	}
@@ -101,4 +104,8 @@ public class LineControls extends SelectionControls<Line>
 	{
 		activeHandle = -1;
 	}
+
+	@Override
+	public void update()
+	{}
 }

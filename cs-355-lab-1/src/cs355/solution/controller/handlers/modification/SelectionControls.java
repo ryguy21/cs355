@@ -58,27 +58,12 @@ public abstract class SelectionControls<T extends Shape> extends InputResponder 
 		return wtov.getMultipliedCopy(otow);
 	}
 
-	protected void drawRotateHandle(HandleControl rotate, Graphics2D g, Matrix otov)
+	protected Vector2D getRotationHandlePosition(float y)
 	{
-		Stroke oldStroke = g.getStroke();
-		g.setStroke(HandleControl.STROKE);
+		Vector2D offset = new Vector2D(0f, -30f);
+		offset.scale(controller.getViewTransformController().getInverseTransform().getScaleX());
 
-		Vector2D v = rotate.getMultipliedCopy(otov);
-
-		Vector2D offset = getRotationHandleOffset().invert();
-		v.add(offset);
-
-		int x = (int) v.x - HandleControl.HALF_SIZE;
-		int y = (int) v.y - HandleControl.HALF_SIZE;
-
-		g.drawArc(x, y, HandleControl.SIZE, HandleControl.SIZE, 0, 360);
-
-		g.setStroke(oldStroke);
-	}
-
-	protected Vector2D getRotationHandleOffset()
-	{
-		return new Vector2D(0, 30).rotate(shape.getRotation()).multiply(controller.getViewTransformController().getInverseTransform());
+		return offset.add(0, y);
 	}
 
 	protected abstract void drawComponents(Graphics2D g, Matrix otov);

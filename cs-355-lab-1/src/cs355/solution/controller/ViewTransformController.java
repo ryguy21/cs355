@@ -15,16 +15,8 @@ public class ViewTransformController
 	private final Matrix		inverseTranslation;
 	private final Matrix		inverseScale;
 
-	// private final AffineTransform translationJ;
-	// private final AffineTransform scaleJ;
-	// private final AffineTransform inverseTranslationJ;
-	// private final AffineTransform inverseScaleJ;
-
 	private Matrix				transform;
 	private Matrix				inverseTransform;
-
-	// private AffineTransform transformJ;
-	// private AffineTransform inverseTransformJ;
 
 	private int					zoom;
 	private final Vector2D		position;
@@ -35,17 +27,13 @@ public class ViewTransformController
 	public ViewTransformController()
 	{
 		translation = new Matrix();
-		scale = new Matrix();
 		inverseTranslation = new Matrix();
+
+		scale = new Matrix();
 		inverseScale = new Matrix();
 
-		// translationJ = new AffineTransform();
-		// scaleJ = new AffineTransform();
-		// inverseTranslationJ = new AffineTransform();
-		// inverseScaleJ = new AffineTransform();
-
-		zoom = DEFAULT_ZOOM;
 		position = new Vector2D();
+		zoom = DEFAULT_ZOOM;
 
 		dirty = true;
 		suspendTranslation = false;
@@ -61,9 +49,6 @@ public class ViewTransformController
 
 			scale.scale(2f);
 			inverseScale.scale(0.5f);
-
-			// scaleJ.scale(2f, 2f);
-			// inverseScaleJ.scale(0.5f, 0.5f);
 
 			suspendTranslation = true;
 
@@ -88,9 +73,6 @@ public class ViewTransformController
 
 			scale.scale(0.5f);
 			inverseScale.scale(2f);
-
-			// scaleJ.scale(0.5f, 0.5f);
-			// inverseScaleJ.scale(2f, 2f);
 
 			suspendTranslation = true;
 
@@ -169,9 +151,6 @@ public class ViewTransformController
 			translation.translate2D(dx, dy);
 			inverseTranslation.translate2D(-dx, -dy);
 
-			// translationJ.translate(dx, dy);
-			// inverseTranslationJ.translate(-dx, -dy);
-
 			dirty = true;
 		}
 	}
@@ -212,14 +191,8 @@ public class ViewTransformController
 		transform = new Matrix(translation);
 		transform.multiply(scale);
 
-		// transformJ = new AffineTransform(scaleJ);
-		// transformJ.concatenate(translationJ);
-
 		inverseTransform = new Matrix(inverseScale);
 		inverseTransform.multiply(inverseTranslation);
-
-		// inverseTransformJ = new AffineTransform(inverseScaleJ);
-		// inverseTransformJ.concatenate(inverseTranslationJ);
 
 		dirty = false;
 	}

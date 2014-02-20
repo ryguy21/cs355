@@ -2,6 +2,7 @@ package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Rectangle;
 import cs355.solution.util.math.Matrix;
@@ -19,11 +20,13 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	{
 		super(controller, s);
 
-		topLeft = new HandleControl();
-		topRight = new HandleControl();
-		bottomLeft = new HandleControl();
-		bottomRight = new HandleControl();
-		rotate = new HandleControl();
+		ViewTransformController vtc = controller.getViewTransformController();
+
+		topLeft = new HandleControl(vtc);
+		topRight = new HandleControl(vtc);
+		bottomLeft = new HandleControl(vtc);
+		bottomRight = new HandleControl(vtc);
+		rotate = new HandleControl(vtc);
 
 		positionHandles();
 
@@ -32,38 +35,33 @@ public class RectangleControls extends SelectionControls<Rectangle>
 
 	protected void positionHandles()
 	{
-		Vector2D tlCorner = shape.getTopLeftCorner();
+		float halfWidth = shape.getWidth() * 0.5f;
+		float halfHeight = shape.getHeight() * 0.5f;
 
-		float right = tlCorner.x + shape.getWidth();
-		float bottom = tlCorner.y + shape.getHeight();
-
-		topLeft.copyValues(tlCorner);
-		topRight.copyValues(right, tlCorner.y);
-		bottomLeft.copyValues(tlCorner.x, bottom);
-		bottomRight.copyValues(right, bottom);
-		rotate.copyValues(0, tlCorner.y - 30f);
+		topLeft.copyValues(-halfWidth, -halfHeight);
+		topRight.copyValues(halfWidth, -halfHeight);
+		bottomLeft.copyValues(-halfWidth, halfHeight);
+		bottomRight.copyValues(halfWidth, halfHeight);
+		rotate.copyValues(getRotationHandlePosition(-halfHeight));
 	}
 
 	@Override
-	public boolean contains(Vector2D p)
+	public boolean contains(Vector2D w)
 	{
-		if (shape.contains(p))
+		if (shape.contains(w))
 			return true;
 
-		// Vector2D offset = getRotationHandleOffset();
-		// Vector2D r = p.getAddedCopy(offset);
-		// r = shape.worldToObject(r);
-		p = shape.worldToObject(p);
+		Vector2D o = shape.worldToObject(w);
 
-		if (topLeft.contains(p))
+		if (topLeft.contains(o))
 			return true;
-		else if (topRight.contains(p))
+		else if (topRight.contains(o))
 			return true;
-		else if (bottomLeft.contains(p))
+		else if (bottomLeft.contains(o))
 			return true;
-		else if (bottomRight.contains(p))
+		else if (bottomRight.contains(o))
 			return true;
-		else if (rotate.contains(p))
+		else if (rotate.contains(o))
 			return true;
 		else
 			return false;
@@ -227,5 +225,11 @@ public class RectangleControls extends SelectionControls<Rectangle>
 	public void mouseReleased(Vector2D p)
 	{
 		activeHandle = -1;
+	}
+
+	@Override
+	public void update()
+	{
+		positionHandles();
 	}
 }

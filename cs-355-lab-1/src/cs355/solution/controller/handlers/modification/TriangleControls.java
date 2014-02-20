@@ -2,6 +2,7 @@ package cs355.solution.controller.handlers.modification;
 
 import java.awt.Graphics2D;
 
+import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.shapes.Triangle;
 import cs355.solution.util.math.Matrix;
@@ -18,10 +19,12 @@ public class TriangleControls extends SelectionControls<Triangle>
 	{
 		super(controller, triangle);
 
-		handle1 = new HandleControl();
-		handle2 = new HandleControl();
-		handle3 = new HandleControl();
-		rotate = new HandleControl();
+		ViewTransformController vtc = controller.getViewTransformController();
+
+		handle1 = new HandleControl(vtc);
+		handle2 = new HandleControl(vtc);
+		handle3 = new HandleControl(vtc);
+		rotate = new HandleControl(vtc);
 
 		positionHandles();
 
@@ -40,7 +43,7 @@ public class TriangleControls extends SelectionControls<Triangle>
 		if (handle3.y < minY)
 			minY = handle3.y;
 
-		rotate.copyValues(0, minY);
+		rotate.copyValues(getRotationHandlePosition(minY));
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class TriangleControls extends SelectionControls<Triangle>
 		handle1.draw(g, otov);
 		handle2.draw(g, otov);
 		handle3.draw(g, otov);
-		drawRotateHandle(rotate, g, otov);
+		rotate.draw(g, otov);
 
 		Vector2D p1 = handle1.getMultipliedCopy(otov);
 		Vector2D p2 = handle2.getMultipliedCopy(otov);
@@ -72,6 +75,9 @@ public class TriangleControls extends SelectionControls<Triangle>
 	@Override
 	public boolean contains(Vector2D w)
 	{
+		if (shape.contains(w))
+			return true;
+
 		Vector2D o = shape.worldToObject(w);
 
 		if (handle1.contains(o))
@@ -81,8 +87,6 @@ public class TriangleControls extends SelectionControls<Triangle>
 		else if (handle3.contains(o))
 			return true;
 		else if (rotate.contains(o))
-			return true;
-		else if (shape.contains(w))
 			return true;
 		else
 			return false;
@@ -173,5 +177,11 @@ public class TriangleControls extends SelectionControls<Triangle>
 	public void mouseReleased(Vector2D p)
 	{
 		activeHandle = -1;
+	}
+
+	@Override
+	public void update()
+	{
+		positionHandles();
 	}
 }
