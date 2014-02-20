@@ -1,6 +1,9 @@
 package cs355.solution.controller.handlers.modification;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.IController;
@@ -75,23 +78,20 @@ public class RectangleControls extends SelectionControls<Rectangle>
 		bottomLeft.draw(g, otov);
 		bottomRight.draw(g, otov);
 		rotate.draw(g, otov);
-		// drawRotateHandle(rotate, g, otov);
 
-		Vector2D tlCorner = shape.getTopLeftCorner();
-		// tlCorner.multiply(otov);
-		//
-		// AffineTransform rotate = shape.getRotationTransform().toAffineTransform();
-		// AffineTransform original = g.getTransform();
-		// g.setTransform(rotate);
+		AffineTransform original = g.getTransform();
+		g.setTransform(otov.toAffineTransform());
 
-		int x = (int) tlCorner.x;
-		int y = (int) tlCorner.y;
+		Stroke stroke = g.getStroke();
+		float lineWidth = SelectionControls.STROKE_WIDTH * controller.getViewTransformController().getInverseTransform().getScaleX();
+		g.setStroke(new BasicStroke(lineWidth));
 
-		int width = (int) (shape.getWidth() * otov.getScaleX());
-		int height = (int) (shape.getHeight() * otov.getScaleY());
+		int x = (int) (shape.getWidth() * -0.5f);
+		int y = (int) (shape.getHeight() * -0.5f);
 
-		g.drawRect(x, y, width, height);
-		// g.setTransform(original);
+		g.drawRect(x, y, (int) shape.getWidth(), (int) shape.getHeight());
+		g.setTransform(original);
+		g.setStroke(stroke);
 	}
 
 	@Override

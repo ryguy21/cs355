@@ -15,10 +15,12 @@ import cs355.solution.util.math.Vector2D;
 
 public abstract class SelectionControls<T extends Shape> extends InputResponder implements Control
 {
-	private static final Stroke	STROKE			= new BasicStroke(1.5f);
-	private static final Color	STROKE_COLOR	= Color.cyan;
+	protected static final float	STROKE_WIDTH	= 1.5f;
 
-	protected final T			shape;
+	private static final Stroke		STROKE			= new BasicStroke(STROKE_WIDTH);
+	private static final Color		STROKE_COLOR	= Color.cyan;
+
+	protected final T				shape;
 
 	public SelectionControls(IController controller, T shape)
 	{

@@ -1,6 +1,9 @@
 package cs355.solution.controller.handlers.modification;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 
 import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.IController;
@@ -76,16 +79,16 @@ public class EllipseControls extends SelectionControls<Ellipse>
 		bottomRight.draw(g, otov);
 		rotate.draw(g, otov);
 
-		float x = -shape.getxRadius();
-		float y = -shape.getyRadius();
+		AffineTransform original = g.getTransform();
+		g.setTransform(otov.toAffineTransform());
 
-		Vector2D tlc = new Vector2D(x, y);
-		tlc.multiply(otov);
+		Stroke stroke = g.getStroke();
+		float lineWidth = SelectionControls.STROKE_WIDTH * controller.getViewTransformController().getInverseTransform().getScaleX();
+		g.setStroke(new BasicStroke(lineWidth));
 
-		int width = (int) (shape.getxDiameter() * otov.getScaleX());
-		int height = (int) (shape.getyDiameter() * otov.getScaleY());
-
-		g.drawArc((int) tlc.x, (int) tlc.y, width, height, 0, 360);
+		g.drawArc((int) -shape.getxRadius(), (int) -shape.getyRadius(), (int) shape.getxDiameter(), (int) shape.getyDiameter(), 0, 360);
+		g.setTransform(original);
+		g.setStroke(stroke);
 	}
 
 	@Override
