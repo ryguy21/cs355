@@ -1,9 +1,5 @@
 package cs355.solution.controller;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,7 +24,6 @@ public class Controller3D
 	private final int		z_far			= 100;
 	private final float		rotate_speed	= (float) (Math.PI / 128f);
 
-	private Controller		controller;
 	private boolean			enabled;
 	private WireFrame		model;
 
@@ -41,50 +36,39 @@ public class Controller3D
 	private final Matrix	wtocRotation;
 	private final Matrix	clip;
 
-	private Matrix			wtoc;
 	private Matrix			wtoClip;
 	private final Matrix	clipToScreen;
-
-	public Controller3D(Controller controller)
-	{
-		this();
-		this.controller = controller;
-	}
 
 	public Controller3D()
 	{
 		enable(false);
 
-		camera = new Vector3D(0, -4, -20);
-		forward = Vector3D.Z_AXIS.getScaledCopy(-1f);
+		camera = new Vector3D();
+		forward = new Vector3D();
 
-		wtocTranslation = Matrix.createTranslationMatrix(camera);
+		wtocTranslation = new Matrix();
+		wtocRotation = new Matrix();
+
+		loadHome();
+
 		clip = Matrix.createClipMatrix(zoom_x, zoom_y, z_far, z_near);
-		wtocRotation = Matrix.createWorldToCameraRotationMatrix(camera, camera.getAddedCopy(forward), up);
 		clipToScreen = Matrix.createClipToScreenMatrix(view_width, view_height);
 
 		dirty = true;
-
-		if (controller != null)
-		{}
 	}
 
-	public Vector3D objectToCamera(Vector3D o)
+	private void loadHome()
 	{
-		return o.getMultipliedCopy(getObjectToCameraTransform());
+		camera.copyValues(0, -4, -20);
+		forward.copyValues(Vector3D.Z_AXIS.getInvertedCopy());
+
+		wtocTranslation.copyValues(Matrix.createTranslationMatrix(camera));
+		wtocRotation.copyValues(Matrix.createWorldToCameraRotationMatrix(camera, camera.getAddedCopy(forward), up));
 	}
 
-	public Vector3D objectToClip(Vector3D o)
+	private Vector3D objectToClip(Vector3D o)
 	{
 		return o.getMultipliedCopy(getObjectToClipTransform());
-	}
-
-	private Matrix getObjectToCameraTransform()
-	{
-		if (dirty)
-			update();
-
-		return wtoc;
 	}
 
 	private Matrix getObjectToClipTransform()
@@ -97,8 +81,7 @@ public class Controller3D
 
 	private void update()
 	{
-		wtoc = wtocRotation.getMultipliedCopy(wtocTranslation);
-		wtoClip = clip.getMultipliedCopy(wtoc);
+		wtoClip = clip.getMultipliedCopy(wtocRotation.getMultipliedCopy(wtocTranslation));
 		dirty = false;
 	}
 
@@ -212,34 +195,17 @@ public class Controller3D
 			wtocTranslation.translate(up);
 			dirty = true;
 		}
+		if (keys.contains(KeyEvent.VK_H))
+		{
+			loadHome();
+			dirty = true;
+		}
 
 		return dirty;
 	}
 
-	public void draw(Graphics2D g, float zoom)
+	public WireFrame getModel()
 	{
-		if (enabled)
-		{
-			Iterator<Line3D> house = model.getLines();
-			g.setColor(Color.cyan);
-
-			Stroke originalStroke = g.getStroke();
-			Stroke stroke = new BasicStroke(1f / zoom);
-			g.setStroke(stroke);
-
-			while (house.hasNext())
-			{
-				Line3D line = house.next();
-
-				line = transform(line);
-
-				if (line != null)
-				{
-					g.drawLine((int) line.start.x, (int) line.start.y, (int) line.end.x, (int) line.end.y);
-				}
-			}
-
-			g.setStroke(originalStroke);
-		}
+		return model;
 	}
 }

@@ -6,7 +6,6 @@ import java.awt.geom.AffineTransform;
 import java.util.Iterator;
 
 import cs355.ViewRefresher;
-import cs355.solution.controller.Controller3D;
 import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
@@ -17,6 +16,7 @@ import cs355.solution.util.Log;
 public class Refresher implements ViewRefresher
 {
 	private final IModelManager		model;
+	private final Refresher3D		r3d;
 	private final ShapeDrawer		drawer;
 	private IController				controller;
 	private ViewTransformController	viewController;
@@ -25,6 +25,7 @@ public class Refresher implements ViewRefresher
 	{
 		this.model = model;
 		drawer = new ShapeDrawer();
+		r3d = new Refresher3D();
 	}
 
 	@Override
@@ -54,8 +55,7 @@ public class Refresher implements ViewRefresher
 			AffineTransform original = g.getTransform();
 			g.setTransform(viewController.getTransform().toAffineTransform());
 
-			Controller3D _3d = controller.get3DController();
-			_3d.draw(g, viewController.getZoom());
+			r3d.draw(g, viewController.getZoom());
 
 			g.setTransform(original);
 		}
@@ -66,6 +66,7 @@ public class Refresher implements ViewRefresher
 	public void setController(IController controller)
 	{
 		this.controller = controller;
+		r3d.setController(controller.get3DController());
 		viewController = controller.getViewTransformController();
 		drawer.setViewTransformController(viewController);
 	}
