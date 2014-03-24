@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import cs355.Line3D;
 import cs355.solution.controller.Controller3D;
+import cs355.solution.util.math.Vector3D;
 
 public class Refresher3D
 {
@@ -22,7 +23,7 @@ public class Refresher3D
 	{
 		if (controller.isEnabled())
 		{
-			Iterator<Line3D> house = controller.getModel().getLines();
+			Iterator<Line3D> house = controller.getHouseModel().getLines();
 			g.setColor(Color.cyan);
 
 			Stroke originalStroke = g.getStroke();
@@ -33,7 +34,7 @@ public class Refresher3D
 			{
 				Line3D line = house.next();
 
-				line = controller.transform(line);
+				line = transform(line);
 
 				if (line != null)
 				{
@@ -43,5 +44,45 @@ public class Refresher3D
 
 			g.setStroke(originalStroke);
 		}
+	}
+
+	private Vector3D objectToClip(Vector3D o)
+	{
+		return o.getMultipliedCopy(controller.getObjectToClipTransform());
+	}
+
+	private Line3D transform(Line3D line)
+	{
+		Vector3D start = objectToClip(line.start);
+		Vector3D end = objectToClip(line.end);
+
+		if (clip(start, end))
+			return null;
+
+		start.scale(1f / start.w);
+		end.scale(1f / end.w);
+
+		start.multiply(controller.getClipToScreenTransform());
+		end.multiply(controller.getClipToScreenTransform());
+
+		return new Line3D(start, end);
+	}
+
+	private boolean clip(Vector3D start, Vector3D end)
+	{
+		if (start.x > start.w && end.x > end.w)
+			return true;
+		if (start.x < -start.w && end.x < -end.w)
+			return true;
+		if (start.y > start.w && end.y > end.w)
+			return true;
+		if (start.y < -start.w && end.y < -end.w)
+			return true;
+		if (start.z > start.w && end.z > end.w)
+			return true;
+		if (start.z < -start.w || end.z < -end.w)
+			return true;
+
+		return false;
 	}
 }

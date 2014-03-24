@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import cs355.HouseModel;
-import cs355.Line3D;
 import cs355.WireFrame;
 import cs355.solution.util.math.Matrix;
 import cs355.solution.util.math.Vector3D;
@@ -66,12 +65,13 @@ public class Controller3D
 		wtocRotation.copyValues(Matrix.createWorldToCameraRotationMatrix(camera, camera.getAddedCopy(forward), up));
 	}
 
-	private Vector3D objectToClip(Vector3D o)
+	private void update()
 	{
-		return o.getMultipliedCopy(getObjectToClipTransform());
+		wtoClip = clip.getMultipliedCopy(wtocRotation.getMultipliedCopy(wtocTranslation));
+		dirty = false;
 	}
 
-	private Matrix getObjectToClipTransform()
+	public Matrix getObjectToClipTransform()
 	{
 		if (dirty)
 			update();
@@ -79,45 +79,14 @@ public class Controller3D
 		return wtoClip;
 	}
 
-	private void update()
+	public Matrix getClipToScreenTransform()
 	{
-		wtoClip = clip.getMultipliedCopy(wtocRotation.getMultipliedCopy(wtocTranslation));
-		dirty = false;
+		return clipToScreen;
 	}
 
-	public Line3D transform(Line3D line)
+	public WireFrame getHouseModel()
 	{
-		Vector3D start = objectToClip(line.start);
-		Vector3D end = objectToClip(line.end);
-
-		if (clip(start, end))
-			return null;
-
-		start.scale(1f / start.w);
-		end.scale(1f / end.w);
-
-		start.multiply(clipToScreen);
-		end.multiply(clipToScreen);
-
-		return new Line3D(start, end);
-	}
-
-	private boolean clip(Vector3D start, Vector3D end)
-	{
-		if (start.x > start.w && end.x > end.w)
-			return true;
-		if (start.x < -start.w && end.x < -end.w)
-			return true;
-		if (start.y > start.w && end.y > end.w)
-			return true;
-		if (start.y < -start.w && end.y < -end.w)
-			return true;
-		if (start.z > start.w && end.z > end.w)
-			return true;
-		if (start.z < -start.w || end.z < -end.w)
-			return true;
-
-		return false;
+		return model;
 	}
 
 	public boolean isEnabled()
@@ -202,10 +171,5 @@ public class Controller3D
 		}
 
 		return dirty;
-	}
-
-	public WireFrame getModel()
-	{
-		return model;
 	}
 }
