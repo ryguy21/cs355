@@ -22,6 +22,7 @@ public class Controller implements IController
 
 	private final DrawingState				state;
 	private final ViewTransformController	viewTransform;
+	private final Controller3D				_3d;
 
 	public Controller(IModelManager model, EventHandler handler)
 	{
@@ -31,6 +32,7 @@ public class Controller implements IController
 		state = new DrawingState();
 		viewTransform = new ViewTransformController();
 		handler.setViewTransformController(viewTransform);
+		_3d = new Controller3D(this);
 	}
 
 	@Override
@@ -227,19 +229,15 @@ public class Controller implements IController
 	public void toggle3DModelDisplay()
 	{
 		Log.v("toggle3DModelDisplay()");
+		_3d.enable(!_3d.isEnabled());
+		refresh();
 	}
 
 	@Override
 	public void keyPressed(Iterator<Integer> iterator)
 	{
-		String message = "keyPressed():";
-
-		while (iterator.hasNext())
-		{
-			message += " " + iterator.next();
-		}
-
-		Log.v(message);
+		if (_3d.isEnabled() && _3d.keyPressed(iterator))
+			refresh();
 	}
 
 	@Override
@@ -307,5 +305,11 @@ public class Controller implements IController
 
 			currentResponder = null;
 		}
+	}
+
+	@Override
+	public Controller3D get3DController()
+	{
+		return _3d;
 	}
 }

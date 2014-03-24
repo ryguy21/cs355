@@ -2,9 +2,12 @@ package cs355.solution.view;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.util.Iterator;
 
 import cs355.ViewRefresher;
+import cs355.solution.controller.Controller3D;
+import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.IModelManager;
@@ -13,9 +16,10 @@ import cs355.solution.util.Log;
 
 public class Refresher implements ViewRefresher
 {
-	private final IModelManager	model;
-	private final ShapeDrawer	drawer;
-	private IController			controller;
+	private final IModelManager		model;
+	private final ShapeDrawer		drawer;
+	private IController				controller;
+	private ViewTransformController	viewController;
 
 	public Refresher(IModelManager model)
 	{
@@ -46,6 +50,14 @@ public class Refresher implements ViewRefresher
 			Control control = controller.getControl();
 			if (control != null)
 				control.draw(g);
+
+			AffineTransform original = g.getTransform();
+			g.setTransform(viewController.getTransform().toAffineTransform());
+
+			Controller3D _3d = controller.get3DController();
+			_3d.draw(g, viewController.getZoom());
+
+			g.setTransform(original);
 		}
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialias_default);
@@ -54,6 +66,7 @@ public class Refresher implements ViewRefresher
 	public void setController(IController controller)
 	{
 		this.controller = controller;
-		drawer.setViewTransformController(controller.getViewTransformController());
+		viewController = controller.getViewTransformController();
+		drawer.setViewTransformController(viewController);
 	}
 }

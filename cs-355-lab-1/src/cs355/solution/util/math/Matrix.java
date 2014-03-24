@@ -4,10 +4,10 @@ import java.awt.geom.AffineTransform;
 
 public class Matrix
 {
-	float	m00, m01, m02, m03;
-	float	m10, m11, m12, m13;
-	float	m20, m21, m22, m23;
-	float	m30, m31, m32, m33;
+	public float	m00, m01, m02, m03;
+	public float	m10, m11, m12, m13;
+	public float	m20, m21, m22, m23;
+	public float	m30, m31, m32, m33;
 
 	public static Matrix getTranslateInstance(float x, float y)
 	{
@@ -16,6 +16,54 @@ public class Matrix
 		m.m13 = y;
 
 		return m;
+	}
+
+	public static Matrix getPerspectiveMatrix(float z_far)
+	{
+		Matrix m = new Matrix();
+		m.m32 = 1f / z_far;
+		m.m33 = 0;
+
+		return m;
+	}
+
+	public static Matrix createClipMatrix(float zoom_x, float zoom_y, float z_far, float z_near)
+	{
+		Matrix m = new Matrix();
+		m.m00 = zoom_x;
+		m.m11 = zoom_y;
+
+		m.m22 = (z_far + z_near) / (z_far - z_near);
+		m.m23 = (-2 * z_near * z_far) / (z_far - z_near);
+		m.m32 = 1;
+		m.m33 = 0;
+
+		return m;
+	}
+
+	public static Matrix createWorldToCameraRotationMatrix(Vector3D center, Vector3D lookAt, Vector3D up)
+	{
+		Vector3D z = lookAt.getSubtractedCopy(center).normalize();
+		Vector3D x = z.cross(up).normalize();
+		Vector3D y = x.cross(z).normalize();
+
+		return new Matrix(x, y, z);
+	}
+
+	public static Matrix createClipToScreenMatrix(int width, int height)
+	{
+		Matrix m = new Matrix();
+		m.m00 = width * -0.5f;
+		m.m11 = height * -0.5f;
+		m.m02 = width * 0.5f;
+		m.m12 = height * 0.5f;
+
+		return m;
+	}
+
+	public static Matrix createTranslationMatrix(Vector3D trans)
+	{
+		return new Matrix().translate(trans);
 	}
 
 	/**
@@ -51,6 +99,24 @@ public class Matrix
 		this.m31 = m31;
 		this.m32 = m32;
 		this.m33 = m33;
+	}
+
+	public Matrix(Vector3D x, Vector3D y, Vector3D z)
+	{
+		m00 = x.x;
+		m01 = x.y;
+		m02 = x.z;
+		m03 = x.w;
+		m10 = y.x;
+		m11 = y.y;
+		m12 = y.z;
+		m13 = y.w;
+		m20 = z.x;
+		m21 = z.y;
+		m22 = z.z;
+		m23 = z.w;
+		m30 = m31 = m32 = 0;
+		m33 = 1;
 	}
 
 	public Matrix copyValues(Matrix m)
@@ -445,6 +511,15 @@ public class Matrix
 		m03 += x;
 		m13 += y;
 		m23 += z;
+
+		return this;
+	}
+
+	public Matrix translate(Vector3D v)
+	{
+		m03 += v.x;
+		m13 += v.y;
+		m23 += v.z;
 
 		return this;
 	}

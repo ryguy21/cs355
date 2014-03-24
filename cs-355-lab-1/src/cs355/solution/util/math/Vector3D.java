@@ -215,6 +215,7 @@ public class Vector3D
 		x *= scalar;
 		y *= scalar;
 		z *= scalar;
+		w *= scalar;
 
 		return this;
 	}
@@ -250,12 +251,12 @@ public class Vector3D
 
 	public Vector3D normalize()
 	{
-		return limit(1);
+		return setLength(1);
 	}
 
 	public Vector3D getNormalizedCopy()
 	{
-		return getLimitedCopy(1);
+		return getCopyOfLength(1);
 	}
 
 	public Vector3D setLength(float length)
@@ -303,6 +304,48 @@ public class Vector3D
 		float w = m.m30 * this.x + m.m31 * this.y + m.m32 * this.z + m.m33 * this.w;
 
 		return new Vector3D(x, y, z, w);
+	}
+
+	public Vector3D rotateX(float angle)
+	{
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+
+		float _y = y * cos - z * sin;
+		float _z = y * sin + z * cos;
+
+		y = _y;
+		z = _z;
+
+		return this;
+	}
+
+	public Vector3D rotateY(float angle)
+	{
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+
+		float _x = x * cos + z * sin;
+		float _z = x * -sin + z * cos;
+
+		x = _x;
+		z = _z;
+
+		return this;
+	}
+
+	public Vector3D rotateZ(float angle)
+	{
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+
+		float _x = x * cos - y * sin;
+		float _y = x * sin + y * cos;
+
+		x = _x;
+		y = _y;
+
+		return this;
 	}
 
 	public String print()

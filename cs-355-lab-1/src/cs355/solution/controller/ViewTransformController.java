@@ -87,6 +87,11 @@ public class ViewTransformController
 		}
 	}
 
+	public float getZoom()
+	{
+		return zoom * 0.25f;
+	}
+
 	private void setPosition(Vector2D pos)
 	{
 		position.copyValues(pos);
