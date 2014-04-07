@@ -68,6 +68,7 @@ public class Refresher implements ViewRefresher
 
 	private void drawBackground(Graphics2D g)
 	{
+		Log.v("Drawing background");
 		Image image = model.getImage();
 		BufferedImage buffer = image.getBuffer();
 		g.drawImage(buffer, viewController.getTransform().toAffineTransform(), null);

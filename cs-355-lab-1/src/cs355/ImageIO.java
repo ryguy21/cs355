@@ -52,7 +52,17 @@ public class ImageIO
 			if (file != null)
 			{
 				int dot = file.getName().lastIndexOf('.');
-				String suffix = file.getName().substring(dot + 1);
+				String suffix;
+				if (dot != -1)
+				{
+					suffix = file.getName().substring(dot + 1);
+				}
+				else
+				{
+					suffix = "png";
+					file = new File(file.getPath() + ".png");
+				}
+
 				ImageWriter writer = javax.imageio.ImageIO.getImageWritersBySuffix(suffix).next();
 				ImageOutputStream out = javax.imageio.ImageIO.createImageOutputStream(file);
 				writer.setOutput(out);
