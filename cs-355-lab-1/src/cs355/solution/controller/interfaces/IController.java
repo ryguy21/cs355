@@ -22,4 +22,6 @@ public interface IController extends CS355Controller
 	public ViewTransformController getViewTransformController();
 
 	public Controller3D get3DController();
+
+	public boolean isBackgroundEnabled();
 }

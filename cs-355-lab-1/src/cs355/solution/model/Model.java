@@ -1,5 +1,6 @@
 package cs355.solution.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -9,10 +10,12 @@ import cs355.solution.model.shapes.Shape;
 public class Model implements IModelManager
 {
 	private final IShapeStorage	shapeStorage;
+	private final Image			image;
 
 	public Model()
 	{
 		shapeStorage = new ShapeStorage();
+		image = new Image();
 	}
 
 	@Override
@@ -49,5 +52,17 @@ public class Model implements IModelManager
 	public int getShapeCount()
 	{
 		return shapeStorage.getShapeCount();
+	}
+
+	@Override
+	public Image getImage()
+	{
+		return image;
+	}
+
+	@Override
+	public void setImage(BufferedImage image)
+	{
+		this.image.setBuffer(image);
 	}
 }

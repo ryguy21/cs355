@@ -19,6 +19,7 @@ public class Controller implements IController
 	private final EventHandler				handler;
 
 	private InputResponder					currentResponder;
+	private boolean							backgroundEnabled;
 
 	private final DrawingState				state;
 	private final ViewTransformController	viewTransform;
@@ -236,8 +237,7 @@ public class Controller implements IController
 	@Override
 	public void keyPressed(Iterator<Integer> iterator)
 	{
-		if (c3d.isEnabled() && c3d.keyPressed(iterator))
-			refresh();
+		if (c3d.isEnabled() && c3d.keyPressed(iterator)) refresh();
 	}
 
 	@Override
@@ -277,15 +277,19 @@ public class Controller implements IController
 	}
 
 	@Override
-	public void doLoadImage(BufferedImage openImage)
+	public void doLoadImage(BufferedImage image)
 	{
 		Log.v("doLoadImage()");
+		model.setImage(image);
+		refresh();
 	}
 
 	@Override
 	public void toggleBackgroundDisplay()
 	{
-		Log.v("toggleBackgroundDisplay()");
+		backgroundEnabled = !backgroundEnabled;
+		Log.v("toggleBackgroundDisplay(%b)", backgroundEnabled);
+		refresh();
 	}
 
 	@Override
@@ -311,5 +315,11 @@ public class Controller implements IController
 	public Controller3D get3DController()
 	{
 		return c3d;
+	}
+
+	@Override
+	public boolean isBackgroundEnabled()
+	{
+		return backgroundEnabled;
 	}
 }
