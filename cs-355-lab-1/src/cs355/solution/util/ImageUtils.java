@@ -31,6 +31,17 @@ public class ImageUtils
 		return new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
 	}
 
+	public static int[][] getCopy(int[][] data)
+	{
+		int[][] copy = new int[data.length][data[0].length];
+
+		for (int i = 0; i < data.length; i++)
+			for (int j = 0; j < data[i].length; j++)
+				copy[i][j] = data[i][j];
+
+		return copy;
+	}
+
 	public static void saveImage(BufferedImage image, String file) throws IOException
 	{
 		// override extension to be png so other programs can read it
@@ -147,5 +158,15 @@ public class ImageUtils
 		}
 
 		return data;
+	}
+
+	public static int normalize(double val)
+	{
+		if (val > 255.0)
+			return 255;
+		else if (val < 0.0)
+			return 0;
+		else
+			return (int) val;
 	}
 }

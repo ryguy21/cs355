@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import cs355.solution.model.images.Image;
 import cs355.solution.model.shapes.Shape;
 
 public class Model implements IModelManager

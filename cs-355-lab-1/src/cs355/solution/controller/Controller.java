@@ -10,6 +10,7 @@ import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.controller.interfaces.InputResponder;
 import cs355.solution.model.IModelManager;
+import cs355.solution.model.images.Image;
 import cs355.solution.model.shapes.Shape;
 import cs355.solution.util.Log;
 
@@ -243,45 +244,96 @@ public class Controller implements IController
 	@Override
 	public void doEdgeDetection()
 	{
-		Log.v("doEdgeDetection()");
+		if (backgroundEnabled)
+		{
+			Log.v("doEdgeDetection()");
+			Image image = model.getImage();
+
+			image.detectEdges();
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doSharpen()
 	{
-		Log.v("doSharpen()");
+		if (backgroundEnabled)
+		{
+			Log.v("doSharpen()");
+			Image image = model.getImage();
+
+			image.sharpen();
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doMedianBlur()
 	{
-		Log.v("doMedianBlur()");
+		if (backgroundEnabled)
+		{
+			Log.v("doMedianBlur()");
+			Image image = model.getImage();
+
+			image.blur(Image.MEDIAN_BLUR);
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doUniformBlur()
 	{
-		Log.v("doUniformBlur()");
+		if (backgroundEnabled)
+		{
+			Log.v("doUniformBlur()");
+			Image image = model.getImage();
+
+			image.blur(Image.UNIFORM_BLUR);
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doChangeContrast(int delta)
 	{
-		Log.v("doChangeContrast(" + delta + ")");
+		if (backgroundEnabled)
+		{
+			Log.v("doChangeContrast(" + delta + ")");
+			Image image = model.getImage();
+
+			image.changeContrast(delta);
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doChangeBrightness(int delta)
 	{
-		Log.v("doChangeBrightness(" + delta + ")");
+		if (backgroundEnabled)
+		{
+			Log.v("doChangeBrightness(" + delta + ")");
+			Image image = model.getImage();
+
+			image.brighten(delta);
+
+			refresh();
+		}
 	}
 
 	@Override
 	public void doLoadImage(BufferedImage image)
 	{
-		Log.v("doLoadImage()");
-		model.setImage(image);
-		refresh();
+		if (backgroundEnabled)
+		{
+			Log.v("doLoadImage()");
+			model.setImage(image);
+			refresh();
+		}
 	}
 
 	@Override

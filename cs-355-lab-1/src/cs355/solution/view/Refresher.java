@@ -11,9 +11,8 @@ import cs355.solution.controller.ViewTransformController;
 import cs355.solution.controller.interfaces.Control;
 import cs355.solution.controller.interfaces.IController;
 import cs355.solution.model.IModelManager;
-import cs355.solution.model.Image;
+import cs355.solution.model.images.Image;
 import cs355.solution.model.shapes.Shape;
-import cs355.solution.util.ImageUtils;
 import cs355.solution.util.Log;
 
 public class Refresher implements ViewRefresher
@@ -70,13 +69,8 @@ public class Refresher implements ViewRefresher
 	private void drawBackground(Graphics2D g)
 	{
 		Image image = model.getImage();
-		int[][] data = image.getData();
-		if (data != null)
-		{
-			BufferedImage buffer = ImageUtils.createFromData(data);
-
-			g.drawImage(buffer, viewController.getTransform().toAffineTransform(), null);
-		}
+		BufferedImage buffer = image.getBuffer();
+		g.drawImage(buffer, viewController.getTransform().toAffineTransform(), null);
 	}
 
 	public void setController(IController controller)
